@@ -1,4 +1,4 @@
-import 'date_time_interfaces.dart';
+import '../date_time_interfaces.dart';
 
 class EnglishMergedParserConfiguration extends EnglishCommonDateTimeParserConfiguration implements IMergedParserConfiguration {
 

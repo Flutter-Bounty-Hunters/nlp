@@ -1,8 +1,8 @@
-import 'package:nlp/src/unicode.dart';
+import 'package:nlp/src/old/unicode.dart';
 import 'package:unorm_dart/unorm_dart.dart' as unorm;
 
 import 'base_date_time.dart';
-import 'date_time_interfaces.dart';
+import '../date_time_interfaces.dart';
 
 class DateTimeRecognizer extends Recognizer<DateTimeOptions> {
   static List<ModelResult> recognizeDateTime({
