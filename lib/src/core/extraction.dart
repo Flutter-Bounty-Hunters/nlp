@@ -35,6 +35,20 @@ class ExtractResult {
     return ((er2.start < er1.start) && ((er2.start + er2.length) >= (er1.start + er1.length))) ||
         ((er2.start <= er1.start) && ((er2.start + er2.length) > (er1.start + er1.length)));
   }
+
+  /// Serialized this [ExtractResult] into a form that can be compared with JSON test cases.
+  Map<String, dynamic> toTestCaseJson() {
+    return {
+      if (type != null) //
+        "Type": type,
+      "Text": text,
+      "Start": start,
+      "Length": length,
+      // We don't include "data" or "metadata" because either the test cases don't want them,
+      // or we're incorrectly setting these properties and they're triggering test failures.
+      // Either way, for now, we don't include them.
+    };
+  }
 }
 
 class Metadata {

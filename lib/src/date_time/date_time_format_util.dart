@@ -236,7 +236,7 @@ class DateTimeFormatUtil {
 
           // Re-run weekday-end match using JS regex so we can get the index of the start of the match.
           final matchResult = JsRegExp(WeekDayTimexRegex).exec(splited[2]);
-          final weekDayEndMatchStart = matchResult.indices[1].$1;
+          final weekDayEndMatchStart = matchResult!.indices[1].$1;
           splited[2] = "${splited[2].substring(0, weekDayEndMatchStart)}$weekDayEnd";
           // This line was previously:
           // splited.set(2, splited.get(2).substring(0, weekDayEndMatch.start(1)) + weekDayEnd);

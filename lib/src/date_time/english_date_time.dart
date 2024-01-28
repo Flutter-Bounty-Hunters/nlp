@@ -166,8 +166,11 @@ class EnglishDateTime {
       .replaceAll("{WrittenMonthRegex}", WrittenMonthRegex);
 
   static final String DateUnitRegex =
-      // r"(?<unit>(decade|year|(?<uoy>month|week)|(?<business>(business\s+|week\s*))?(?<uoy>day)|fortnight|weekend)(?<plural>s)?|(?<=(^|\s)\d{1,4})[ymwd])\b";
-      r"(?<unit>(decade|year|(?<uoy>month|week)|(?<business>(business\s+|week\s*))?(?<uoy>day)|fortnight|weekend)(?<plural>s)?|(?<=(^|\s)\d{1,4})[ymwd])\b";
+      r"(?<unit>(decade|y(ea)?(r)?|(?<uoy>month|week)|(?<business>(business\s+|week\s*))?(?<uoy>day)|fortnight|weekend)(?<plural>s)?|(?<=(^|\s)\d{1,4})[ymwd])\b";
+  // ^ Added support for "ys", "yr", "yrs"
+  //
+  // Original is below:
+  // r"(?<unit>(decade|year|(?<uoy>month|week)|(?<business>(business\s+|week\s*))?(?<uoy>day)|fortnight|weekend)(?<plural>s)?|(?<=(^|\s)\d{1,4})[ymwd])\b";
 
   static final String DateTokenPrefix = "on ";
 

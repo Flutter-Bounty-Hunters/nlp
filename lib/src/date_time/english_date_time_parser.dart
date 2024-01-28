@@ -1,7 +1,7 @@
 import 'package:nlp/src/core/english_merged_extractor.dart';
 import 'package:nlp/src/core/extraction.dart';
 import 'package:nlp/src/core/parser.dart';
-import 'package:nlp/src/date_time/base_duration_parser.dart';
+import 'package:nlp/src/duration/base_duration_parser.dart';
 import 'package:nlp/src/date_time/date_time_extraction.dart';
 import 'package:nlp/src/date_time/date_time_parsing.dart';
 import 'package:nlp/src/date_time/english_date_period_extraction.dart';

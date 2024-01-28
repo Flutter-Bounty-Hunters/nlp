@@ -17,9 +17,9 @@ class JsRegExp {
 
   late final js.JsObject _jsRegExp;
 
-  JsRegExpResult exec(String content) {
+  JsRegExpResult? exec(String content) {
     final jsResult = _jsRegExp.callMethod('exec', [content]);
-    return JsRegExpResult(jsResult);
+    return jsResult != null ? JsRegExpResult(jsResult) : null;
   }
 }
 

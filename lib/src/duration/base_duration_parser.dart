@@ -1,14 +1,10 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:nlp/nlp.dart';
-import 'package:nlp/src/core/extraction.dart';
 import 'package:nlp/src/core/parser.dart';
 import 'package:nlp/src/core/string_utility.dart';
 import 'package:nlp/src/core/timex_utility.dart';
-import 'package:nlp/src/date_time/constants.dart';
 import 'package:nlp/src/date_time/date_time_parsing.dart';
-import 'package:nlp/src/date_time/date_time_recognizer.dart';
-import 'package:nlp/src/duration/duration.dart';
 
 class BaseDurationParser implements IDateTimeParser {
   BaseDurationParser(this.config);
@@ -28,20 +24,28 @@ class BaseDurationParser implements IDateTimeParser {
   @override
   DateTimeParseResult parseDateTime(ExtractResult er, DateTime reference) {
     print("BaseDurationParser - parseDateTime() - ${er.text}");
+    print(" - parser name: ${getParserName()}");
+    print(" - extraction type: ${er.type}");
+    print(" ^ If these aren't the same, we won't add a MOD");
     Object? value;
 
     if (er.type == getParserName()) {
+      print(" - this parser knows the meaning of this extraction - looking at MODs");
       var innerResult = _parseMergedDuration(er.text, reference);
+      print(" - did parse merged duration? ${innerResult.success}");
 
       if (!innerResult.success) {
         innerResult = _parseNumberWithUnit(er.text, reference);
+        print(" - did parse number with unit? ${innerResult.success}");
       }
 
       if (!innerResult.success) {
         innerResult = _parseImplicitDuration(er.text, reference);
+        print(" - did did parse implicit duration? ${innerResult.success}");
       }
 
       if (innerResult.success) {
+        print(" - adding a future resolution and past resolution");
         innerResult.futureResolution = {
           TimeTypeConstants.DURATION: StringUtility.format(innerResult.futureValue as double),
         };
@@ -50,6 +54,7 @@ class BaseDurationParser implements IDateTimeParser {
           TimeTypeConstants.DURATION: StringUtility.format(innerResult.pastValue as double),
         };
 
+        print(" - ExtractResult data: ${er.data}");
         if (er.data != null) {
           if (er.data == DateTimeConstants.MORE_THAN_MOD) {
             innerResult.mod = DateTimeConstants.MORE_THAN_MOD;
@@ -57,6 +62,7 @@ class BaseDurationParser implements IDateTimeParser {
             innerResult.mod = DateTimeConstants.LESS_THAN_MOD;
           }
         }
+        print(" - set MOD to ${innerResult.mod}");
 
         value = innerResult;
       }
@@ -111,12 +117,13 @@ class BaseDurationParser implements IDateTimeParser {
 
     // insert timex into a dictionary
     for (final er in ers) {
-      RegExp unitRegex = config.getDurationUnitRegex();
-      final unitMatch = unitRegex.allMatches(er.text).firstOrNull;
+      // RegExp unitRegex = config.getDurationUnitRegex();
+      // final unitMatch = unitRegex.allMatches(er.text).firstOrNull;
+      final unitMatch = RegExpComposer.getMatchesSimple(config.getDurationUnitRegex(), er.text).firstOrNull;
       if (unitMatch != null) {
         final pr = parse(er) as DateTimeParseResult;
         if (pr.value != null) {
-          timexMap[unitMatch.namedGroup("unit")!] = pr.timexStr!;
+          timexMap[unitMatch.getGroup("unit").value] = pr.timexStr!;
           prs.add(pr);
         }
       }
@@ -263,12 +270,20 @@ class BaseDurationParser implements IDateTimeParser {
     String suffixStr = text;
 
     // if there are NO spaces between number and unit
-    final match = config.getNumberCombinedWithUnit().allMatches(text).firstOrNull;
+    // TODO: we're using getMatchesSimple() because we haven't implemented more sophisticated named
+    //       group matching because it hasn't been needed yet.
+    final match = RegExpComposer.getMatchesSimple(config.getNumberCombinedWithUnit(), text).firstOrNull;
+    // Original regex line is below:
+    // Optional<Match> match = Arrays.stream(RegExpUtility.getMatches(config.getNumberCombinedWithUnit(), text)).findFirst();
+    print("");
+    print("RegExp for number with unit:");
+    print(config.getNumberCombinedWithUnit().pattern);
+    print("");
     if (match != null) {
-      final numVal = double.parse(match.namedGroup("num")!) + _parseNumberWithUnitAndSuffix(suffixStr);
+      final numVal = double.parse(match.getGroup("num").value) + _parseNumberWithUnitAndSuffix(suffixStr);
       final numStr = StringUtility.format(numVal);
 
-      String srcUnit = match.namedGroup("unit")!.toLowerCase();
+      String srcUnit = match.getGroup("unit").value.toLowerCase();
 
       if (config.getUnitMap().containsKey(srcUnit)) {
         String unitStr = config.getUnitMap()[srcUnit]!;
@@ -293,23 +308,31 @@ class BaseDurationParser implements IDateTimeParser {
   }
 
   DateTimeResolutionResult _parseAnUnit(String text) {
+    print("_parseAsUnit(): '$text'");
+    print("");
+    print("anUnit regex: ${config.getAnUnitRegex()}");
+    print("");
+    print("halfDateUnit regex: ${config.getHalfDateUnitRegex()}");
+    print("");
     var result = DateTimeResolutionResult();
 
     String suffixStr = text;
 
     // if there are NO spaces between number and unit
-    var match = config.getAnUnitRegex().allMatches(text).firstOrNull;
-    match ??= config.getHalfDateUnitRegex().allMatches(text).firstOrNull;
+    // var match = config.getAnUnitRegex().allMatches(text).firstOrNull;
+    // match ??= config.getHalfDateUnitRegex().allMatches(text).firstOrNull;
+    var match = RegExpComposer.getMatchesSimple(config.getAnUnitRegex(), text).firstOrNull;
+    match ??= RegExpComposer.getMatchesSimple(config.getHalfDateUnitRegex(), text).firstOrNull;
 
     if (match != null) {
-      double numVal = StringUtility.isNullOrEmpty(match.namedGroup("half")) ? 1 : 0.5;
-      numVal = StringUtility.isNullOrEmpty(match.namedGroup("quarter")) ? numVal : 0.25;
-      numVal = StringUtility.isNullOrEmpty(match.namedGroup("threequarter")) ? numVal : 0.75;
+      double numVal = StringUtility.isNullOrEmpty(match.getGroup("half").value) ? 1 : 0.5;
+      numVal = StringUtility.isNullOrEmpty(match.getGroup("quarter").value) ? numVal : 0.25;
+      numVal = StringUtility.isNullOrEmpty(match.getGroup("threequarter").value) ? numVal : 0.75;
 
       numVal += _parseNumberWithUnitAndSuffix(suffixStr);
       String numStr = StringUtility.format(numVal);
 
-      String srcUnit = match.namedGroup("unit")!.toLowerCase();
+      String srcUnit = match.getGroup("unit").value.toLowerCase();
 
       if (config.getUnitMap().containsKey(srcUnit)) {
         String unitStr = config.getUnitMap()[srcUnit]!;
@@ -321,7 +344,7 @@ class BaseDurationParser implements IDateTimeParser {
         result.pastValue = timeValue;
 
         result.success = true;
-      } else if (!StringUtility.isNullOrEmpty(match.namedGroup(DateTimeConstants.BusinessDayGroupName))) {
+      } else if (!StringUtility.isNullOrEmpty(match.getGroup(DateTimeConstants.BusinessDayGroupName).value)) {
         String timex = TimexUtility.generateDurationTimex(numVal, DateTimeConstants.TimexBusinessDay, false);
         double timeValue = numVal * config.getUnitValueMap()[srcUnit.split(" ")[1]]!;
 
@@ -339,11 +362,12 @@ class BaseDurationParser implements IDateTimeParser {
   DateTimeResolutionResult _parseInexactNumberUnit(String text) {
     var result = DateTimeResolutionResult();
 
-    final match = config.getInexactNumberUnitRegex().allMatches(text).firstOrNull;
+    // final match = config.getInexactNumberUnitRegex().allMatches(text).firstOrNull;
+    final match = RegExpComposer.getMatchesSimple(config.getInexactNumberUnitRegex(), text).firstOrNull;
     if (match != null) {
       double numVal;
 
-      if (!StringUtility.isNullOrEmpty(match.namedGroup("NumTwoTerm"))) {
+      if (!StringUtility.isNullOrEmpty(match.getGroup("NumTwoTerm").value)) {
         numVal = 2;
       } else {
         // set the inexact number "few", "some" to 3 for now
@@ -352,7 +376,7 @@ class BaseDurationParser implements IDateTimeParser {
 
       String numStr = StringUtility.format(numVal);
 
-      String srcUnit = match.namedGroup("unit")!.toLowerCase();
+      String srcUnit = match.getGroup("unit").value.toLowerCase();
 
       if (config.getUnitMap().containsKey(srcUnit)) {
         String unitStr = config.getUnitMap()[srcUnit]!;

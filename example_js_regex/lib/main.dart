@@ -20,7 +20,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   void _runNlpExample() {
-    const phrase = "It happened when the baby was only ten months old";
+    // const phrase = "It happened when the baby was only ten months old";
+    // const phrase = "I'll leave for 3h";
+    const phrase = "The project estimative is a 2 ys duration";
+    // const phrase = "We've been in Pakistan for 2ys";
+    // const phrase = "I'll leave for 1 year 1 month 21 days";
+    // const phrase = "I'll leave for 2 days 1 month";
 
     // Datetime recognizer This model will find any Date even if its write in colloquial language
     // E.g "I'll go back 8pm today" will return "2017-10-04 20:00:00"
@@ -30,14 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
     for (final result in results) {
       print("Type: ${result.typeName}");
       print(
-        const JsonEncoder.withIndent("  ").convert({
-          "parentText": result.parentText,
-          "text": result.text,
-          "start": result.start,
-          "end": result.end,
-          "typeName": result.typeName,
-          "resolution": result.resolution,
-        }),
+        const JsonEncoder.withIndent("  ").convert(result.toJson()),
       );
     }
   }
@@ -50,6 +48,11 @@ class _MyHomePageState extends State<MyHomePage> {
       '^(?<timestamp>\\d+),(?<author>.+)\$',
       d: true,
     ).exec("1560979912,Caroline");
+    if (dartResult == null) {
+      print("No results");
+      print("");
+      return;
+    }
 
     print("Timestamp group:");
     print(dartResult.groups['timestamp']);

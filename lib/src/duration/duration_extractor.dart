@@ -71,7 +71,7 @@ class DurationExtractor implements IExtractor {
     // handle "few" related cases
     result.addAll(Token.getTokenFromRegex(config.getInexactNumberUnitRegex(), text));
 
-    print("numberWithUnits() - returning ${result.length} results");
+    print("numberWithUnit() - returning ${result.length} results");
 
     return result;
   }
@@ -160,10 +160,16 @@ class DurationExtractor implements IExtractor {
 
     while (firstExtractionIndex < extractResults.length) {
       String? currentUnit;
-      RegExpMatch? unitMatch = unitRegex.allMatches(extractResults[firstExtractionIndex].text).firstOrNull;
 
-      if (unitMatch != null && unitMap.containsKey(unitMatch.namedGroup("unit"))) {
-        currentUnit = unitMatch.namedGroup("unit");
+      NlpMatch? unitMatch =
+          RegExpComposer.getMatchesSimple(unitRegex, extractResults[firstExtractionIndex].text).firstOrNull;
+      // Replaced below line with composed regex to de-dup names.
+      // RegExpMatch? unitMatch = unitRegex.allMatches(extractResults[firstExtractionIndex].text).firstOrNull;
+
+      // if (unitMatch != null && unitMap.containsKey(unitMatch.namedGroup("unit"))) {
+      if (unitMatch != null && unitMap.containsKey(unitMatch.getGroup("unit").value)) {
+        // currentUnit = unitMatch.namedGroup("unit");
+        currentUnit = unitMatch.getGroup("unit").value;
         totalUnit++;
         if (DurationParsingUtil.isTimeDurationUnit(unitMap[currentUnit]!)) {
           timeUnit++;
@@ -185,10 +191,15 @@ class DurationExtractor implements IExtractor {
 
         final match = config.getDurationConnectorRegex().allMatches(midStr).firstOrNull;
         if (match != null) {
-          unitMatch = unitRegex.allMatches(extractResults[secondExtractionIndex].text).firstOrNull;
+          NlpMatch? unitMatch =
+              RegExpComposer.getMatchesSimple(unitRegex, extractResults[secondExtractionIndex].text).firstOrNull;
+          // Replaced below line with composed regex to de-dup names.
+          // unitMatch = unitRegex.allMatches(extractResults[secondExtractionIndex].text).firstOrNull;
 
-          if (unitMatch != null && unitMap.containsKey(unitMatch.namedGroup("unit"))) {
-            final nextUnitStr = unitMatch.namedGroup("unit");
+          // if (unitMatch != null && unitMap.containsKey(unitMatch.namedGroup("unit"))) {
+          if (unitMatch != null && unitMap.containsKey(unitMatch.getGroup("unit").value)) {
+            // final nextUnitStr = unitMatch.namedGroup("unit");
+            final nextUnitStr = unitMatch.getGroup("unit").value;
 
             if (unitValueMap[nextUnitStr] != unitValueMap[currentUnit]) {
               valid = true;
@@ -246,21 +257,28 @@ class DurationExtractor implements IExtractor {
   }
 
   List<ExtractResult> tagInequalityPrefix(String input, List<ExtractResult> result) {
+    print("tagInequalityPrefix() - input: '$input'");
     List<ExtractResult> resultStream = result.map((ExtractResult er) {
+      print("Looking at a single result for inequality prefix: '${er.text}'");
       String beforeString = input.substring(0, er.start);
+      print(" - before string: '$beforeString'");
+      print(" - matching against: '${config.getMoreThanRegex().pattern}'");
       bool isInequalityPrefixMatched = false;
 
-      var match = config.getMoreThanRegex().matchEnd(beforeString, true);
+      var match = config.getMoreThanRegex().matchEnd(beforeString);
+      print(" - match: $match");
 
       // The second condition is necessary so for "1 week" in "more than 4 days and less than 1 week",
       // it will not be tagged incorrectly as "more than"
       if (match != null) {
+        print(" - matched MORE THAN");
         er.data = DateTimeConstants.MORE_THAN_MOD;
         isInequalityPrefixMatched = true;
       }
 
       if (!isInequalityPrefixMatched) {
-        match = config.getLessThanRegex().matchEnd(beforeString, true);
+        print(" - didn't match MORE, now trying LESS");
+        match = config.getLessThanRegex().matchEnd(beforeString);
 
         if (match != null) {
           er.data = DateTimeConstants.LESS_THAN_MOD;

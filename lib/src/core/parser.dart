@@ -1,3 +1,4 @@
+import 'package:nlp/nlp.dart';
 import 'package:nlp/src/core/extraction.dart';
 import 'package:nlp/src/date_time/date_time_parsing.dart';
 import 'package:nlp/src/date_time/english_date_time_parser.dart';
@@ -61,4 +62,16 @@ class ParseResult extends ExtractResult {
   // Output the value in string format.
   // It is used in some parsers.
   String? resolutionStr;
+
+  /// Serialized this [ParseResult] into a form that can be compared with JSON test cases.
+  @override
+  Map<String, dynamic> toTestCaseJson() {
+    return {
+      ...super.toTestCaseJson(),
+      if (value != null) //
+        "Value": value is DateTimeResolutionResult ? (value as DateTimeResolutionResult).toTestCaseJson() : value,
+      if (resolutionStr != null && resolutionStr!.isNotEmpty) //
+        "resolutionStr": resolutionStr,
+    };
+  }
 }

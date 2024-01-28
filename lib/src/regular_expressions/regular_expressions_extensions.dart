@@ -107,6 +107,11 @@ class RegExpComposer {
 
     final regExpMatches = regExp.allMatches(input).toList();
     final jsRegExpMatches = JsRegExp(regExp.pattern, d: true).exec(input);
+    if (jsRegExpMatches == null) {
+      // No matches.
+      return [];
+    }
+
     for (final match in regExpMatches) {
       print(
           "Processing a RegExpMatch - start: ${match.start}, end: ${match.end}, value: '${input.substring(match.start, match.end)}', group count: ${match.groupCount}");

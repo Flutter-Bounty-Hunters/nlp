@@ -9,7 +9,7 @@ import 'package:nlp/src/core/model_result.dart';
 import 'package:nlp/src/core/parser.dart';
 import 'package:nlp/src/core/string_utility.dart';
 import 'package:nlp/src/core/timex_utility.dart';
-import 'package:nlp/src/date_time/base_duration_parser.dart';
+import 'package:nlp/src/duration/base_duration_parser.dart';
 import 'package:nlp/src/date_time/date_time_format_util.dart';
 import 'package:nlp/src/date_time/date_time_parsing.dart';
 import 'package:nlp/src/date_time/date_util.dart';
@@ -34,9 +34,67 @@ class DateTimeRecognizer {
     // DateTimeModel model = getModelFunction.call(recognizer);
     // return model.parse(query, referenceTime);
 
-    // TODO: move the following behavior into DateTimeModel.parse()
-    // We are directly implementing the duration version of model.parse() so that we
-    // can get one real code path working. From there we can expand to more models.
+    return DateTimeModel().parse(query, referenceTime);
+  }
+
+  //////////////////////////////// PARSING //////////////////////////////
+
+  // static DateTimeParseResult setInclusivePeriodEnd(DateTimeParseResult slot, String parserName) {
+  //   String currentType =  parserName + "." + DateTimeConstants.SYS_DATETIME_DATEPERIOD;
+  //   if (slot.type == currentType) {
+  //     final timexStream = slot.timexStr!.split(",|\\(|\\)");
+  //     final timexComponents = timexStream.where((str) => str.isNotEmpty).toList();
+  //
+  //     // Only handle DatePeriod like "(StartDate,EndDate,Duration)"
+  //     if (timexComponents.length == 3) {
+  //       final value = slot.value as SplayTreeMap<String, Object>;
+  //       String altTimex = "";
+  //
+  //       if (value != null && value.containsKey(ResolutionKey.ValueSet)) {
+  //         if (value[ResolutionKey.ValueSet] is List) {
+  //           List<Map<String, String>> valueSet = value[ResolutionKey.ValueSet] as List<Map<String, String>>;
+  //           if (value.isNotEmpty) {
+  //             for (final values in valueSet) {
+  //               // This is only a sanity check, as here we only handle DatePeriod like "(StartDate,EndDate,Duration)"
+  //               if (values.containsKey(DateTimeResolutionKey.START) &&
+  //                 values.containsKey(DateTimeResolutionKey.END) &&
+  //                 values.containsKey(DateTimeResolutionKey.Timex)) {
+  //
+  //                 final formatter = DateFormat("yyyy-MM-dd");
+  //                 DateTime startDate = LocalDate.parse(values[DateTimeResolutionKey.START], formatter).atStartOfDay();
+  //                 DateTime endDate = LocalDate.parse(values[DateTimeResolutionKey.END], formatter).atStartOfDay();
+  //                 String durationStr = timexComponents[2];
+  //                 final datePeriodTimexType = TimexUtility.getDatePeriodTimexType(durationStr);
+  //
+  //                 endDate = TimexUtility.offsetDateObject(endDate, 1, datePeriodTimexType);
+  //                 values[DateTimeResolutionKey.END] = DateTimeFormatUtil.luisDate(endDate);
+  //                 values[DateTimeResolutionKey.Timex] = generateEndInclusiveTimex(slot.timexStr, datePeriodTimexType, startDate, endDate);
+  //
+  //                 if (altTimex == null || altTimex.isEmpty) {
+  //                   altTimex = values[DateTimeResolutionKey.Timex];
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //
+  //       slot.value = value;
+  //       slot.timexStr = altTimex;
+  //     }
+  //   }
+  //   return slot;
+  // }
+
+  DateTimeRecognizer();
+}
+
+class DateTimeModel {
+  static final String dateMinString = DateTimeFormatUtil.formatDate(DateUtil.minValue());
+
+  DateTimeModel();
+
+  List<ModelResult> parse(String query, DateTime referenceTime) {
     final durationExtractor = DurationExtractor(
       config: EnglishDurationExtractorConfiguration(),
     );
@@ -51,7 +109,7 @@ class DateTimeRecognizer {
     for (final extraction in extractions) {
       print("Attempting to parse extracted result: ${extraction.type}, '${extraction.text}'");
       // DateTimeParseResult parseResult = parser.parse(result, referenceTime);
-      final parseResult = parse(extraction, referenceTime);
+      final parseResult = _parse(extraction, referenceTime);
       if (parseResult == null) {
         print("Didn't parse any date time from extraction: ${extraction.text}");
         continue;
@@ -67,10 +125,7 @@ class DateTimeRecognizer {
     return parsedDateTimes.map((parsedDateTime) => _getModelResult(parsedDateTime)).toList();
   }
 
-  //////////////////////////////// PARSING //////////////////////////////
-  static final String dateMinString = DateTimeFormatUtil.formatDate(DateUtil.minValue());
-
-  static DateTimeParseResult? parse(ExtractResult er, DateTime reference) {
+  DateTimeParseResult? _parse(ExtractResult er, DateTime reference) {
     print("parse() - '${er.text}', reference time: $reference, metadata: ${er.metadata}");
     DateTimeParseResult? pr;
 
@@ -301,31 +356,7 @@ class DateTimeRecognizer {
     return pr;
   }
 
-  static String combineMod(String? originalMod, String newMod) {
-    String combinedMod = newMod;
-    if (originalMod != null && originalMod != "") {
-      combinedMod = "$newMod-$originalMod";
-    }
-    return combinedMod;
-  }
-
-  static String? determineSourceEntityType(String sourceType, String newType, bool hasMod) {
-    if (!hasMod) {
-      return null;
-    }
-
-    if (newType != sourceType) {
-      return DateTimeConstants.SYS_DATETIME_DATETIMEPOINT;
-    }
-
-    if (newType != DateTimeConstants.SYS_DATETIME_DATEPERIOD) {
-      return DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD;
-    }
-
-    return null;
-  }
-
-  static List<DateTimeParseResult> dateTimeResolutionForSplit(
+  List<DateTimeParseResult> dateTimeResolutionForSplit(
       DateTimeParseResult slot, String parserName, IOptionsConfiguration config) {
     final results = <DateTimeParseResult>[];
     if ((slot.value as DateTimeResolutionResult).subDateTimeEntities != null) {
@@ -345,67 +376,16 @@ class DateTimeRecognizer {
     return results;
   }
 
-  static DateTimeParseResult setParseResult(
-      DateTimeParseResult slot, bool hasMod, String parserName, IOptionsConfiguration config) {
-    final slotValue = dateTimeResolution(slot, config);
-    // Change the type at last for the after or before modes
-    String type = "$parserName.${determineDateTimeType(slot.type!, hasMod, config)}";
-
-    slot.value = slotValue;
-    slot.type = type;
-
-    return slot;
+  String combineMod(String? originalMod, String newMod) {
+    String combinedMod = newMod;
+    if (originalMod != null && originalMod != "") {
+      combinedMod = "$newMod-$originalMod";
+    }
+    return combinedMod;
   }
 
-  // static DateTimeParseResult setInclusivePeriodEnd(DateTimeParseResult slot, String parserName) {
-  //   String currentType =  parserName + "." + DateTimeConstants.SYS_DATETIME_DATEPERIOD;
-  //   if (slot.type == currentType) {
-  //     final timexStream = slot.timexStr!.split(",|\\(|\\)");
-  //     final timexComponents = timexStream.where((str) => str.isNotEmpty).toList();
-  //
-  //     // Only handle DatePeriod like "(StartDate,EndDate,Duration)"
-  //     if (timexComponents.length == 3) {
-  //       final value = slot.value as SplayTreeMap<String, Object>;
-  //       String altTimex = "";
-  //
-  //       if (value != null && value.containsKey(ResolutionKey.ValueSet)) {
-  //         if (value[ResolutionKey.ValueSet] is List) {
-  //           List<Map<String, String>> valueSet = value[ResolutionKey.ValueSet] as List<Map<String, String>>;
-  //           if (value.isNotEmpty) {
-  //             for (final values in valueSet) {
-  //               // This is only a sanity check, as here we only handle DatePeriod like "(StartDate,EndDate,Duration)"
-  //               if (values.containsKey(DateTimeResolutionKey.START) &&
-  //                 values.containsKey(DateTimeResolutionKey.END) &&
-  //                 values.containsKey(DateTimeResolutionKey.Timex)) {
-  //
-  //                 final formatter = DateFormat("yyyy-MM-dd");
-  //                 DateTime startDate = LocalDate.parse(values[DateTimeResolutionKey.START], formatter).atStartOfDay();
-  //                 DateTime endDate = LocalDate.parse(values[DateTimeResolutionKey.END], formatter).atStartOfDay();
-  //                 String durationStr = timexComponents[2];
-  //                 final datePeriodTimexType = TimexUtility.getDatePeriodTimexType(durationStr);
-  //
-  //                 endDate = TimexUtility.offsetDateObject(endDate, 1, datePeriodTimexType);
-  //                 values[DateTimeResolutionKey.END] = DateTimeFormatUtil.luisDate(endDate);
-  //                 values[DateTimeResolutionKey.Timex] = generateEndInclusiveTimex(slot.timexStr, datePeriodTimexType, startDate, endDate);
-  //
-  //                 if (altTimex == null || altTimex.isEmpty) {
-  //                   altTimex = values[DateTimeResolutionKey.Timex];
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //
-  //       slot.value = value;
-  //       slot.timexStr = altTimex;
-  //     }
-  //   }
-  //   return slot;
-  // }
-
   // // TODO: return type should be a SortedMap
-  static Map<String, Object>? dateTimeResolution(DateTimeParseResult? slot, IOptionsConfiguration config) {
+  Map<String, Object>? dateTimeResolution(DateTimeParseResult? slot, IOptionsConfiguration config) {
     if (slot == null) {
       return null;
     }
@@ -565,31 +545,23 @@ class DateTimeRecognizer {
     return result;
   }
 
-  static String determineDateTimeType(String type, bool hasMod, IOptionsConfiguration config) {
-    if (config.options.match(DateTimeOptions.SplitDateAndTime)) {
-      if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
-        return DateTimeConstants.SYS_DATETIME_TIME;
-      }
-    } else {
-      if (hasMod) {
-        if (type == DateTimeConstants.SYS_DATETIME_DATE) {
-          return DateTimeConstants.SYS_DATETIME_DATEPERIOD;
-        }
-
-        if (type == DateTimeConstants.SYS_DATETIME_TIME) {
-          return DateTimeConstants.SYS_DATETIME_TIMEPERIOD;
-        }
-
-        if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
-          return DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD;
-        }
-      }
+  String? determineSourceEntityType(String sourceType, String newType, bool hasMod) {
+    if (!hasMod) {
+      return null;
     }
 
-    return type;
+    if (newType != sourceType) {
+      return DateTimeConstants.SYS_DATETIME_DATETIMEPOINT;
+    }
+
+    if (newType != DateTimeConstants.SYS_DATETIME_DATEPERIOD) {
+      return DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD;
+    }
+
+    return null;
   }
 
-  static String determineResolutionDateTimeType(LinkedHashMap<String, String> pastResolutionStr) {
+  String determineResolutionDateTimeType(LinkedHashMap<String, String> pastResolutionStr) {
     switch (pastResolutionStr.keys.first) {
       case TimeTypeConstants.START_DATE:
         return DateTimeConstants.SYS_DATETIME_DATEPERIOD;
@@ -602,7 +574,7 @@ class DateTimeRecognizer {
     }
   }
 
-  static Map<String, String> generateResolution(String type, Map<String, String> resolutionDic, String? mod) {
+  Map<String, String> generateResolution(String type, Map<String, String> resolutionDic, String? mod) {
     final res = LinkedHashMap<String, String>();
 
     if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
@@ -632,6 +604,93 @@ class DateTimeRecognizer {
     }
 
     return res;
+  }
+
+  void resolveAmPm(Map<String, Object> resolutionDic, String keyName) {
+    if (resolutionDic.containsKey(keyName)) {
+      final resolution = resolutionDic[keyName] as Map<String, String>;
+
+      final resolutionPm = LinkedHashMap<String, String>();
+
+      if (!resolutionDic.containsKey(DateTimeResolutionKey.Timex)) {
+        return;
+      }
+
+      final timex = resolutionDic[DateTimeResolutionKey.Timex] as String? ?? "";
+
+      // As resolutionDic is a LinkedHashMap and once a new value is set
+      // it goes as the last value, we need to keep the position after the replacement.
+      // Here it copies the resolutionDic map but appending the correct with Am
+      // to populate again the received LinkedHashMap.
+      // This is implemented because LinkedHashMap differs to Dictionary just in Java.
+      final resolutionDicDuplicated = Map.fromEntries(
+        resolutionDic.entries.map((entry) => entry.key == keyName ? MapEntry("$keyName Am", entry.value) : entry),
+      );
+
+      resolutionDic.clear();
+      for (final entry in resolutionDicDuplicated.entries) {
+        resolutionDic[entry.key] = entry.value;
+      }
+
+      switch (resolutionDic[ResolutionKey.Type] as String) {
+        case DateTimeConstants.SYS_DATETIME_TIME:
+          resolutionPm[ResolutionKey.Value] = DateTimeFormatUtil.toPm(resolution[ResolutionKey.Value]!);
+          resolutionPm[DateTimeResolutionKey.Timex] = DateTimeFormatUtil.toPm(timex);
+          break;
+        case DateTimeConstants.SYS_DATETIME_DATETIME:
+          final splited = resolution[ResolutionKey.Value]!.split(" ");
+          resolutionPm[ResolutionKey.Value] = "${splited[0]} ${DateTimeFormatUtil.toPm(splited[1])}";
+          resolutionPm[DateTimeResolutionKey.Timex] = DateTimeFormatUtil.allStringToPm(timex);
+          break;
+        case DateTimeConstants.SYS_DATETIME_TIMEPERIOD:
+          if (resolution.containsKey(DateTimeResolutionKey.START)) {
+            resolutionPm[DateTimeResolutionKey.START] =
+                DateTimeFormatUtil.toPm(resolution[DateTimeResolutionKey.START]!);
+          }
+
+          if (resolution.containsKey(DateTimeResolutionKey.END)) {
+            resolutionPm[DateTimeResolutionKey.END] = DateTimeFormatUtil.toPm(resolution[DateTimeResolutionKey.END]!);
+          }
+
+          resolutionPm[DateTimeResolutionKey.Timex] = DateTimeFormatUtil.allStringToPm(timex);
+          break;
+        case DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD:
+          if (resolution.containsKey(DateTimeResolutionKey.START)) {
+            DateTime start = DateFormat("yyyy-MM-dd HH:mm:ss").parse(resolution[DateTimeResolutionKey.START]!);
+            start = start.hour == DateTimeConstants.HalfDayHourCount
+                ? start.subtract(Duration(hours: DateTimeConstants.HalfDayHourCount))
+                : start.add(Duration(hours: DateTimeConstants.HalfDayHourCount));
+
+            resolutionPm[DateTimeResolutionKey.START] = DateTimeFormatUtil.formatDateTime(start);
+          }
+
+          if (resolution.containsKey(DateTimeResolutionKey.END)) {
+            DateTime end = DateFormat("yyyy-MM-dd HH:mm:ss").parse(resolution[DateTimeResolutionKey.END]!);
+            end = end.hour == DateTimeConstants.HalfDayHourCount
+                ? end.subtract(Duration(hours: DateTimeConstants.HalfDayHourCount))
+                : end.add(Duration(hours: DateTimeConstants.HalfDayHourCount));
+
+            resolutionPm[DateTimeResolutionKey.END] = DateTimeFormatUtil.formatDateTime(end);
+          }
+
+          resolutionPm[DateTimeResolutionKey.Timex] = DateTimeFormatUtil.allStringToPm(timex);
+          break;
+        default:
+          break;
+      }
+      resolutionDic["${keyName}Pm"] = resolutionPm;
+    }
+  }
+
+  void resolveWeekOf(Map<String, Object> resolutionDic, String keyName) {
+    if (resolutionDic.containsKey(keyName)) {
+      Map<String, String> resolution = resolutionDic[keyName] as Map<String, String>;
+
+      final monday = DateUtil.tryParse(resolution[DateTimeResolutionKey.START]);
+      resolution[DateTimeResolutionKey.Timex] = TimexUtility.generateWeekTimex(monday);
+
+      resolutionDic[keyName] = resolution;
+    }
   }
 
   static void addAltPeriodToResolution(Map<String, String> resolutionDic, String? mod, Map<String, String> res) {
@@ -758,106 +817,55 @@ class DateTimeRecognizer {
     }
   }
 
-  static void resolveAmPm(Map<String, Object> resolutionDic, String keyName) {
-    if (resolutionDic.containsKey(keyName)) {
-      final resolution = resolutionDic[keyName] as Map<String, String>;
-
-      final resolutionPm = LinkedHashMap<String, String>();
-
-      if (!resolutionDic.containsKey(DateTimeResolutionKey.Timex)) {
-        return;
-      }
-
-      final timex = resolutionDic[DateTimeResolutionKey.Timex] as String? ?? "";
-
-      // As resolutionDic is a LinkedHashMap and once a new value is set
-      // it goes as the last value, we need to keep the position after the replacement.
-      // Here it copies the resolutionDic map but appending the correct with Am
-      // to populate again the received LinkedHashMap.
-      // This is implemented because LinkedHashMap differs to Dictionary just in Java.
-      final resolutionDicDuplicated = Map.fromEntries(
-        resolutionDic.entries.map((entry) => entry.key == keyName ? MapEntry("$keyName Am", entry.value) : entry),
-      );
-
-      resolutionDic.clear();
-      for (final entry in resolutionDicDuplicated.entries) {
-        resolutionDic[entry.key] = entry.value;
-      }
-
-      switch (resolutionDic[ResolutionKey.Type] as String) {
-        case DateTimeConstants.SYS_DATETIME_TIME:
-          resolutionPm[ResolutionKey.Value] = DateTimeFormatUtil.toPm(resolution[ResolutionKey.Value]!);
-          resolutionPm[DateTimeResolutionKey.Timex] = DateTimeFormatUtil.toPm(timex);
-          break;
-        case DateTimeConstants.SYS_DATETIME_DATETIME:
-          final splited = resolution[ResolutionKey.Value]!.split(" ");
-          resolutionPm[ResolutionKey.Value] = "${splited[0]} ${DateTimeFormatUtil.toPm(splited[1])}";
-          resolutionPm[DateTimeResolutionKey.Timex] = DateTimeFormatUtil.allStringToPm(timex);
-          break;
-        case DateTimeConstants.SYS_DATETIME_TIMEPERIOD:
-          if (resolution.containsKey(DateTimeResolutionKey.START)) {
-            resolutionPm[DateTimeResolutionKey.START] =
-                DateTimeFormatUtil.toPm(resolution[DateTimeResolutionKey.START]!);
-          }
-
-          if (resolution.containsKey(DateTimeResolutionKey.END)) {
-            resolutionPm[DateTimeResolutionKey.END] = DateTimeFormatUtil.toPm(resolution[DateTimeResolutionKey.END]!);
-          }
-
-          resolutionPm[DateTimeResolutionKey.Timex] = DateTimeFormatUtil.allStringToPm(timex);
-          break;
-        case DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD:
-          if (resolution.containsKey(DateTimeResolutionKey.START)) {
-            DateTime start = DateFormat("yyyy-MM-dd HH:mm:ss").parse(resolution[DateTimeResolutionKey.START]!);
-            start = start.hour == DateTimeConstants.HalfDayHourCount
-                ? start.subtract(Duration(hours: DateTimeConstants.HalfDayHourCount))
-                : start.add(Duration(hours: DateTimeConstants.HalfDayHourCount));
-
-            resolutionPm[DateTimeResolutionKey.START] = DateTimeFormatUtil.formatDateTime(start);
-          }
-
-          if (resolution.containsKey(DateTimeResolutionKey.END)) {
-            DateTime end = DateFormat("yyyy-MM-dd HH:mm:ss").parse(resolution[DateTimeResolutionKey.END]!);
-            end = end.hour == DateTimeConstants.HalfDayHourCount
-                ? end.subtract(Duration(hours: DateTimeConstants.HalfDayHourCount))
-                : end.add(Duration(hours: DateTimeConstants.HalfDayHourCount));
-
-            resolutionPm[DateTimeResolutionKey.END] = DateTimeFormatUtil.formatDateTime(end);
-          }
-
-          resolutionPm[DateTimeResolutionKey.Timex] = DateTimeFormatUtil.allStringToPm(timex);
-          break;
-        default:
-          break;
-      }
-      resolutionDic["${keyName}Pm"] = resolutionPm;
-    }
-  }
-
-  static void resolveWeekOf(Map<String, Object> resolutionDic, String keyName) {
-    if (resolutionDic.containsKey(keyName)) {
-      Map<String, String> resolution = resolutionDic[keyName] as Map<String, String>;
-
-      final monday = DateUtil.tryParse(resolution[DateTimeResolutionKey.START]);
-      resolution[DateTimeResolutionKey.Timex] = TimexUtility.generateWeekTimex(monday);
-
-      resolutionDic[keyName] = resolution;
-    }
-  }
-
-  static void addResolutionFieldsObject(Map<String, Object> dic, String key, Object? value) {
+  void addResolutionFieldsObject(Map<String, Object> dic, String key, Object? value) {
     if (value != null) {
       dic[key] = value;
     }
   }
 
-  static void addResolutionFieldsString(Map<String, String> dic, String key, String? value) {
+  void addResolutionFieldsString(Map<String, String> dic, String key, String? value) {
     if (!StringUtility.isNullOrEmpty(value)) {
       dic[key] = value!;
     }
   }
 
-  static ModelResult _getModelResult(DateTimeParseResult parsedDateTime) {
+  DateTimeParseResult setParseResult(
+      DateTimeParseResult slot, bool hasMod, String parserName, IOptionsConfiguration config) {
+    final slotValue = dateTimeResolution(slot, config);
+    // Change the type at last for the after or before modes
+    String type = "$parserName.${determineDateTimeType(slot.type!, hasMod, config)}";
+
+    slot.value = slotValue;
+    slot.type = type;
+
+    return slot;
+  }
+
+  String determineDateTimeType(String type, bool hasMod, IOptionsConfiguration config) {
+    if (config.options.match(DateTimeOptions.SplitDateAndTime)) {
+      if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
+        return DateTimeConstants.SYS_DATETIME_TIME;
+      }
+    } else {
+      if (hasMod) {
+        if (type == DateTimeConstants.SYS_DATETIME_DATE) {
+          return DateTimeConstants.SYS_DATETIME_DATEPERIOD;
+        }
+
+        if (type == DateTimeConstants.SYS_DATETIME_TIME) {
+          return DateTimeConstants.SYS_DATETIME_TIMEPERIOD;
+        }
+
+        if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
+          return DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD;
+        }
+      }
+    }
+
+    return type;
+  }
+
+  ModelResult _getModelResult(DateTimeParseResult parsedDateTime) {
     int start = parsedDateTime.start;
     int end = parsedDateTime.start + parsedDateTime.length - 1;
     String typeName = parsedDateTime.type!;
@@ -888,8 +896,6 @@ class DateTimeRecognizer {
     final result = map[ModelResult.parentTextKey]!;
     return result.toString();
   }
-
-  DateTimeRecognizer();
 }
 
 class DateTimeResolutionResult {
@@ -914,11 +920,18 @@ class DateTimeResolutionResult {
 
   List<Object>? list;
 
-  // Map<String, Object?> toMap() => {
-  //       "timex": timex,
-  //       "type": type,
-  //       "value": value,
-  //     };
+  Map<String, dynamic> toTestCaseJson() {
+    return {
+      if (timex != null) //
+        "Timex": timex,
+      if (futureResolution != null) //
+        "FutureResolution": futureResolution,
+      if (pastResolution != null) //
+        "PastResolution": pastResolution,
+      if (mod != null) //
+        "Mod": mod,
+    };
+  }
 }
 
 class TimeZoneResolutionResult {
@@ -938,13 +951,4 @@ class ResolutionKey {
   static final String IsoCurrency = "isoCurrency";
   static final String Offset = "offset";
   static final String RelativeTo = "relativeTo";
-}
-
-class DateTimeModel {
-  DateTimeModel();
-
-  List<DateTimeParseResult> parse(String query, DateTime referenceTime) {
-    // TODO:
-    return [];
-  }
 }

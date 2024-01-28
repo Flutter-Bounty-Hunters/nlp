@@ -163,6 +163,7 @@ abstract class BaseNumberExtractor implements IExtractor {
 
     getRegexes().forEach((regExp, dataType) {
       print(regExp.pattern);
+      print("");
       final matches = regExp.allMatches(source);
 
       for (final match in matches) {

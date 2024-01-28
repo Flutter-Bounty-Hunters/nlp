@@ -1,6 +1,6 @@
 import 'package:nlp/src/core/extraction.dart';
 import 'package:nlp/src/core/parser.dart';
-import 'package:nlp/src/date_time/base_duration_parser.dart';
+import 'package:nlp/src/duration/base_duration_parser.dart';
 import 'package:nlp/src/date_time/english_date_time_parser.dart';
 import 'package:nlp/src/duration/duration.dart';
 import 'package:nlp/src/duration/duration_extractor.dart';
