@@ -137,4 +137,12 @@ class QueryProcessor {
 
     return input.split(delimitersRegex).where((s) => s.isNotEmpty).toList();
   }
+
+  static String? removeDiacritics(String? query) {
+    if (query == null) {
+      return null;
+    }
+
+    return removeDiacritics(query);
+  }
 }

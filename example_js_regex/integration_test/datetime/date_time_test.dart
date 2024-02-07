@@ -5,7 +5,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:intl/intl.dart';
 import 'package:nlp/nlp.dart';
 
-import 'test_cases/date_time/date_time_model_cases.dart';
+import 'date_time_model_cases.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

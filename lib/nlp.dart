@@ -13,6 +13,10 @@ export 'src/duration/english_duration_parser_configuration.dart';
 
 export 'src/numbers/numbers.dart';
 
+export 'src/time/english_time_zone.dart';
+export 'src/time/english_time_zone_extractor.dart';
+export 'src/time/time_zone_extractor.dart';
+
 // NLP Processing Primitives
 export 'src/core/extraction.dart';
 export 'src/core/parser.dart';

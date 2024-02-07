@@ -3,7 +3,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:intl/intl.dart';
 import 'package:nlp/nlp.dart';
 
-import 'test_cases/date_time/duration_parser_cases.dart';
+import 'duration_parser_cases.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

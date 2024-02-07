@@ -1,7 +1,14 @@
+import 'dart:collection';
+
+import 'package:nlp/src/regular_expressions/string_extensions.dart';
+
 import 'extraction.dart';
 
 class StringMatcher {
-  StringMatcher({MatchStrategy strategy = MatchStrategy.TrieTree, ITokenizer? tokenizer,}) {
+  StringMatcher({
+    MatchStrategy strategy = MatchStrategy.TrieTree,
+    ITokenizer? tokenizer,
+  }) {
     this.tokenizer = tokenizer ?? SimpleTokenizer();
 
     switch (strategy) {
@@ -56,7 +63,7 @@ class StringMatcher {
   }
 
   Iterable<MatchResult<String>> findByTokenizedQuery(Iterable<String> tokenizedQuery) {
-    return matcher.find(tokenizedQuery);
+    return matcher.find(tokenizedQuery)!;
   }
 
   Iterable<MatchResult<String>> findByQueryText(String queryText) {
@@ -71,7 +78,9 @@ class StringMatcher {
       int length = endToken.end - startToken.start;
       String rtext = queryText.substring(start, start + length);
 
-      result.add(MatchResult<String>(start: start, length: length, canonicalValues: r.canonicalValues, text: rtext),);
+      result.add(
+        MatchResult<String>(start: start, length: length, canonicalValues: r.canonicalValues, text: rtext),
+      );
     }
 
     return result;
@@ -92,18 +101,18 @@ class SimpleTokenizer implements ITokenizer {
     for (int i = 0; i < input.length; i++) {
       final c = input[i];
 
-      if (Character.isWhitespace(c)) {
+      if (c.isWhitespace) {
         if (inToken) {
           tokens.add(Token(tokenStart, i - tokenStart, input.substring(tokenStart, i)));
           inToken = false;
         }
-      } else if (!Character.isLetterOrDigit(c) || isCjk(c)) {
+      } else if (!(c.isLetter || c.isDigit) || isCjk(c)) {
         if (inToken) {
           tokens.add(Token(tokenStart, i - tokenStart, input.substring(tokenStart, i)));
           inToken = false;
         }
 
-        tokens.add(new Token(i, 1, input.substring(i, i + 1)));
+        tokens.add(Token(i, 1, input.substring(i, i + 1)));
       } else {
         if (!inToken) {
           tokenStart = i;
@@ -113,38 +122,36 @@ class SimpleTokenizer implements ITokenizer {
     }
 
     if (inToken) {
-      tokens.add(new Token(tokenStart, chars.length - tokenStart, input.substring(tokenStart)));
+      tokens.add(Token(tokenStart, input.length - tokenStart, input.substring(tokenStart)));
     }
 
     return tokens;
   }
 
-  protected bool isChinese(char c) {
-    int uc = (int)c;
+  bool isChinese(String c) {
+    int uc = c.codeUnitAt(0);
 
-    return (uc >= (int)0x4E00 && uc <= (int)0x9FBF) || (uc >= (int)0x3400 && uc <= (int)0x4DBF);
+    return (uc >= 0x4E00 && uc <= 0x9FBF) || (uc >= 0x3400 && uc <= 0x4DBF);
   }
 
-  protected bool isJapanese(char c) {
-    int uc = (int)c;
+  bool isJapanese(String c) {
+    int uc = c.codeUnitAt(0);
 
-    return (uc >= 0x3040 && uc <= 0x309F) ||
-        (uc >= 0x30A0 && uc <= (int)0x30FF) ||
-        (uc >= (int)0xFF66 && uc <= (int)0xFF9D);
+    return (uc >= 0x3040 && uc <= 0x309F) || (uc >= 0x30A0 && uc <= 0x30FF) || (uc >= 0xFF66 && uc <= 0xFF9D);
   }
 
-  protected bool isKorean(char c) {
-    int uc = (int)c;
+  bool isKorean(String c) {
+    int uc = c.codeUnitAt(0);
 
-    return (uc >= (int)0xAC00 && uc <= (int)0xD7AF) ||
-    (uc >= (int)0x1100 && uc <= (int)0x11FF) ||
-    (uc >= (int)0x3130 && uc <= (int)0x318F) ||
-    (uc >= (int)0xFFB0 && uc <= (int)0xFFDC);
+    return (uc >= 0xAC00 && uc <= 0xD7AF) ||
+        (uc >= 0x1100 && uc <= 0x11FF) ||
+        (uc >= 0x3130 && uc <= 0x318F) ||
+        (uc >= 0xFFB0 && uc <= 0xFFDC);
   }
 
   // Check the character is Chinese/Japanese/Korean.
   // For those languages which are not using whitespace delimited symbol, we only simply tokenize the sentence by each single character.
-  private bool isCjk(char c) {
+  bool isCjk(String c) {
     return isChinese(c) || isJapanese(c) || isKorean(c);
   }
 }
@@ -154,7 +161,12 @@ abstract interface class ITokenizer {
 }
 
 class MatchResult<T> {
-  MatchResult({this.start = 0, this.length = 0, this.text, Set<String>? canonicalValues, }) : canonicalValues = canonicalValues ?? <String>{};
+  MatchResult({
+    this.start = 0,
+    this.length = 0,
+    this.text,
+    Set<String>? canonicalValues,
+  }) : canonicalValues = canonicalValues ?? <String>{};
 
   int start;
   int length;
@@ -168,28 +180,26 @@ class MatchResult<T> {
 
 enum MatchStrategy {
   AcAutomaton,
-  TrieTree
+  TrieTree,
 }
 
 class AcAutomation<T> extends AbstractMatcher<T> {
-  protected final AaNode<T> root;
+  AcAutomation() : root = AaNode<T>();
 
-  AcAutomation() {
-    root = AaNode<>();
-  }
+  final AaNode<T> root;
 
   @override
   void insert(Iterable<T> value, String id) {
     AaNode<T> node = root;
     int i = 0;
-    for (T item : value) {
-      AaNode<T> child = node.get(item);
+    for (T item in value) {
+      AaNode<T>? child = node.get(item);
       if (child == null) {
-        node.put(item, AaNode<>(item, i, node));
+        node.put(item, AaNode<T>(item, i, node));
         child = node.get(item);
       }
 
-      node = child;
+      node = child!;
       i++;
     }
 
@@ -197,143 +207,198 @@ class AcAutomation<T> extends AbstractMatcher<T> {
   }
 
   @override
-  void init(List<List<T>> values, String[] ids) {
-  this.batchInsert(values, ids);
-  Queue<AaNode<T>> queue = LinkedList<>();
-  queue.offer(root);
+  void init(List<List<T>> values, List<String> ids) {
+    batchInsert(values, ids);
+    final queue = Queue<AaNode<T>>();
+    queue.add(root);
 
-  while (!queue.isEmpty()) {
-  AaNode<T> node = queue.peek();
+    while (queue.isNotEmpty) {
+      AaNode<T> node = queue.first;
 
-  if (node.children != null) {
-  for (Object item : node.getIterable()) {
-  queue.offer((AaNode<T>)item);
-  }
-  }
+      if (node.children != null) {
+        for (Object item in node.getIterable()!) {
+          queue.add(item as AaNode<T>);
+        }
+      }
 
-  if (node == root) {
-  root.fail = root;
-  continue;
-  }
+      if (node == root) {
+        root.fail = root;
+        continue;
+      }
 
-  AaNode<T> fail = node.parent.fail;
+      AaNode<T> fail = node.parent!.fail!;
 
-  while (fail.get(node.word) == null && fail != root) {
-  fail = fail.fail;
-  }
+      while (fail.get(node.word as T) == null && fail != root) {
+        fail = fail.fail!;
+      }
 
-  node.fail = fail.get(node.word) != null ? fail.get(node.word) : root;
-  node.fail = node.fail == node ? root : node.fail;
-  }
+      node.fail = fail.get(node.word as T) ?? root;
+      node.fail = node.fail == node ? root : node.fail;
+    }
   }
 
   @override
   Iterable<MatchResult<T>> find(Iterable<T> queryText) {
-  AaNode<T> node = root;
-  int i = 0;
-  List<MatchResult<T>> result = ArrayList<>();
+    AaNode<T> node = root;
+    int i = 0;
+    final result = <MatchResult<T>>[];
 
-  for (T c : queryText) {
-  while (node.get(c) == null && node != root) {
-  node = node.fail;
-  }
+    for (T c in queryText) {
+      while (node.get(c) == null && node != root) {
+        node = node.fail!;
+      }
 
-  node = node.get(c) == null ? node.get(c) : root;
+      node = node.get(c) == null ? node.get(c)! : root;
 
-  for (AaNode<T> t = node; t != root ; t = t.fail) {
-  if (t.getEnd()) {
-  result.add(MatchResult<>(i - t.depth, t.depth + 1, t.values));
-  }
-  }
+      for (AaNode<T> t = node; t != root; t = t.fail!) {
+        if (t.getEnd()) {
+          result.add(MatchResult<T>(start: i - t.depth, length: t.depth + 1, canonicalValues: t.values));
+        }
+      }
 
-  i++;
-  }
+      i++;
+    }
 
-  return  result;
+    return result;
   }
 }
 
 class TrieTree<T> extends AbstractMatcher<T> {
-  protected final Node<T> root;
+  TrieTree() : root = Node<T>();
 
-  TrieTree() {
-    root = Node<>();
-  }
+  final Node<T> root;
 
   @override
   void insert(Iterable<T> value, String id) {
     Node<T> node = root;
 
-    for (T item : value) {
-      Node<T> child = node.get(item);
+    for (T item in value) {
+      Node<T>? child = node.get(item);
 
       if (child == null) {
-        node.put(item, Node<>());
+        node.put(item, Node<T>());
         child = node.get(item);
       }
 
-      node = child;
+      node = child!;
     }
 
     node.addValue(id);
   }
 
   @override
-  void init(List<List<T>> values, String[] ids) {
-  batchInsert(values, ids);
+  void init(List<List<T>> values, List<String> ids) {
+    batchInsert(values, ids);
   }
 
   @override
   Iterable<MatchResult<T>> find(Iterable<T> queryText) {
-  List<MatchResult<T>> result = ArrayList<>();
+    final result = <MatchResult<T>>[];
 
-  ArrayList<T> queryArray = ArrayList<>();
-  queryText.iterator().forEachRemaining(queryArray::add);
+    final queryArray = <T>[
+      ...queryText,
+    ];
 
-  for (int i = 0; i < queryArray.size(); i++) {
-  Node<T> node = root;
-  for (int j = i; j <= queryArray.size(); j++) {
-  if (node.getEnd()) {
-  result.add(MatchResult<>(i, j - i, node.values));
-  }
+    for (int i = 0; i < queryArray.length; i++) {
+      Node<T> node = root;
+      for (int j = i; j <= queryArray.length; j++) {
+        if (node.getEnd()) {
+          result.add(MatchResult<T>(start: i, length: j - i, canonicalValues: node.values));
+        }
 
-  if (j == queryArray.size()) {
-  break;
-  }
+        if (j == queryArray.length) {
+          break;
+        }
 
-  T text = queryArray.get(j);
-  if (node.get(text) == null) {
-  break;
-  }
+        T text = queryArray[j];
+        if (node.get(text) == null) {
+          break;
+        }
 
-  node = node.get(text);
-  }
-  }
+        node = node.get(text)!;
+      }
+    }
 
-  return  result;
+    return result;
   }
 }
 
 abstract class AbstractMatcher<T> implements IMatcher<T> {
   void insert(Iterable<T> value, String id);
 
-  protected void batchInsert(List<List<T>> values, List<string> ids) {
-  if (values.size() != ids.length) {
-  throw new IllegalArgumentException();
-  }
+  void batchInsert(List<List<T>> values, List<String> ids) {
+    if (values.length != ids.length) {
+      throw Exception("Expected values to have same length as IDs - ${values.length} vs ${ids.length}");
+    }
 
-  for (int i = 0; i < values.size(); i++) {
-  insert(values.get(i), ids[i]);
-  }
+    for (int i = 0; i < values.length; i++) {
+      insert(values[i], ids[i]);
+    }
   }
 
   bool isMatch(Iterable<T> queryText) {
-  return find(queryText) != null;
+    return find(queryText) != null;
   }
 }
 
 abstract interface class IMatcher<T> {
   void init(List<List<T>> values, List<String> ids);
 
-  Iterable<MatchResult<T>> find(Iterable<T> queryText);
+  Iterable<MatchResult<T>>? find(Iterable<T> queryText);
+}
+
+class AaNode<T> extends Node<T> {
+  AaNode([this.word, this.depth = 0, this.parent]);
+
+  T? word;
+  int depth;
+  AaNode<T>? parent;
+  AaNode<T>? fail;
+
+  @override
+  AaNode<T>? get(T c) {
+    return children != null && children!.containsKey(c) ? children![c] as AaNode<T> : null;
+  }
+
+  @override
+  void put(T c, Node<T> value) {
+    children ??= HashMap<T, AaNode<T>>();
+    children![c] = value as AaNode<T>;
+  }
+
+  @override
+  String toString() {
+    return word.toString();
+  }
+}
+
+class Node<T> {
+  Iterable<Node<T>>? getEnumerator() {
+    return children?.values;
+  }
+
+  Iterable<Node<T>>? getIterable() {
+    return children?.values;
+  }
+
+  HashSet<String>? values;
+  Map<T, Node<T>>? children;
+
+  bool getEnd() {
+    return this.values != null && values!.isNotEmpty;
+  }
+
+  Node<T>? get(T c) {
+    return children != null && children!.containsKey(c) ? children![c] : null;
+  }
+
+  void put(T c, Node<T> value) {
+    children ??= HashMap<T, Node<T>>();
+    children![c] = value;
+  }
+
+  void addValue(String value) {
+    values ??= HashSet<String>();
+    values!.add(value);
+  }
 }
