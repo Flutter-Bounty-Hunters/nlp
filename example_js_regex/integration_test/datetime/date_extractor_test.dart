@@ -17,7 +17,15 @@ void main() {
           ),
         );
 
-        final extractions = extractor.extract(input);
+        DateTime? referenceDate;
+
+        final context = testCase["Context"] as Map<String, dynamic>?;
+
+        if (context != null) {
+          referenceDate = DateTime.parse(context["ReferenceDateTime"]);
+        }
+
+        final extractions = extractor.extractDateTime(input, referenceDate ?? DateTime.now());
 
         final actualResults = extractions.map((extraction) => extraction.toTestCaseJson()).toList();
         final expectedResults = testCase["Results"] as List<dynamic>;

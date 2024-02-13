@@ -35,24 +35,24 @@ class RegExpComposer {
     // print(result);
     // print("");
 
-    index = 0;
-    result = _replace(result, _matchPositiveLookbehind, (Match m) {
-      final replacedString = "(?<plb$_groupNameIndexSep$index>";
-      index += 1;
+    // index = 0;
+    // result = _replace(result, _matchPositiveLookbehind, (Match m) {
+    //   final replacedString = "(?<plb$_groupNameIndexSep$index>";
+    //   index += 1;
 
-      return replacedString;
-    });
+    //   return replacedString;
+    // });
     // print("Pattern after second replace:");
     // print(result);
     // print("");
 
-    index = 0;
-    result = _replace(result, _matchNegativeLookbehind, (Match m) {
-      final replacedString = "(?<nlb$_groupNameIndexSep$index>";
-      index += 1;
+    // index = 0;
+    // result = _replace(result, _matchNegativeLookbehind, (Match m) {
+    //   final replacedString = "(?<nlb$_groupNameIndexSep$index>";
+    //   index += 1;
 
-      return replacedString;
-    });
+    //   return replacedString;
+    // });
     // print("Pattern after third replace:");
     // print(result);
     // print("");
@@ -176,7 +176,7 @@ class RegExpComposer {
             print("ERROR: Couldn't find capture match for $key");
           }
 
-          Capture newCapture = Capture(inputMatchValue, jsBounds!.$1, jsBounds.$2);
+          Capture newCapture = Capture(inputMatchValue, jsBounds!.$1, jsBounds.$2 - jsBounds.$1);
           // Capture newCapture = Capture(inputMatchValue, match.start, match.end - match.start);
           print("    - capture - index: ${newCapture.index}, length: ${newCapture.length}, value: ${newCapture.value}");
 
@@ -186,7 +186,7 @@ class RegExpComposer {
           final captures = List<Capture>.from(groups[groupKey]!.captures);
           captures.add(newCapture);
 
-          groups[groupKey] = NlpMatchGroup(inputMatchValue, match.start, match.end - match.start, captures);
+          groups[groupKey] = NlpMatchGroup(inputMatchValue, newCapture.index, newCapture.length, captures);
 
           print("Set '$groupKey' -> '$inputMatchValue'");
         }
@@ -239,6 +239,24 @@ class RegExpComposer {
     print("");
 
     return matches;
+  }
+
+  static NlpMatch? matchBegin(RegExp regExp, String text, [bool trim = false]) {
+    final match = getMatchesSimple(regExp, text).firstOrNull;
+    if (match == null) {
+      return null;
+    }
+
+    String strBefore = text.substring(0, match.index);
+    if (trim) {
+      strBefore = strBefore.trim();
+    }
+
+    if (strBefore.isNotEmpty) {
+      return null;
+    }
+
+    return match;
   }
 
   static Map<String, String> getNamedGroups(
@@ -364,7 +382,7 @@ extension NlpRegExp on RegExp {
     if (trim) {
       strAfter = strAfter.trim();
     }
-    if (strAfter.isEmpty) {
+    if (strAfter.isNotEmpty) {
       return null;
     }
 
