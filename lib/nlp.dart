@@ -5,6 +5,8 @@ export 'src/date_time/constants.dart';
 export 'src/date_time/english_date_time.dart';
 export 'src/date_time/english_date_time_parser.dart';
 export 'src/date_time/date_time_recognizer.dart';
+export 'src/date_time/base_date_extractor.dart';
+export 'src/date_time/english_date_extractor.dart';
 
 export 'src/duration/base_duration_parser.dart';
 export 'src/duration/duration.dart';

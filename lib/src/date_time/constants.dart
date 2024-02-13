@@ -179,6 +179,17 @@ class DateTimeConstants {
   static const Night = "TNI";
   static const BusinessHour = "TBH";
 
+  static final HolidayWeekend = "holidayWeekend";
+  static final Holiday = "holiday";
+
+  static final YearGroupName = "year";
+  static final DayGroupName = "day";
+  static final MonthGroupName = "month";
+  static final WeekdayGroupName = "weekday";
+
+  static final BASE_YEAR_PAST_CENTURY = 1900;
+  static final BASE_YEAR_CURRENT_CENTURY = 2000;
+
   const DateTimeConstants._();
 }
 

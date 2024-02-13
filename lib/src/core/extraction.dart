@@ -52,6 +52,8 @@ class ExtractResult {
 }
 
 class Metadata {
+  Metadata({this.isDurationWithBeforeAndAfter = false});
+
   bool isHoliday = false;
 
   bool hasMod = false;
@@ -68,7 +70,13 @@ class Metadata {
   // (usually regards as "5 days ago" in English) in Chinese, we need to decide whether this is a "Date with Mode" or "Duration with Before and After".
   // We use this flag to avoid duplicate judgment both in the Extraction step and Parse step.
   // Currently, this flag is only used in Chinese DateTime as other languages don't have this ambiguity cases.
-  bool isDurationWithBeforeAndAfter = false;
+  bool isDurationWithBeforeAndAfter;
+
+  bool isHolidayRange = false;
+
+  bool isHolidayWeekend = false;
+
+  String holidayName = "";
 }
 
 class Token {

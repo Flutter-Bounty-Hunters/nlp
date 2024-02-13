@@ -2,12 +2,13 @@
 
 import 'package:nlp/src/core/extraction.dart';
 import 'package:nlp/src/date_time/constants.dart';
+import 'package:nlp/src/date_time/date_time_extraction.dart';
 import 'package:nlp/src/date_time/english_date_time.dart';
 import 'package:nlp/src/duration/duration.dart';
 import 'package:nlp/src/numbers/numbers.dart';
 import 'package:nlp/src/regular_expressions/regular_expressions_extensions.dart';
 
-class DurationExtractor implements IExtractor {
+class DurationExtractor implements IDateTimeExtractor {
   DurationExtractor({
     required this.config,
     this.merge = true,
@@ -19,8 +20,12 @@ class DurationExtractor implements IExtractor {
   String get extractorName => "duration";
 
   @override
+  String getExtractorName() => extractorName;
+
+  @override
   List<ExtractResult> extract(String query) => extractDateTime(query, DateTime.now());
 
+  @override
   List<ExtractResult> extractDateTime(String query, DateTime referenceTime) {
     print("DurationExtractor - extract() - '$query'");
     final tokens = <Token>[];
