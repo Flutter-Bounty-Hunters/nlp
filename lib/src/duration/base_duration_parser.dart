@@ -421,9 +421,9 @@ class BaseDurationParser implements IDateTimeParser {
   DateTimeResolutionResult _getResultFromRegex(RegExp regExp, String text, String numStr) {
     var result = DateTimeResolutionResult();
 
-    final match = regExp.allMatches(text).firstOrNull;
+    final match = RegExpComposer.getMatchesSimple(regExp, text).firstOrNull;
     if (match != null) {
-      String srcUnit = match.namedGroup("unit")!.toLowerCase();
+      String srcUnit = match.getGroup("unit").value.toLowerCase();
       if (config.getUnitMap().containsKey(srcUnit)) {
         String unitStr = config.getUnitMap()[srcUnit]!;
 

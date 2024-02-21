@@ -5,8 +5,18 @@ import 'package:nlp/src/regular_expressions/regular_expressions_extensions.dart'
 class DateUtil {
   static final DateFormat DATE_TIME_FORMATTER = DateFormat("yyyy-MM-dd");
 
+  static final List<int> _monthValidDays = <int>[31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  static const _leapMonth = 2;
+
   static DateTime minValue() {
     return DateTime(1, 1, 1, 0, 0, 0, 0);
+  }
+
+  static int daysInMonth(int year, int month) {
+    final daysInMonth = month == _leapMonth //
+        ? LeapMonthDays(year)
+        : _monthValidDays[month - 1];
+    return daysInMonth;
   }
 
   static bool isValidDate(int year, int month, int day) {
@@ -14,6 +24,22 @@ class DateUtil {
     final monthStr = month.toString().padLeft(2, '0');
     final dayStr = day.toString().padLeft(2, '0');
     return DateTime.tryParse('$yearStr-$monthStr-$dayStr') != null;
+  }
+
+  static DateTime createSafeDate(int year, int month, int day) {
+    if (year < 1 || year > 9999) {
+      return minValue();
+    }
+
+    final daysInMonth = month == _leapMonth //
+        ? LeapMonthDays(year)
+        : _monthValidDays[month - 1];
+
+    if (month >= 1 && month <= 12 && day >= 1 && day <= daysInMonth) {
+      return DateTime(year, month, day);
+    }
+
+    return minValue();
   }
 
   static DateTime? tryParse(String? date) {
@@ -119,6 +145,10 @@ class DateUtil {
     }
 
     return false;
+  }
+
+  static int LeapMonthDays(int year) {
+    return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 ? 29 : 28;
   }
 
   const DateUtil._();

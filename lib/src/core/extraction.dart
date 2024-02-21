@@ -52,9 +52,12 @@ class ExtractResult {
 }
 
 class Metadata {
-  Metadata({this.isDurationWithBeforeAndAfter = false});
+  Metadata({
+    this.isDurationWithBeforeAndAfter = false,
+    this.isHoliday = false,
+  });
 
-  bool isHoliday = false;
+  bool isHoliday;
 
   bool hasMod = false;
 
@@ -72,11 +75,15 @@ class Metadata {
   // Currently, this flag is only used in Chinese DateTime as other languages don't have this ambiguity cases.
   bool isDurationWithBeforeAndAfter;
 
+  bool isDurationDateWithWeekday = false;
+
   bool isHolidayRange = false;
 
   bool isHolidayWeekend = false;
 
   String holidayName = "";
+
+  bool isOrdinalRelative = false;
 }
 
 class Token {

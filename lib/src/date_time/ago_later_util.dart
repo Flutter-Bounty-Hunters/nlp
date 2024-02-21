@@ -1,5 +1,9 @@
 import 'package:nlp/nlp.dart';
+import 'package:nlp/src/date_time/date_time_extraction.dart';
+import 'package:nlp/src/date_time/date_time_format_util.dart';
+import 'package:nlp/src/date_time/date_time_parsing.dart';
 import 'package:nlp/src/date_time/datetime_utility_configuration.dart';
+import 'package:nlp/src/numbers/number_constants.dart';
 import 'package:nlp/src/regular_expressions/matching_util.dart';
 
 class AgoLaterUtil {
@@ -131,4 +135,162 @@ class AgoLaterUtil {
 
     return ret;
   }
+
+  static DateTimeResolutionResult ParseDurationWithAgoAndLater(
+      String text,
+      DateTime referenceTime,
+      IDateTimeExtractor durationExtractor,
+      IDateTimeParser durationParser,
+      IParser numberParser,
+      Map<String, String> unitMap,
+      RegExp unitRegex,
+      IDateTimeUtilityConfiguration utilityConfiguration,
+      SwiftDayFunc swiftDay) {
+    var ret = DateTimeResolutionResult();
+    var durationRes = durationExtractor.extractDateTime(text, referenceTime);
+
+    if (durationRes.isNotEmpty) {
+      var pr = durationParser.parseDateTime(durationRes[0], referenceTime);
+      var matches = RegExpComposer.getMatchesSimple(unitRegex, text);
+      if (matches.isNotEmpty) {
+        var afterStr = text.substring(durationRes[0].start + durationRes[0].length).trim();
+
+        var beforeStr = text.substring(0, durationRes[0].start).trim();
+
+        var mode = AgoLaterMode.Date;
+        if (pr.timexStr!.contains("T")) {
+          mode = AgoLaterMode.DateTime;
+        }
+
+        if (pr.value != null) {
+          return GetAgoLaterResult(
+              pr, afterStr, beforeStr, referenceTime, numberParser, utilityConfiguration, mode, swiftDay);
+        }
+      }
+    }
+
+    return ret;
+  }
+
+  static DateTimeResolutionResult GetAgoLaterResult(
+      DateTimeParseResult durationParseResult,
+      String afterStr,
+      String beforeStr,
+      DateTime referenceTime,
+      IParser numberParser,
+      IDateTimeUtilityConfiguration utilityConfiguration,
+      AgoLaterMode mode,
+      SwiftDayFunc swiftDay) {
+    var ret = DateTimeResolutionResult();
+    var resultDateTime = referenceTime;
+    var timex = durationParseResult.timexStr;
+
+    if ((durationParseResult.value as DateTimeResolutionResult).mod == DateTimeConstants.MORE_THAN_MOD) {
+      ret.mod = DateTimeConstants.MORE_THAN_MOD;
+    } else if ((durationParseResult.value as DateTimeResolutionResult).mod == DateTimeConstants.LESS_THAN_MOD) {
+      ret.mod = DateTimeConstants.LESS_THAN_MOD;
+    }
+
+    int swift = 0;
+    bool isMatch = false, isLater = false;
+    String? dayStr;
+
+    // Item2 is a label identifying the regex defined in Item1
+    var agoLaterRegexTuples = <(RegExp, String)>[
+      (utilityConfiguration.agoRegExp(), Constants.AGO_LABEL),
+      (utilityConfiguration.laterRegExp(), Constants.LATER_LABEL),
+    ];
+
+    // AgoRegex and LaterRegex cases
+    for (var regex in agoLaterRegexTuples) {
+      // Match in afterStr
+      if (MatchingUtil.ContainsAgoLaterIndex(afterStr, regex.$1, true)) {
+        isMatch = true;
+        isLater = regex.$2 == Constants.LATER_LABEL;
+        var match = RegExpComposer.getMatchesSimple(regex.$1, afterStr).firstOrNull;
+        dayStr = match?.getGroup("day").value;
+      }
+
+      if (utilityConfiguration.checkBothBeforeAfter()) {
+        // Match split between beforeStr and afterStr
+        if ((dayStr == null || dayStr.isEmpty) && isMatch) {
+          var match = RegExpComposer.getMatchesSimple(regex.$1, "$beforeStr $afterStr").firstOrNull;
+          dayStr = match?.getGroup("day").value;
+        }
+
+        // Match in beforeStr
+        if ((dayStr == null || dayStr.isEmpty) && MatchingUtil.ContainsAgoLaterIndex(beforeStr, regex.$1, false)) {
+          isMatch = true;
+          isLater = regex.$2 == Constants.LATER_LABEL;
+          var match = RegExpComposer.getMatchesSimple(regex.$1, beforeStr).firstOrNull;
+          dayStr = match?.getGroup("day").value;
+        }
+      }
+
+      if (isMatch) {
+        break;
+      }
+    }
+
+    // InConnectorRegex cases
+    if (!isMatch) {
+      if (MatchingUtil.ContainsTermIndex(beforeStr, utilityConfiguration.inConnectorRegExp())) {
+        // Match in afterStr
+        isMatch = isLater = true;
+        var match = RegExpComposer.getMatchesSimple(utilityConfiguration.laterRegExp(), afterStr).firstOrNull;
+        dayStr = match?.getGroup("day").value;
+      } else if (utilityConfiguration.checkBothBeforeAfter() &&
+          MatchingUtil.ContainsAgoLaterIndex(afterStr, utilityConfiguration.inConnectorRegExp(), true)) {
+        // Match in beforeStr
+        isMatch = isLater = true;
+        var match = RegExpComposer.getMatchesSimple(utilityConfiguration.laterRegExp(), beforeStr).firstOrNull;
+        dayStr = match?.getGroup("day").value;
+      }
+    }
+
+    if (isMatch) {
+      // Handle cases like "3 days before yesterday", "3 days after tomorrow"
+      if (dayStr != null && dayStr.isNotEmpty) {
+        swift = swiftDay(dayStr);
+      }
+
+      if (isLater) {
+        var yearMatch =
+            RegExpComposer.getMatchesSimple(utilityConfiguration.sinceYearSuffixRegExp(), afterStr).firstOrNull;
+        if (yearMatch != null) {
+          var yearString = yearMatch.getGroup(DateTimeConstants.YearGroupName).value;
+          var yearEr = ExtractResult(start: yearMatch.index, length: yearMatch.length, text: yearString);
+          var year = (numberParser.parse(yearEr)?.value as double?)?.toInt() ?? 0;
+          referenceTime = DateTime(year, 1, 1);
+        }
+      }
+
+      var isFuture = isLater;
+      resultDateTime = DurationParsingUtil.shiftDateTime(timex ?? "", referenceTime.AddDays(swift), isFuture);
+
+      (durationParseResult.value as DateTimeResolutionResult).mod =
+          isLater ? DateTimeConstants.AFTER_MOD : DateTimeConstants.BEFORE_MOD;
+    }
+
+    if (resultDateTime != referenceTime) {
+      if (mode == AgoLaterMode.Date) {
+        ret.timex = DateTimeFormatUtil.luisDateFromDateTime(resultDateTime);
+      } else if (mode == AgoLaterMode.DateTime) {
+        ret.timex = DateTimeFormatUtil.luisDateFromDateTime(resultDateTime);
+      }
+
+      ret.futureValue = ret.pastValue = resultDateTime;
+      ret.subDateTimeEntities = [durationParseResult];
+      ret.success = true;
+    }
+
+    return ret;
+  }
 }
+
+enum AgoLaterMode {
+  Date,
+  DateTime,
+}
+
+typedef SwiftDayFunc = int Function(String text);

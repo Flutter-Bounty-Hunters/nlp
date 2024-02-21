@@ -23,4 +23,7 @@ class Constants {
   static final RELATIVE_START = "start";
   static final RELATIVE_END = "end";
   static final RELATIVE_CURRENT = "current";
+
+  static final AGO_LABEL = "ago";
+  static final LATER_LABEL = "later";
 }

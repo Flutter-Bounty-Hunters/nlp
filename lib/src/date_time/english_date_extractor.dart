@@ -32,7 +32,6 @@ class EnglishDateExtractorConfiguration extends BaseOptionsConfiguration impleme
 
   @override
   List<RegExp> dateRegExpList() {
-    //return [RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.DateExtractorA)];
     final enableDmy =
         dmyDateFormat || EnglishDateTime.DefaultLanguageFallback == DateTimeConstants.DefaultLanguageFallback_DMY;
 

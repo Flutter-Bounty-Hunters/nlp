@@ -193,6 +193,79 @@ class DateTimeConstants {
   const DateTimeConstants._();
 }
 
+class TasksModeConstants {
+  // These are some particular values for timezone recognition
+  static const int WeekDayCount = 7;
+
+  // Hours in a half day
+  static const int HalfDayHourCount = 12;
+
+  // Default boundaries for time of day resolution under TasksMode
+  static const int EarlyMorningBeginHour = 6;
+  static const int EarlyMorningEndHour = 6;
+  static const int MorningBeginHour = 6;
+  static const int MorningEndHour = 6;
+  static const int MidDayBeginHour = 12;
+  static const int MidDayEndHour = 12;
+  static const int AfternoonBeginHour = 12;
+  static const int AfternoonEndHour = 12;
+  static const int EveningBeginHour = 18;
+  static const int EveningEndHour = 18;
+  static const int DaytimeBeginHour = 16;
+  static const int DaytimeEndHour = 16;
+  static const int NighttimeBeginHour = 21;
+  static const int NighttimeEndHour = 21;
+  static const int BusinessBeginHour = 8;
+  static const int BusinessEndHour = 18;
+  static const int NightBeginHour = 21;
+  static const int NightEndHour = 21;
+  static const int NightEndMin = 0;
+  static const int MealtimeBreakfastBeginHour = 8;
+  static const int MealtimeBreakfastEndHour = 12;
+  static const int MealtimeBrunchBeginHour = 8;
+  static const int MealtimeBrunchEndHour = 12;
+  static const int MealtimeLunchBeginHour = 11;
+  static const int MealtimeLunchEndHour = 13;
+  static const int MealtimeDinnerBeginHour = 20;
+  static const int MealtimeDinnerEndHour = 21;
+
+  // constants
+  static const String PeriodDaySuffix = "P1D";
+  static const String YearlyPeriodSuffix = "P1Y";
+  static const String WeeklyPeriodSuffix = "P1W";
+  static const String DailyPeriodPrefix = "P1";
+  static const String AlternatePeriodPrefix = "P2";
+  static const String WeekEndPrefix = "WE";
+  static const String WeekDayPrefix = "WD";
+
+  // Fuzzy timex
+  static const String FuzzyYearAndMonth = "XXXX-XX-";
+  static const String FuzzyYearAndWeek = "XXXX-WXX-";
+  static const String FuzzyYear = "XXXX-";
+
+  // Default time in String format
+  static const String StringMorningHHMMSS = "06:00:00";
+  static const String StringAfternoonHHMMSS = "12:00:00";
+  static const String StringEveningHHMMSS = "18:00:00";
+  static const String StringNightHHMMSS = "21:00:00";
+
+  // timex pattern to be extracted by SetHandler
+  static const String PeriodString = "period";
+  static const String AmountString = "amount";
+  static const String DateUnitString = "dateUnit";
+
+  // TasksMode Additional units and constants in SetParser
+  static const String KeyIntSize = "intervalSize";
+  static const String KeyIntType = "intervalType";
+  static const String KeySetTypeName = "setTypename";
+  static const String KeySet = "Set: ";
+  static const String NextWeekGroupName = "next week";
+
+  // TasksMode SetParser Date calucation constant from value
+  static const int IntDateStartIdx = 0;
+  static const int IntDateEndIdx = 10;
+}
+
 // Min/max integer values were taken from Java because Dart doesn't expose this info.
 const intMin = -2147483648;
 const intMax = 2147483647;

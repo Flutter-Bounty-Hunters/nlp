@@ -45,6 +45,14 @@ class MatchingUtil {
     return null;
   }
 
+  static bool ContainsAgoLaterIndex(String text, RegExp regex, bool inSuffix) {
+    return GetAgoLaterIndex(text, regex, inSuffix) != null;
+  }
+
+  static bool ContainsTermIndex(String text, RegExp regex) {
+    return GetTermIndex(text, regex) != null;
+  }
+
   static bool isInvalidDayNumberPrefix(String prefix) {
     return invalidDayNumberPrefix.hasMatch(prefix);
   }

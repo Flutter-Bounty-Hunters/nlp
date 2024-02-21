@@ -20,23 +20,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   void _runNlpExample() {
-    // const phrase = "It happened when the baby was only ten months old";
-    // const phrase = "I'll leave for 3h";
-    const phrase = "The project estimative is a 2 ys duration";
-    // const phrase = "We've been in Pakistan for 2ys";
-    // const phrase = "I'll leave for 1 year 1 month 21 days";
-    // const phrase = "I'll leave for 2 days 1 month";
+    const phrase = "We had a meeting 1 month and 21 days ago";
+    final referenceDate = DateTime(2017, 11, 23);
+    final extractor = BaseDateExtractor(
+      EnglishDateExtractorConfiguration(
+        EnglishCommonDateTimeParserConfiguration(DateTimeOptions.None),
+      ),
+    );
 
-    // Datetime recognizer This model will find any Date even if its write in colloquial language
-    // E.g "I'll go back 8pm today" will return "2017-10-04 20:00:00"
-    final results = DateTimeRecognizer.recognizeDateTime(phrase);
+    final parser = BaseDateParser(
+      EnglishDateParserConfiguration(
+        EnglishCommonDateTimeParserConfiguration(DateTimeOptions.None),
+      ),
+    );
 
-    print("I found the following entities (${results.length})");
-    for (final result in results) {
-      print("Type: ${result.typeName}");
-      print(
-        const JsonEncoder.withIndent("  ").convert(result.toJson()),
-      );
+    final extractions = extractor.extract(phrase);
+
+    final parsed = extractions //
+        .map((extraction) => parser.parseDateTime(extraction, referenceDate))
+        .toList();
+    for (final item in parsed) {
+      print((item.value as DateTimeResolutionResult?)?.toTestCaseJson());
     }
   }
 

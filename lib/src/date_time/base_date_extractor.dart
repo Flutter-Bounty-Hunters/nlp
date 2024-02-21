@@ -100,11 +100,13 @@ class BaseDateExtractor implements IDateExtractor {
   }
 
   List<ExtractResult> _performExtraction(String text, DateTime reference) {
+    final normalizedText = text.toLowerCase();
+
     var tokens = <Token>[];
-    tokens.addAll(_basicRegExpMatch(text));
-    tokens.addAll(_implicitDate(text));
-    tokens.addAll(_numberWithMonth(text, reference));
-    tokens.addAll(_extractRelativeDurationDate(text, tokens, reference));
+    tokens.addAll(_basicRegExpMatch(normalizedText));
+    tokens.addAll(_implicitDate(normalizedText));
+    tokens.addAll(_numberWithMonth(normalizedText, reference));
+    tokens.addAll(_extractRelativeDurationDate(normalizedText, tokens, reference));
 
     var results = Token.mergeAllTokens(tokens, text, getExtractorName());
 
@@ -140,11 +142,8 @@ class BaseDateExtractor implements IDateExtractor {
   List<Token> _implicitDate(String text) {
     final ret = <Token>[];
 
-    int i = 0;
     for (final regex in config.implicitDateList()) {
       ret.addAll(Token.getTokenFromRegex(regex, text));
-      i++;
-      if (i > 6) ;
     }
 
     return ret;
@@ -359,7 +358,7 @@ class BaseDateExtractor implements IDateExtractor {
             for (var token in tempTokens) {
               var start = er.start + er.length + connector.start + connector.length;
               var length = token.start - start;
-              if (length > 0 && start + length < text.length && text.substring(start, length).trim().isEmpty) {
+              if (length > 0 && start + length < text.length && text.substring(start, start + length).trim().isEmpty) {
                 Token tok = Token(er.start, token.end);
                 ret.add(tok);
               }

@@ -1,8 +1,10 @@
 import 'package:nlp/src/core/english_merged_extractor.dart';
 import 'package:nlp/src/core/extraction.dart';
 import 'package:nlp/src/core/parser.dart';
+import 'package:nlp/src/date_time/base_date_extractor.dart';
 import 'package:nlp/src/date_time/base_holiday_extractor.dart';
 import 'package:nlp/src/date_time/english/english_holiday_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english_date_extractor.dart';
 import 'package:nlp/src/duration/base_duration_parser.dart';
 import 'package:nlp/src/date_time/date_time_extraction.dart';
 import 'package:nlp/src/date_time/date_time_parsing.dart';
@@ -102,7 +104,7 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
     numberParser = BaseNumberParser(EnglishNumberParserConfiguration());
 
     durationExtractor = DurationExtractor(config: EnglishDurationExtractorConfiguration());
-    //dateExtractor = BaseDateExtractor(EnglishDateExtractorConfiguration(this));
+    dateExtractor = BaseDateExtractor(EnglishDateExtractorConfiguration(this));
     // timeExtractor = BaseTimeExtractor(EnglishTimeExtractorConfiguration(options));
     // dateTimeExtractor = BaseDateTimeExtractor(EnglishDateTimeExtractorConfiguration(options));
     // datePeriodExtractor = BaseDatePeriodExtractor(EnglishDatePeriodExtractorConfiguration(this));
