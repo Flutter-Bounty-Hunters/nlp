@@ -20,6 +20,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   void _runNlpExample() {
+    // const phrase = "It happened when the baby was only ten months old";
+    // const phrase = "I'll leave for 3h";
+    //const phrase = "The project estimative is a 2 ys duration";
+    // const phrase = "We've been in Pakistan for 2ys";
+    // const phrase = "I'll leave for 1 year 1 month 21 days";
+    // const phrase = "I'll leave for 2 days 1 month";
     const phrase = "We had a meeting 1 month and 21 days ago";
     final referenceDate = DateTime(2017, 11, 23);
     final extractor = BaseDateExtractor(

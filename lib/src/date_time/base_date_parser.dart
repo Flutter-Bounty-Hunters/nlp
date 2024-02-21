@@ -1111,13 +1111,7 @@ extension DateTimeExtensions on DateTime {
   }
 
   DateTime AddDays(int days) {
-    // final timeZoneOffset = this.timeZoneOffset;
     final newDate = add(Duration(days: days));
-
-    // if (newDate.timeZoneOffset != timeZoneOffset) {
-    //   return newDate.subtract(newDate.timeZoneOffset).add(timeZoneOffset);
-    // }
-
     return _adjustTimeZones(newDate);
   }
 
