@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:nlp/src/date_time/base_date_parser.dart';
 import 'package:nlp/src/date_time/constants.dart';
 
 import '../core/extraction.dart';
@@ -66,14 +67,14 @@ class DurationParsingUtil {
           chronoUnit = ChronoUnit.SECONDS;
           break;
         case DateTimeConstants.TimexDay:
-          chronoUnit = ChronoUnit.DAYS;
+          result = result.AddDays((number * futureOrPast).round());
           break;
         case DateTimeConstants.TimexWeek:
           chronoUnit = ChronoUnit.WEEKS;
           break;
         case DateTimeConstants.TimexMonthFull:
           chronoUnit = null;
-          result.copyWith(month: result.month + (number * futureOrPast).round());
+          result = result.AddMonths((number * futureOrPast).round());
           break;
         case DateTimeConstants.TimexYear:
           chronoUnit = null;
@@ -229,6 +230,7 @@ enum DateTimeOptions {
   SplitDateAndTime(2),
   CalendarMode(4),
   ExtendedTypes(8),
+  TasksMode(1048576),
   EnablePreview(8388608),
   ExperimentalMode(4194304),
   ComplexCalendar(8 + 4 + 8388608);

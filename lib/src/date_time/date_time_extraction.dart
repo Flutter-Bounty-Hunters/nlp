@@ -1,7 +1,8 @@
 import 'package:nlp/src/core/extraction.dart';
+import 'package:nlp/src/regular_expressions/regular_expressions_extensions.dart';
 
 abstract interface class IDateExtractor extends IDateTimeExtractor {
-  int getYearFromText(Match match);
+  int getYearFromText(NlpMatch match);
 }
 
 abstract interface class IDateTimeExtractor implements IExtractor {

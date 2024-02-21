@@ -64,6 +64,10 @@ class TimexUtility {
     pastResolution[DateTimeResolutionKey.Timex] = timexes[1];
     return resolutionDic;
   }
+
+  static String modifyAmbiguousCenturyTimex(String timex) {
+    return "XX${timex.substring(2)}";
+  }
 }
 
 class DateTimeResolutionKey {

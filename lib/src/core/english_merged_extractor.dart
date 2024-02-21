@@ -1,11 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:nlp/src/core/extraction.dart';
+import 'package:nlp/src/date_time/base_holiday_extractor.dart';
 import 'package:nlp/src/date_time/date_time_extraction.dart';
+import 'package:nlp/src/date_time/english/english_holiday_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english_date_time.dart';
 import 'package:nlp/src/duration/duration.dart';
 import 'package:nlp/src/duration/duration_extractor.dart';
-import 'package:nlp/src/numbers/numbers.dart';
 import 'package:nlp/src/regular_expressions/regular_expressions_extensions.dart';
 
 class EnglishMergedExtractorConfiguration extends BaseOptionsConfiguration implements IMergedExtractorConfiguration {
@@ -40,7 +41,7 @@ class EnglishMergedExtractorConfiguration extends BaseOptionsConfiguration imple
     // setExtractor = BaseSetExtractor(EnglishSetExtractorConfiguration(options));
     // dateExtractor = BaseDateExtractor(EnglishDateExtractorConfiguration(this));
     // timeExtractor = BaseTimeExtractor(EnglishTimeExtractorConfiguration(options));
-    // holidayExtractor = BaseHolidayExtractor(EnglishHolidayExtractorConfiguration());
+    holidayExtractor = BaseHolidayExtractor(config: EnglishHolidayExtractorConfiguration(options));
     // datePeriodExtractor = BaseDatePeriodExtractor(EnglishDatePeriodExtractorConfiguration(this));
     // dateTimeExtractor = BaseDateTimeExtractor(EnglishDateTimeExtractorConfiguration(options));
     durationExtractor = DurationExtractor(config: EnglishDurationExtractorConfiguration(options));

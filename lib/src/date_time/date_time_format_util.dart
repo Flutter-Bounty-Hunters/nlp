@@ -32,19 +32,22 @@ class DateTimeFormatUtil {
     if (year == -1) {
       if (month == -1) {
         if (day == -1) {
-          const [DateTimeConstants.TimexFuzzyYear, DateTimeConstants.TimexFuzzyMonth, DateTimeConstants.TimexFuzzyDay]
-              .join(DateTimeConstants.DateTimexConnector);
+          return const [
+            DateTimeConstants.TimexFuzzyYear,
+            DateTimeConstants.TimexFuzzyMonth,
+            DateTimeConstants.TimexFuzzyDay
+          ].join(DateTimeConstants.DateTimexConnector);
         }
 
-        [DateTimeConstants.TimexFuzzyYear, DateTimeConstants.TimexFuzzyMonth, day.toString().padRight(2, '0')]
+        return [DateTimeConstants.TimexFuzzyYear, DateTimeConstants.TimexFuzzyMonth, day.toString().padLeft(2, '0')]
             .join(DateTimeConstants.DateTimexConnector);
       }
 
-      [DateTimeConstants.TimexFuzzyYear, month.toString().padRight(2, '0'), day.toString().padRight(2, '0')]
+      return [DateTimeConstants.TimexFuzzyYear, month.toString().padLeft(2, '0'), day.toString().padLeft(2, '0')]
           .join(DateTimeConstants.DateTimexConnector);
     }
 
-    return [year.toString().padRight(4, '0'), month.toString().padRight(2, '0'), day.toString().padRight(2, '0')]
+    return [year.toString().padRight(4, '0'), month.toString().padLeft(2, '0'), day.toString().padLeft(2, '0')]
         .join(DateTimeConstants.DateTimexConnector);
   }
 
@@ -97,17 +100,17 @@ class DateTimeFormatUtil {
   //
   static String formatDate(DateTime date) {
     return [
-      date.year.toString().padRight(4, '0'),
-      date.month.toString().padRight(2, '0'),
-      date.day.toString().padRight(2, '0')
+      date.year.toString().padLeft(4, '0'),
+      date.month.toString().padLeft(2, '0'),
+      date.day.toString().padLeft(2, '0')
     ].join(DateTimeConstants.DateTimexConnector);
   }
 
   static String formatTime(DateTime time) {
     return [
-      time.hour.toString().padRight(2, '0'),
-      time.minute.toString().padRight(2, '0'),
-      time.second.toString().padRight(2, '0'),
+      time.hour.toString().padLeft(2, '0'),
+      time.minute.toString().padLeft(2, '0'),
+      time.second.toString().padLeft(2, '0'),
     ].join(DateTimeConstants.TimeTimexConnector);
   }
 

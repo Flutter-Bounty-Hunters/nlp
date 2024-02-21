@@ -35,24 +35,24 @@ class RegExpComposer {
     // print(result);
     // print("");
 
-    index = 0;
-    result = _replace(result, _matchPositiveLookbehind, (Match m) {
-      final replacedString = "(?<plb$_groupNameIndexSep$index>";
-      index += 1;
+    // index = 0;
+    // result = _replace(result, _matchPositiveLookbehind, (Match m) {
+    //   final replacedString = "(?<plb$_groupNameIndexSep$index>";
+    //   index += 1;
 
-      return replacedString;
-    });
+    //   return replacedString;
+    // });
     // print("Pattern after second replace:");
     // print(result);
     // print("");
 
-    index = 0;
-    result = _replace(result, _matchNegativeLookbehind, (Match m) {
-      final replacedString = "(?<nlb$_groupNameIndexSep$index>";
-      index += 1;
+    // index = 0;
+    // result = _replace(result, _matchNegativeLookbehind, (Match m) {
+    //   final replacedString = "(?<nlb$_groupNameIndexSep$index>";
+    //   index += 1;
 
-      return replacedString;
-    });
+    //   return replacedString;
+    // });
     // print("Pattern after third replace:");
     // print(result);
     // print("");
@@ -111,6 +111,9 @@ class RegExpComposer {
       // No matches.
       return [];
     }
+    print("Finding named groups in the regex match and processing each group...");
+    print("");
+    final namedGroups = getNamedGroups(regExp.pattern, jsRegExpMatches, regExpMatches);
 
     for (final match in regExpMatches) {
       print(
@@ -119,10 +122,6 @@ class RegExpComposer {
       final positiveLookbehinds = <(String, String)>[];
       final groups = <String, NlpMatchGroup>{};
       String? lastGroup;
-
-      print("Finding named groups in the regex match and processing each group...");
-      print("");
-      final namedGroups = getNamedGroups(regExp.pattern, jsRegExpMatches, regExpMatches);
 
       for (final entry in namedGroups.entries) {
         final key = entry.key;
@@ -170,13 +169,18 @@ class RegExpComposer {
           print(" - the input text has a match for '$key' - adding a match group to our records.");
           // String inputMatchValue = input.substring(match.start, match.end);
 
-          final inputMatchValue = jsRegExpMatches.getGroup(key)!;
+          final inputMatchValue = jsRegExpMatches.getGroup(key);
+          if (inputMatchValue == null) {
+            // The group exists but the current match doesn't have a value for it.
+            continue;
+          }
+
           final jsBounds = jsRegExpMatches.getGroupBounds(key);
           if (jsBounds == null) {
             print("ERROR: Couldn't find capture match for $key");
           }
 
-          Capture newCapture = Capture(inputMatchValue, jsBounds!.$1, jsBounds.$2);
+          Capture newCapture = Capture(inputMatchValue, jsBounds!.$1, jsBounds.$2 - jsBounds.$1);
           // Capture newCapture = Capture(inputMatchValue, match.start, match.end - match.start);
           print("    - capture - index: ${newCapture.index}, length: ${newCapture.length}, value: ${newCapture.value}");
 
@@ -186,7 +190,7 @@ class RegExpComposer {
           final captures = List<Capture>.from(groups[groupKey]!.captures);
           captures.add(newCapture);
 
-          groups[groupKey] = NlpMatchGroup(inputMatchValue, match.start, match.end - match.start, captures);
+          groups[groupKey] = NlpMatchGroup(inputMatchValue, newCapture.index, newCapture.length, captures);
 
           print("Set '$groupKey' -> '$inputMatchValue'");
         }
@@ -239,6 +243,61 @@ class RegExpComposer {
     print("");
 
     return matches;
+  }
+
+  static NlpMatch? matchBegin(RegExp regExp, String text, [bool trim = false]) {
+    final match = getMatchesSimple(regExp, text).firstOrNull;
+    if (match == null) {
+      return null;
+    }
+
+    String strBefore = text.substring(0, match.index);
+    if (trim) {
+      strBefore = strBefore.trim();
+    }
+
+    if (strBefore.isNotEmpty) {
+      return null;
+    }
+
+    return match;
+  }
+
+  static NlpMatch? matchEnd(RegExp regExp, String text, [bool trim = false]) {
+    final match = getMatchesSimple(regExp, text).lastOrNull;
+    if (match == null) {
+      return null;
+    }
+
+    String strAfter = text.substring(match.index + match.length);
+    if (trim) {
+      strAfter = strAfter.trim();
+    }
+    if (strAfter.isNotEmpty) {
+      return null;
+    }
+
+    return match;
+  }
+
+  static NlpMatch? matchExact(RegExp regExp, String text, [bool trim = false]) {
+    final match = getMatchesSimple(regExp, text).firstOrNull;
+    if (match == null) {
+      return null;
+    }
+
+    String strBefore = text.substring(0, match.index);
+    String strAfter = text.substring(match.index + match.length);
+    if (trim) {
+      strBefore = strBefore.trim();
+      strAfter = strAfter.trim();
+    }
+
+    if (strBefore.isNotEmpty || strAfter.isNotEmpty) {
+      return null;
+    }
+
+    return match;
   }
 
   static Map<String, String> getNamedGroups(
@@ -364,7 +423,27 @@ extension NlpRegExp on RegExp {
     if (trim) {
       strAfter = strAfter.trim();
     }
-    if (strAfter.isEmpty) {
+    if (strAfter.isNotEmpty) {
+      return null;
+    }
+
+    return match;
+  }
+
+  RegExpMatch? matchExact(String text, [bool trim = false]) {
+    final match = allMatches(text).firstOrNull;
+    if (match == null) {
+      return null;
+    }
+
+    String strBefore = text.substring(0, match.start);
+    String strAfter = text.substring(match.start + match.length);
+    if (trim) {
+      strBefore = strBefore.trim();
+      strAfter = strAfter.trim();
+    }
+
+    if (strBefore.isNotEmpty || strAfter.isNotEmpty) {
       return null;
     }
 

@@ -128,6 +128,31 @@ class DoubleExtractor extends BaseNumberExtractor {
   Pattern? getNegativeNumberTermsRegex() => null;
 }
 
+class OrdinalExtractor extends BaseNumberExtractor {
+  static final OrdinalExtractor _instance = OrdinalExtractor._();
+
+  static OrdinalExtractor getInstance() {
+    return _instance;
+  }
+
+  OrdinalExtractor._() {
+    _regexes = <RegExp, String>{
+      RegExp(EnglishNumeric.OrdinalSuffixRegex): "OrdinalNum",
+      RegExp(EnglishNumeric.OrdinalNumericRegex): "OrdinalNum",
+      RegExp(EnglishNumeric.OrdinalEnglishRegex): "OrdinalEng",
+      RegExp(EnglishNumeric.OrdinalRoundNumberRegex): "OrdinalNum",
+    };
+  }
+
+  @override
+  String getExtractType() => Constants.SYS_NUM_ORDINAL;
+
+  late final Map<RegExp, String> _regexes;
+
+  @override
+  Map<RegExp, String> getRegexes() => _regexes;
+}
+
 enum NumberOptions {
   None(0),
   PercentageMode(1),

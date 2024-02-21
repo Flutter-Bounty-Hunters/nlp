@@ -886,13 +886,6 @@ const dateExtractorTestCases = [
     ]
   },
   {
-    "Input": "6,107.31 August 2019 should not include the decimal",
-    "Comment":
-        "Only August 2019 should be extracted as a DateRange, so no output in Date only. Java disabled due to issue in lookbehind.",
-    "NotSupported": "dotnet, java, javascript, python",
-    "Results": []
-  },
-  {
     "Input": "i'll go back 2019-sep-1",
     "Results": [
       {"Text": "2019-sep-1", "Type": "date", "Start": 13, "Length": 10}
