@@ -9,6 +9,8 @@ export 'src/date_time/base_date_extractor.dart';
 export 'src/date_time/english_date_extractor.dart';
 export 'src/date_time/base_date_parser.dart';
 export 'src/date_time/english/english_date_parser_configuration.dart';
+export 'src/date_time/base_datetime_extractor.dart';
+export 'src/date_time/english/english_date_time_extractor_configuration.dart';
 
 export 'src/duration/base_duration_parser.dart';
 export 'src/duration/duration.dart';

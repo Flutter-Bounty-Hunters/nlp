@@ -3,7 +3,9 @@ import 'package:nlp/src/core/extraction.dart';
 import 'package:nlp/src/core/parser.dart';
 import 'package:nlp/src/date_time/base_date_extractor.dart';
 import 'package:nlp/src/date_time/base_holiday_extractor.dart';
+import 'package:nlp/src/date_time/base_time_extractor.dart';
 import 'package:nlp/src/date_time/english/english_holiday_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_time_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english_date_extractor.dart';
 import 'package:nlp/src/duration/base_duration_parser.dart';
 import 'package:nlp/src/date_time/date_time_extraction.dart';
@@ -105,7 +107,7 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
 
     durationExtractor = DurationExtractor(config: EnglishDurationExtractorConfiguration());
     dateExtractor = BaseDateExtractor(EnglishDateExtractorConfiguration(this));
-    // timeExtractor = BaseTimeExtractor(EnglishTimeExtractorConfiguration(options));
+    timeExtractor = BaseTimeExtractor(EnglishTimeExtractorConfiguration(this));
     // dateTimeExtractor = BaseDateTimeExtractor(EnglishDateTimeExtractorConfiguration(options));
     // datePeriodExtractor = BaseDatePeriodExtractor(EnglishDatePeriodExtractorConfiguration(this));
     // timePeriodExtractor = BaseTimePeriodExtractor(EnglishTimePeriodExtractorConfiguration(options));
@@ -168,8 +170,9 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
 
   @override
   late final IDateExtractor dateExtractor;
-  // @override
-  // late final IDateTimeExtractor timeExtractor;
+
+  @override
+  late final IDateTimeExtractor timeExtractor;
   // @override
   // late final IDateTimeExtractor dateTimeExtractor;
   // @override
@@ -221,7 +224,7 @@ abstract interface class ICommonDateTimeParserConfiguration implements IOptionsC
 
   IDateExtractor get dateExtractor;
 
-  // IDateTimeExtractor get timeExtractor;
+  IDateTimeExtractor get timeExtractor;
 
   // IDateTimeExtractor get dateTimeExtractor;
 

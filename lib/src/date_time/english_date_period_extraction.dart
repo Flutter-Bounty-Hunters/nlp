@@ -97,7 +97,7 @@ class EnglishDatePeriodExtractorConfiguration
       RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.RangeConnectorRegex);
 
   EnglishDatePeriodExtractorConfiguration(super.config) {
-    // datePointExtractor = BaseDateExtractor(EnglishDateExtractorConfiguration(this));
+    //datePointExtractor = BaseDateExtractor(EnglishDateExtractorConfiguration(EnglishDateExtractorConfiguration(super.config)));
     cardinalExtractor = CardinalExtractor.getInstance();
     // ordinalExtractor = OrdinalExtractor.getInstance();
     durationExtractor = DurationExtractor(config: EnglishDurationExtractorConfiguration());
