@@ -69,4 +69,6 @@ class EnglishTimeExtractorConfiguration extends BaseDateTimeOptionsConfiguration
     // TODO: implement TimeZoneExtractor
     throw UnimplementedError();
   }
+
+  static RegExp LessThanOneHour() => RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.LessThanOneHour);
 }

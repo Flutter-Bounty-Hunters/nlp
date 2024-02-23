@@ -26,7 +26,8 @@ class DateUtil {
     return DateTime.tryParse('$yearStr-$monthStr-$dayStr') != null;
   }
 
-  static DateTime createSafeDate(int year, int month, int day) {
+  static DateTime createSafeDate(int year, int month, int day,
+      [int hour = 0, int minute = 0, int second = 0, int millisecond = 0]) {
     if (year < 1 || year > 9999) {
       return minValue();
     }
@@ -36,7 +37,7 @@ class DateUtil {
         : _monthValidDays[month - 1];
 
     if (month >= 1 && month <= 12 && day >= 1 && day <= daysInMonth) {
-      return DateTime(year, month, day);
+      return DateTime(year, month, day, hour, minute, second, millisecond);
     }
 
     return minValue();

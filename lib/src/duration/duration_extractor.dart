@@ -270,7 +270,7 @@ class DurationExtractor implements IDateTimeExtractor {
       print(" - matching against: '${config.getMoreThanRegex().pattern}'");
       bool isInequalityPrefixMatched = false;
 
-      var match = config.getMoreThanRegex().matchEnd(beforeString);
+      var match = config.getMoreThanRegex().matchEnd(beforeString, true);
       print(" - match: $match");
 
       // The second condition is necessary so for "1 week" in "more than 4 days and less than 1 week",
@@ -283,7 +283,7 @@ class DurationExtractor implements IDateTimeExtractor {
 
       if (!isInequalityPrefixMatched) {
         print(" - didn't match MORE, now trying LESS");
-        match = config.getLessThanRegex().matchEnd(beforeString);
+        match = config.getLessThanRegex().matchEnd(beforeString, true);
 
         if (match != null) {
           er.data = DateTimeConstants.LESS_THAN_MOD;

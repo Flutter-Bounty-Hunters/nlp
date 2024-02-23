@@ -78,25 +78,29 @@ class DateTimeFormatUtil {
   //   return luisTime(hour, min, Constants.InvalidSecond);
   // }
   //
-  // public static String luisTime(int hour, int min, int second) {
+  static String luisTimeFromComponents(int hour, int min, int second) {
+    String result;
+    if (second == DateTimeConstants.InvalidSecond) {
+      result =
+          [hour.toString().padLeft(2, '0'), min.toString().padLeft(2, '0')].join(DateTimeConstants.TimeTimexConnector);
+    } else {
+      result = [hour.toString().padLeft(2, '0'), min.toString().padLeft(2, '0'), second.toString().padLeft(2, '0')]
+          .join(DateTimeConstants.TimeTimexConnector);
+    }
+
+    return result;
+  }
+
   //
-  //   String result;
-  //   if (second == Constants.InvalidSecond) {
-  //     result = String.join(Constants.TimeTimexConnector, String.format("%02d", hour), String.format("%02d", min));
-  //   } else {
-  //     result = String.join(Constants.TimeTimexConnector, String.format("%02d", hour), String.format("%02d", min), String.format("%02d", second));
-  //   }
+  static String luisTime(DateTime time) {
+    return luisTimeFromComponents(time.hour, time.minute, time.second);
+  }
+
   //
-  //   return result;
-  // }
-  //
-  // public static String luisTime(LocalDateTime time) {
-  //   return luisTime(time.getHour(), time.getMinute(), time.getSecond());
-  // }
-  //
-  // public static String luisDateTime(LocalDateTime time) {
-  //   return luisDate(time) + "T" + luisTime(time.getHour(), time.getMinute(), time.getSecond());
-  // }
+  static String luisDateTime(DateTime time) {
+    return "${luisDateFromDateTime(time)}T${luisTime(time)}";
+  }
+
   //
   static String formatDate(DateTime date) {
     return [
@@ -119,6 +123,17 @@ class DateTimeFormatUtil {
       formatDate(datetime),
       formatTime(datetime),
     ].join(" ");
+  }
+
+  static DateTimeResolutionResult ResolveEndOfDay(String timexPrefix, DateTime futureDate, DateTime pastDate) {
+    var ret = DateTimeResolutionResult();
+
+    ret.timex = "${timexPrefix}T23:59:59";
+    ret.futureValue = futureDate.dateOnly.AddDays(1).AddSeconds(-1);
+    ret.pastValue = pastDate.dateOnly.AddDays(1).AddSeconds(-1);
+    ret.success = true;
+
+    return ret;
   }
 
   //

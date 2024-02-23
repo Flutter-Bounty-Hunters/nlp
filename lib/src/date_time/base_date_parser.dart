@@ -794,8 +794,10 @@ class BaseDateParser implements IDateTimeParser {
                 data: null,
                 metadata: Metadata(isHoliday: true),
               );
-              innerResult =
-                  config.holidayParser().parseDateTime(holidayEr, referenceDate).value as DateTimeResolutionResult;
+              // TODO: bring back
+              // innerResult =
+              //     config.holidayParser().parseDateTime(holidayEr, referenceDate).value as DateTimeResolutionResult;
+              innerResult = DateTimeResolutionResult();
             }
 
             // Combine parsed results Duration + Date
@@ -1027,6 +1029,10 @@ extension DateTimeExtensions on DateTime {
     return difference(DateTime(year, 1, 1)).inDays + 1;
   }
 
+  DateTime get dateOnly {
+    return DateTime(year, month, day);
+  }
+
   DateTime This(int dayOfWeek) {
     var start = weekday;
     var target = dayOfWeek;
@@ -1113,6 +1119,10 @@ extension DateTimeExtensions on DateTime {
   DateTime AddDays(int days) {
     final newDate = add(Duration(days: days));
     return _adjustTimeZones(newDate);
+  }
+
+  DateTime AddSeconds(int seconds) {
+    return add(Duration(seconds: seconds));
   }
 
   DateTime AddMonths(int months) {

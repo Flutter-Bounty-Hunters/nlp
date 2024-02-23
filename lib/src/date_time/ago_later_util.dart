@@ -276,7 +276,7 @@ class AgoLaterUtil {
       if (mode == AgoLaterMode.Date) {
         ret.timex = DateTimeFormatUtil.luisDateFromDateTime(resultDateTime);
       } else if (mode == AgoLaterMode.DateTime) {
-        ret.timex = DateTimeFormatUtil.luisDateFromDateTime(resultDateTime);
+        ret.timex = DateTimeFormatUtil.luisDateTime(resultDateTime);
       }
 
       ret.futureValue = ret.pastValue = resultDateTime;

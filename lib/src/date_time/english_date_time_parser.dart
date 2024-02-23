@@ -2,10 +2,16 @@ import 'package:nlp/src/core/english_merged_extractor.dart';
 import 'package:nlp/src/core/extraction.dart';
 import 'package:nlp/src/core/parser.dart';
 import 'package:nlp/src/date_time/base_date_extractor.dart';
+import 'package:nlp/src/date_time/base_date_parser.dart';
+import 'package:nlp/src/date_time/base_datetime_parser.dart';
 import 'package:nlp/src/date_time/base_holiday_extractor.dart';
 import 'package:nlp/src/date_time/base_time_extractor.dart';
+import 'package:nlp/src/date_time/base_time_parser.dart';
+import 'package:nlp/src/date_time/english/english_date_parser_configuration.dart';
+import 'package:nlp/src/date_time/english/english_date_time_parser_configuration.dart';
 import 'package:nlp/src/date_time/english/english_holiday_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english/english_time_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_time_parser_configuration.dart';
 import 'package:nlp/src/date_time/english_date_extractor.dart';
 import 'package:nlp/src/duration/base_duration_parser.dart';
 import 'package:nlp/src/date_time/date_time_extraction.dart';
@@ -116,9 +122,9 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
 
     // timeZoneParser = BaseTimeZoneParser();
     durationParser = BaseDurationParser(EnglishDurationParserConfiguration(this));
-    // dateParser = BaseDateParser(EnglishDateParserConfiguration(this));
-    // timeParser = TimeParser(EnglishTimeParserConfiguration(this));
-    // dateTimeParser = BaseDateTimeParser(EnglishDateTimeParserConfiguration(this));
+    dateParser = BaseDateParser(EnglishDateParserConfiguration(this));
+    timeParser = BaseTimeParser(EnglishTimeParserConfiguration(this, options: options));
+    dateTimeParser = BaseDateTimeParser(EnglishDateTimeParserConfiguration(this, options: options));
     // datePeriodParser = BaseDatePeriodParser(EnglishDatePeriodParserConfiguration(this));
     // timePeriodParser = BaseTimePeriodParser(EnglishTimePeriodParserConfiguration(this));
     // dateTimePeriodParser = BaseDateTimePeriodParser(EnglishDateTimePeriodParserConfiguration(this));
@@ -173,8 +179,8 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
 
   @override
   late final IDateTimeExtractor timeExtractor;
-  // @override
-  // late final IDateTimeExtractor dateTimeExtractor;
+  @override
+  late final IDateTimeExtractor dateTimeExtractor;
   // @override
   // late final IDateTimeExtractor datePeriodExtractor;
   // @override
@@ -185,10 +191,10 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
   @override
   late final IDateTimeExtractor holidayExtractor;
 
-  // @override
-  // late final IDateTimeParser dateParser;
-  // @override
-  // late final IDateTimeParser timeParser;
+  @override
+  late final IDateTimeParser dateParser;
+  @override
+  late final IDateTimeParser timeParser;
   // @override
   // late final IDateTimeParser dateTimeParser;
   @override
@@ -197,6 +203,9 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
   late final IDateTimeParser datePeriodParser;
   @override
   late final IDateTimeParser timePeriodParser;
+
+  @override
+  late final IDateTimeParser dateTimeParser;
 
   // @override
   // late final IDateTimeParser dateTimePeriodParser;
@@ -226,7 +235,7 @@ abstract interface class ICommonDateTimeParserConfiguration implements IOptionsC
 
   IDateTimeExtractor get timeExtractor;
 
-  // IDateTimeExtractor get dateTimeExtractor;
+  IDateTimeExtractor get dateTimeExtractor;
 
   IDateTimeExtractor get durationExtractor;
 
@@ -237,11 +246,11 @@ abstract interface class ICommonDateTimeParserConfiguration implements IOptionsC
   // IDateTimeExtractor get dateTimePeriodExtractor;
 
   IDateTimeExtractor get holidayExtractor;
-  // IDateTimeParser get dateParser;
+  IDateTimeParser get dateParser;
 
-  // IDateTimeParser get timeParser;
+  IDateTimeParser get timeParser;
 
-  // IDateTimeParser get dateTimeParser;
+  IDateTimeParser get dateTimeParser;
 
   IDateTimeParser get durationParser;
 
