@@ -92,7 +92,7 @@ class DurationParsingUtil {
         // result = DateUtil.plusPeriodInNanos(result, number * futureOrPast, chronoUnit);
         final nanos = chronoUnit.duration.inMicroseconds;
         final micros = result.microsecondsSinceEpoch + ((number * futureOrPast) * nanos).round();
-        return DateTime.fromMicrosecondsSinceEpoch(micros);
+        result = DateTime.fromMicrosecondsSinceEpoch(micros);
       }
     }
     return result;
