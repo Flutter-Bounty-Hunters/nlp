@@ -93,6 +93,8 @@ class DateTimeConstants {
   static const int InvalidMinute = intMin;
   static const int InvalidSecond = intMin;
 
+  static const int INVALID_CONNECTOR_CODE = -1;
+
   static const int MinYearNum = BaseDateTime.MinYearNum;
   static const int MaxYearNum = BaseDateTime.MaxYearNum;
 
@@ -147,6 +149,7 @@ class DateTimeConstants {
   static const BusinessDayGroupName = "business";
   static const LeftAmPmGroupName = "leftDesc";
   static const RightAmPmGroupName = "rightDesc";
+  static const MealTimeGroupName = "mealTime";
 
   static const DECADE_UNIT = "10Y";
   static const FORTNIGHT_UNIT = "2W";
@@ -189,6 +192,8 @@ class DateTimeConstants {
   static final DayGroupName = "day";
   static final MonthGroupName = "month";
   static final WeekdayGroupName = "weekday";
+
+  static const PluralUnit = "plural";
 
   static final BASE_YEAR_PAST_CENTURY = 1900;
   static final BASE_YEAR_CURRENT_CENTURY = 2000;

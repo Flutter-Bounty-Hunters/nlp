@@ -7,11 +7,13 @@ import 'package:nlp/src/date_time/base_datetime_parser.dart';
 import 'package:nlp/src/date_time/base_holiday_extractor.dart';
 import 'package:nlp/src/date_time/base_time_extractor.dart';
 import 'package:nlp/src/date_time/base_time_parser.dart';
+import 'package:nlp/src/date_time/base_time_period_extractor.dart';
 import 'package:nlp/src/date_time/english/english_date_parser_configuration.dart';
 import 'package:nlp/src/date_time/english/english_date_time_parser_configuration.dart';
 import 'package:nlp/src/date_time/english/english_holiday_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english/english_time_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english/english_time_parser_configuration.dart';
+import 'package:nlp/src/date_time/english/english_time_period_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english_date_extractor.dart';
 import 'package:nlp/src/duration/base_duration_parser.dart';
 import 'package:nlp/src/date_time/date_time_extraction.dart';
@@ -116,7 +118,7 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
     timeExtractor = BaseTimeExtractor(EnglishTimeExtractorConfiguration(this));
     // dateTimeExtractor = BaseDateTimeExtractor(EnglishDateTimeExtractorConfiguration(options));
     // datePeriodExtractor = BaseDatePeriodExtractor(EnglishDatePeriodExtractorConfiguration(this));
-    // timePeriodExtractor = BaseTimePeriodExtractor(EnglishTimePeriodExtractorConfiguration(options));
+    timePeriodExtractor = BaseTimePeriodExtractor(EnglishTimePeriodExtractorConfiguration(this, options: options));
     // dateTimePeriodExtractor = BaseDateTimePeriodExtractor(EnglishDateTimePeriodExtractorConfiguration(options));
     holidayExtractor = BaseHolidayExtractor(config: EnglishHolidayExtractorConfiguration(options));
 
@@ -183,8 +185,8 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
   late final IDateTimeExtractor dateTimeExtractor;
   // @override
   // late final IDateTimeExtractor datePeriodExtractor;
-  // @override
-  // late final IDateTimeExtractor timePeriodExtractor;
+  @override
+  late final IDateTimeExtractor timePeriodExtractor;
   // @override
   // late final IDateTimeExtractor dateTimePeriodExtractor;
 
@@ -241,7 +243,7 @@ abstract interface class ICommonDateTimeParserConfiguration implements IOptionsC
 
   // IDateTimeExtractor get datePeriodExtractor;
 
-  // IDateTimeExtractor get timePeriodExtractor;
+  IDateTimeExtractor get timePeriodExtractor;
 
   // IDateTimeExtractor get dateTimePeriodExtractor;
 

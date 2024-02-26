@@ -159,14 +159,14 @@ class JsRegExpResult {
 class JsRegExpGroups {
   const JsRegExpGroups(this._jsGroups);
 
-  final js.JsObject _jsGroups;
+  final js.JsObject? _jsGroups;
 
-  Iterable<String> get names => _jsGroups.keys.whereType<String>();
+  Iterable<String> get names => _jsGroups?.keys.whereType<String>() ?? <String>[];
 
-  String operator [](dynamic key) => _jsGroups[key];
+  String operator [](dynamic key) => _jsGroups?[key] ?? '';
 
   @override
-  String toString() => _jsGroups.keys.join(", ");
+  String toString() => _jsGroups?.keys.join(", ") ?? '';
 }
 
 extension on js.JsObject {
