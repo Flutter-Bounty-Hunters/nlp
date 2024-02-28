@@ -16,9 +16,14 @@ export 'src/date_time/base_datetime_parser.dart';
 export 'src/date_time/english/english_date_time_parser_configuration.dart';
 export 'src/date_time/base_time_period_extractor.dart';
 export 'src/date_time/english/english_time_period_extractor_configuration.dart';
+export 'src/date_time/base_time_period_parser.dart';
+export 'src/date_time/english/english_time_period_parser_configuration.dart';
 
 export 'src/date_time/base_date_time_period_extractor.dart';
 export 'src/date_time/english/english_date_time_period_extractor_configuration.dart';
+
+export 'src/date_time/base_date_time_period_parser.dart';
+export 'src/date_time/english/english_date_time_period_parser_configuration.dart';
 
 export 'src/duration/base_duration_parser.dart';
 export 'src/duration/duration.dart';

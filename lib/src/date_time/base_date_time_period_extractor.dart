@@ -58,8 +58,8 @@ class BaseDateTimePeriodExtractor implements IDateTimeExtractor {
     if (match == null) {
       return false;
     }
-    String subStr = inPrefix ? text.substring(match.start + (match.end - match.start)) : text.substring(0, match.start);
-    var result = subStr.isEmpty;
+    String subStr = inPrefix ? text.substring(match.end) : text.substring(0, match.start);
+    var result = subStr.trim().isEmpty;
     return result;
   }
 
@@ -648,7 +648,7 @@ class BaseDateTimePeriodExtractor implements IDateTimeExtractor {
     if (MatchPrefixRegexInSegment(subStr, match, inPrefix)) {
       var startToken = inPrefix ? match!.start : duration.start;
       var endToken = duration.end + (inPrefix ? 0 : match!.start + match.length);
-      match = config.TimeUnitRegex().firstMatch(text.substring(duration.start, duration.length));
+      match = config.TimeUnitRegex().firstMatch(text.substring(duration.start, duration.end));
       success = match != null;
 
       if (!inPrefix) {

@@ -376,6 +376,8 @@ class NlpMatchGroup {
   final int index;
   final int length;
   final List<Capture> captures;
+
+  bool get success => value.isNotEmpty;
 }
 
 class Capture {
