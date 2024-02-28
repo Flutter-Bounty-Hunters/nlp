@@ -577,7 +577,7 @@ class EnglishDurationExtractorConfiguration extends BaseOptionsConfiguration
       RegExp(RegExpComposer.sanitizeGroups(EnglishDateTime.NumberCombinedWithDurationUnit));
   static final AnUnitRegex = RegExp(RegExpComposer.sanitizeGroups(EnglishDateTime.AnUnitRegex));
   static final DuringRegex = RegExp(EnglishDateTime.DuringRegex);
-  static final AllRegex = RegExp(EnglishDateTime.AllRegex);
+  static final AllRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.AllRegex);
   static final HalfRegex = RegExp(EnglishDateTime.HalfRegex);
   static final ConjunctionRegex = RegExp(EnglishDateTime.ConjunctionRegex);
   static final InexactNumberRegex = RegExp(EnglishDateTime.InexactNumberRegex);
