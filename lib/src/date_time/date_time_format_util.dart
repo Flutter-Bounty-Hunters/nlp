@@ -73,6 +73,13 @@ class DateTimeFormatUtil {
     return luisDateFromComponents(year, month, day);
   }
 
+  static String LuisDateShortTime(DateTime time, [String? timex]) {
+    var hasMin = timex != null ? timex.contains(DateTimeConstants.TimeTimexConnector) : false;
+    var hasSec = timex != null ? timex.split(DateTimeConstants.TimeTimexConnector[0]).length > 2 : false;
+
+    return "${luisDateFromDateTime(time)}${FormatShortTime(time, hasMin, hasSec)}";
+  }
+
   //
   // public static String luisTime(int hour, int min) {
   //   return luisTime(hour, min, Constants.InvalidSecond);
@@ -94,6 +101,37 @@ class DateTimeFormatUtil {
   //
   static String luisTime(DateTime time) {
     return luisTimeFromComponents(time.hour, time.minute, time.second);
+  }
+
+  static String luisTimeSpan(Duration timeSpan) {
+    var timexBuilder = StringBuffer("${DateTimeConstants.GeneralPeriodPrefix}${DateTimeConstants.TimeTimexPrefix}");
+
+    int microseconds = timeSpan.inMicroseconds;
+
+    final days = microseconds ~/ Duration.microsecondsPerDay;
+    microseconds = microseconds.remainder(Duration.microsecondsPerDay);
+
+    final hours = microseconds ~/ Duration.microsecondsPerHour;
+    microseconds = microseconds.remainder(Duration.microsecondsPerHour);
+
+    final minutes = microseconds ~/ Duration.microsecondsPerMinute;
+    microseconds = microseconds.remainder(Duration.microsecondsPerMinute);
+
+    var seconds = microseconds ~/ Duration.microsecondsPerSecond;
+
+    if (days > 0 || hours > 0) {
+      timexBuilder.write("${(days * DateTimeConstants.DayHourCount) + hours}H");
+    }
+
+    if (minutes > 0) {
+      timexBuilder.write("${minutes}M");
+    }
+
+    if (seconds > 0) {
+      timexBuilder.write("${seconds}S");
+    }
+
+    return timexBuilder.toString();
   }
 
   //
@@ -123,6 +161,28 @@ class DateTimeFormatUtil {
       formatDate(datetime),
       formatTime(datetime),
     ].join(" ");
+  }
+
+  static String FormatShortTime(DateTime time, [bool keepMin = false, bool keepSec = false]) {
+    int hour = time.hour,
+        min = (keepMin || time.minute > 0) ? time.minute : DateTimeConstants.InvalidMinute,
+        sec = (keepSec || time.second > 0) ? time.second : DateTimeConstants.InvalidSecond;
+    return ShortTime(hour, min, sec);
+  }
+
+  static String ShortTime(int hour,
+      [int min = DateTimeConstants.InvalidSecond, int second = DateTimeConstants.InvalidSecond]) {
+    String timeString;
+
+    if (min == DateTimeConstants.InvalidSecond && second == DateTimeConstants.InvalidSecond) {
+      timeString = "${DateTimeConstants.TimeTimexPrefix}${hour.toString().padLeft(2, '0')}";
+    } else if (second == DateTimeConstants.InvalidSecond) {
+      timeString = "${DateTimeConstants.TimeTimexPrefix}${luisTimeFromComponents(hour, min, second)}";
+    } else {
+      timeString = "${DateTimeConstants.TimeTimexPrefix}${luisDateFromComponents(hour, min, second)}";
+    }
+
+    return timeString;
   }
 
   static DateTimeResolutionResult ResolveEndOfDay(String timexPrefix, DateTime futureDate, DateTime pastDate) {

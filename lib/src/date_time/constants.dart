@@ -93,6 +93,8 @@ class DateTimeConstants {
   static const int InvalidMinute = intMin;
   static const int InvalidSecond = intMin;
 
+  static const int INVALID_CONNECTOR_CODE = -1;
+
   static const int MinYearNum = BaseDateTime.MinYearNum;
   static const int MaxYearNum = BaseDateTime.MaxYearNum;
 
@@ -117,6 +119,10 @@ class DateTimeConstants {
 
   // hours of one half day
   static const int HalfDayHourCount = 12;
+
+  // hours of one full day
+  static const int DayHourCount = 24;
+
   // hours of a half mid-day-duration
   static const int HalfMidDayDurationHourCount = 2;
 
@@ -125,6 +131,8 @@ class DateTimeConstants {
 
   // the length of four digits year, e.g., 2018
   static const int FourDigitsYearLength = 4;
+
+  static const int EARLY_LATE_TIME_DELTA = 2;
 
   // specifies the priority interpreting month and day order
   static const DefaultLanguageFallback_MDY = "MDY";
@@ -147,9 +155,12 @@ class DateTimeConstants {
   static const BusinessDayGroupName = "business";
   static const LeftAmPmGroupName = "leftDesc";
   static const RightAmPmGroupName = "rightDesc";
+  static const MealTimeGroupName = "mealTime";
+  static const IncludeGroupName = "include";
 
   static const DECADE_UNIT = "10Y";
   static const FORTNIGHT_UNIT = "2W";
+  static const WEEKEND_UNIT = "WE";
 
   // Timex
   static const DatePeriodTimexSplitter = [",", "(", ")"];
@@ -172,6 +183,7 @@ class DateTimeConstants {
   static const TimeTimexConnector = ":";
   static const GeneralPeriodPrefix = "P";
   static const TimeTimexPrefix = "T";
+  static const TimexNow = "PRESENT_REF";
 
   // Timex of TimeOfDay
   static const EarlyMorning = "TDA";
@@ -180,7 +192,9 @@ class DateTimeConstants {
   static const Evening = "TEV";
   static const Daytime = "TDT";
   static const Night = "TNI";
+  static const Nighttime = "TNT";
   static const BusinessHour = "TBH";
+  static const MidDay = "TMI";
 
   static final HolidayWeekend = "holidayWeekend";
   static final Holiday = "holiday";
@@ -190,8 +204,43 @@ class DateTimeConstants {
   static final MonthGroupName = "month";
   static final WeekdayGroupName = "weekday";
 
+  static const PluralUnit = "plural";
+
+  static const String MealtimeBreakfast = "TMEB";
+  static const String MealtimeBrunch = "TMER";
+  static const String MealtimeLunch = "TMEL";
+  static const String MealtimeDinner = "TMED";
+
   static final BASE_YEAR_PAST_CENTURY = 1900;
   static final BASE_YEAR_CURRENT_CENTURY = 2000;
+
+  static const int EarlyMorningBeginHour = 4;
+  static const int EarlyMorningEndHour = 8;
+  static const int MorningBeginHour = 8;
+  static const int MorningEndHour = 12;
+  static const int MidDayBeginHour = 11;
+  static const int MidDayEndHour = 13;
+  static const int AfternoonBeginHour = 12;
+  static const int AfternoonEndHour = 16;
+  static const int EveningBeginHour = 16;
+  static const int EveningEndHour = 20;
+  static const int DaytimeBeginHour = 8;
+  static const int DaytimeEndHour = 18;
+  static const int NighttimeBeginHour = 0;
+  static const int NighttimeEndHour = 8;
+  static const int BusinessBeginHour = 8;
+  static const int BusinessEndHour = 18;
+  static const int NightBeginHour = 20;
+  static const int NightEndHour = 23;
+  static const int NightEndMin = 59;
+  static const int MealtimeBreakfastBeginHour = 8;
+  static const int MealtimeBreakfastEndHour = 12;
+  static const int MealtimeBrunchBeginHour = 8;
+  static const int MealtimeBrunchEndHour = 12;
+  static const int MealtimeLunchBeginHour = 11;
+  static const int MealtimeLunchEndHour = 13;
+  static const int MealtimeDinnerBeginHour = 16;
+  static const int MealtimeDinnerEndHour = 20;
 
   const DateTimeConstants._();
 }

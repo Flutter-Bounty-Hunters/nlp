@@ -1121,6 +1121,14 @@ extension DateTimeExtensions on DateTime {
     return _adjustTimeZones(newDate);
   }
 
+  DateTime AddHours(int hours) {
+    return add(Duration(hours: hours));
+  }
+
+  DateTime AddMinutes(int minutes) {
+    return add(Duration(minutes: minutes));
+  }
+
   DateTime AddSeconds(int seconds) {
     return add(Duration(seconds: seconds));
   }

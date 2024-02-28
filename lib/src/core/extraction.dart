@@ -55,6 +55,7 @@ class Metadata {
   Metadata({
     this.isDurationWithBeforeAndAfter = false,
     this.isHoliday = false,
+    this.isMealtime = false,
   });
 
   bool isHoliday;
@@ -84,6 +85,8 @@ class Metadata {
   String holidayName = "";
 
   bool isOrdinalRelative = false;
+
+  bool isMealtime = false;
 }
 
 class Token {
