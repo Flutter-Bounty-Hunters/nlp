@@ -230,6 +230,7 @@ enum DateTimeOptions {
   SplitDateAndTime(2),
   CalendarMode(4),
   ExtendedTypes(8),
+  NoProtoCache(16),
   TasksMode(1048576),
   EnablePreview(8388608),
   ExperimentalMode(4194304),

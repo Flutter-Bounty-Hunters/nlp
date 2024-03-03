@@ -204,6 +204,8 @@ class DateTimeConstants {
   static final MonthGroupName = "month";
   static final WeekdayGroupName = "weekday";
 
+  static final UnitOfYearGroupName = "uoy";
+
   static const PluralUnit = "plural";
 
   static const String MealtimeBreakfast = "TMEB";

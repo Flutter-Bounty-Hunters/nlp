@@ -25,6 +25,8 @@ class EnglishMergedExtractorConfiguration extends BaseOptionsConfiguration imple
   static final UnspecificDatePeriodRegex =
       RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.UnspecificDatePeriodRegex);
 
+  static final YearRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.YearRegex);
+
   // TODO: bring back
   // static final StringMatcher SuperfluousWordMatcher = StringMatcher();
 

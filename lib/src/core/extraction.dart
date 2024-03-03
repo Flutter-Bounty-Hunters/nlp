@@ -56,6 +56,7 @@ class Metadata {
     this.isDurationWithBeforeAndAfter = false,
     this.isHoliday = false,
     this.isMealtime = false,
+    this.possiblyIncludePeriodEnd = false,
   });
 
   bool isHoliday;
@@ -87,6 +88,8 @@ class Metadata {
   bool isOrdinalRelative = false;
 
   bool isMealtime = false;
+
+  bool possiblyIncludePeriodEnd;
 }
 
 class Token {
