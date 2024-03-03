@@ -571,22 +571,22 @@ class DurationExtractor implements IDateTimeExtractor {
 class EnglishDurationExtractorConfiguration extends BaseOptionsConfiguration
     implements IDurationExtractorConfiguration {
   static final DurationUnitRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.DurationUnitRegex);
-  static final SuffixAndRegex = RegExp(EnglishDateTime.SuffixAndRegex);
-  static final DurationFollowedUnit = RegExp(RegExpComposer.sanitizeGroups(EnglishDateTime.DurationFollowedUnit));
+  static final SuffixAndRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.SuffixAndRegex);
+  static final DurationFollowedUnit = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.DurationFollowedUnit);
   static final NumberCombinedWithDurationUnit =
-      RegExp(RegExpComposer.sanitizeGroups(EnglishDateTime.NumberCombinedWithDurationUnit));
-  static final AnUnitRegex = RegExp(RegExpComposer.sanitizeGroups(EnglishDateTime.AnUnitRegex));
-  static final DuringRegex = RegExp(EnglishDateTime.DuringRegex);
+      RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.NumberCombinedWithDurationUnit);
+  static final AnUnitRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.AnUnitRegex);
+  static final DuringRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.DuringRegex);
   static final AllRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.AllRegex);
-  static final HalfRegex = RegExp(EnglishDateTime.HalfRegex);
-  static final ConjunctionRegex = RegExp(EnglishDateTime.ConjunctionRegex);
-  static final InexactNumberRegex = RegExp(EnglishDateTime.InexactNumberRegex);
-  static final InexactNumberUnitRegex = RegExp(RegExpComposer.sanitizeGroups(EnglishDateTime.InexactNumberUnitRegex));
+  static final HalfRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.HalfRegex);
+  static final ConjunctionRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.ConjunctionRegex);
+  static final InexactNumberRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.InexactNumberRegex);
+  static final InexactNumberUnitRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.InexactNumberUnitRegex);
   static final RelativeDurationUnitRegex =
-      RegExp(RegExpComposer.sanitizeGroups(EnglishDateTime.RelativeDurationUnitRegex));
-  static final DurationConnectorRegex = RegExp(EnglishDateTime.DurationConnectorRegex);
-  static final MoreThanRegex = RegExp(EnglishDateTime.MoreThanRegex);
-  static final LessThanRegex = RegExp(EnglishDateTime.LessThanRegex);
+      RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.RelativeDurationUnitRegex);
+  static final DurationConnectorRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.DurationConnectorRegex);
+  static final MoreThanRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.MoreThanRegex);
+  static final LessThanRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.LessThanRegex);
 
   EnglishDurationExtractorConfiguration([super.options = DateTimeOptions.None])
       : cardinalExtractor = CardinalExtractor.getInstance(),
