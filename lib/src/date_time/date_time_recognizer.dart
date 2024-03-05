@@ -899,7 +899,7 @@ class DateTimeModel {
 }
 
 class DateTimeResolutionResult {
-  DateTimeResolutionResult();
+  DateTimeResolutionResult({this.timex, this.futureValue, this.pastValue});
 
   bool success = false;
   String? timex;

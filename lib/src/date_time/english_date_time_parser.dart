@@ -4,7 +4,9 @@ import 'package:nlp/src/core/parser.dart';
 import 'package:nlp/src/date_time/base_date_extractor.dart';
 import 'package:nlp/src/date_time/base_date_parser.dart';
 import 'package:nlp/src/date_time/base_date_period_extractor.dart';
+import 'package:nlp/src/date_time/base_date_period_parser.dart';
 import 'package:nlp/src/date_time/base_date_time_period_extractor.dart';
+import 'package:nlp/src/date_time/base_date_time_period_parser.dart';
 import 'package:nlp/src/date_time/base_datetime_extractor.dart';
 import 'package:nlp/src/date_time/base_datetime_parser.dart';
 import 'package:nlp/src/date_time/base_holiday_extractor.dart';
@@ -14,9 +16,11 @@ import 'package:nlp/src/date_time/base_time_period_extractor.dart';
 import 'package:nlp/src/date_time/base_time_period_parser.dart';
 import 'package:nlp/src/date_time/english/english_date_parser_configuration.dart';
 import 'package:nlp/src/date_time/english/english_date_period_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_date_period_parser_configuration.dart';
 import 'package:nlp/src/date_time/english/english_date_time_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english/english_date_time_parser_configuration.dart';
 import 'package:nlp/src/date_time/english/english_date_time_period_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_date_time_period_parser_configuration.dart';
 import 'package:nlp/src/date_time/english/english_holiday_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english/english_time_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english/english_time_parser_configuration.dart';
@@ -116,7 +120,7 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
     specialDecadeCases = EnglishDateTime.SpecialDecadeCases;
 
     cardinalExtractor = CardinalExtractor.getInstance();
-    // intExtractor = intExtractor.getInstance();
+    intExtractor = IntegerExtractor.getInstance();
     ordinalExtractor = OrdinalExtractor.getInstance();
     numberParser = BaseNumberParser(EnglishNumberParserConfiguration());
 
@@ -135,9 +139,9 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
     dateParser = BaseDateParser(EnglishDateParserConfiguration(this));
     timeParser = BaseTimeParser(EnglishTimeParserConfiguration(this, options: options));
     dateTimeParser = BaseDateTimeParser(EnglishDateTimeParserConfiguration(this, options: options));
-    //datePeriodParser = BaseDatePeriodParser(EnglishDatePeriodParserConfiguration(this));
+    datePeriodParser = BaseDatePeriodParser(EnglishDatePeriodParserConfiguration(this));
     timePeriodParser = BaseTimePeriodParser(EnglishTimePeriodParserConfiguration(this));
-    // dateTimePeriodParser = BaseDateTimePeriodParser(EnglishDateTimePeriodParserConfiguration(this));
+    dateTimePeriodParser = BaseDateTimePeriodParser(EnglishDateTimePeriodParserConfiguration(this));
     // dateTimeAltParser = BaseDateTimeAltParser(EnglishDateTimeAltParserConfiguration(this));
   }
 
@@ -173,8 +177,8 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
 
   @override
   late final IExtractor cardinalExtractor;
-  // @override
-  // late final IExtractor intExtractor;
+  @override
+  late final IExtractor intExtractor;
   @override
   late final IExtractor ordinalExtractor;
 
@@ -217,8 +221,8 @@ class EnglishCommonDateTimeParserConfiguration extends BaseDateParserConfigurati
   @override
   late final IDateTimeParser dateTimeParser;
 
-  // @override
-  // late final IDateTimeParser dateTimePeriodParser;
+  @override
+  late final IDateTimeParser dateTimePeriodParser;
   // @override
   // late final IDateTimeParser dateTimeAltParser;
   // @override
@@ -235,7 +239,7 @@ abstract class BaseDateParserConfiguration extends BaseOptionsConfiguration
 abstract interface class ICommonDateTimeParserConfiguration implements IOptionsConfiguration {
   IExtractor get cardinalExtractor;
 
-  // IExtractor get intExtractor;
+  IExtractor get intExtractor;
 
   IExtractor get ordinalExtractor;
 
@@ -268,7 +272,7 @@ abstract interface class ICommonDateTimeParserConfiguration implements IOptionsC
 
   IDateTimeParser get timePeriodParser;
 
-  // IDateTimeParser get dateTimePeriodParser;
+  IDateTimeParser get dateTimePeriodParser;
 
   // IDateTimeParser get dateTimeAltParser;
 

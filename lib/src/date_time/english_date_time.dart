@@ -1682,6 +1682,9 @@ class EnglishDateTime {
 
   static final String DayTypeRegex = r"((week)?da(il)?ys?)$";
 
+  static final String WeekDayTypeRegex = r"(weekday?)$";
+  static final String FortNightRegex = r"(fortnight?)$";
+
   static final String WeekTypeRegex = r"(week(s|ly)?)$";
 
   static final String WeekendTypeRegex = r"(weekends?)$";

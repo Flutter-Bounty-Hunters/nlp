@@ -368,7 +368,7 @@ class BaseDatePeriodExtractor implements IDateTimeExtractor {
         if (match.length == DateTimeConstants.FourDigitsYearLength && config.YearRegex().hasMatch(match.value)) {
           // handle single year which is surrounded by '-' at both sides, e.g., a single year falls in a GUID
           if (InfixBoundaryCheck(match, text)) {
-            var substr = text.substring(match.index - 1, match.index + 6);
+            var substr = text.substring(match.index - 1, match.index + 5);
 
             if (config.IllegalYearRegex().hasMatch(substr)) {
               continue;
