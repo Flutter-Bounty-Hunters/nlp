@@ -1,7 +1,5 @@
 library;
 
-export 'src/global_recognizer.dart';
-
 // NLP Domain
 export 'src/date_time/constants.dart';
 export 'src/date_time/english_date_time.dart';

@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:nlp/src/regular_expressions/js_regexp.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-
 import 'package:nlp/nlp.dart';
 import 'package:super_editor/super_editor.dart';
 
@@ -29,85 +29,55 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _runNlpExample() {
-    // const phrase = "It happened when the baby was only ten months old";
-    // const phrase = "I'll leave for 3h";
-    //const phrase = "The project estimative is a 2 ys duration";
-    // const phrase = "We've been in Pakistan for 2ys";
-    // const phrase = "I'll leave for 1 year 1 month 21 days";
-    // const phrase = "I'll leave for 2 days 1 month";
-    const phrase = "Send a birthday card to Dad every year on May 3rd";
-    //const phrase = "Change Tires on Car next Tuesday at 5pm";
-
-    final res = GlobalRecognizer.recognize(phrase);
-
-    for (final item in res) {
-      print(item.toJson());
-    }
-  }
-
-  void _runRegExp() {
-    print("-------- RUNNING DART VERSION --------");
-    print("");
-
-    final dartResult = JsRegExp(
-      '^(?<timestamp>\\d+),(?<author>.+)\$',
-      d: true,
-    ).exec("1560979912,Caroline");
-    if (dartResult == null) {
-      print("No results");
-      print("");
-      return;
-    }
-
-    print("Timestamp group:");
-    print(dartResult.groups['timestamp']);
-    print("");
-
-    print("Author group:");
-    print(dartResult.groups['author']);
-    print("");
-
-    print("Indices:");
-    print(dartResult.indices);
-    print("");
-  }
-
-  // I want twenty meters of cable for tomorrow
-  // I'll be available tomorrow from 11am to 2pm to receive up to 5kg of sugar
-  // I'll be out between 4 and 22 this month
-  // I was the fifth person to finish the 10 km race
-  // The temperature this night will be of 40 deg celsius
-  // The american stock exchange said a seat was sold for down $ 5,000 from the previous sale last friday
-  // It happened when the baby was only ten months old
   void _extractFromText() {
     final text = _inputTextController.text;
-    print("Extracting data from text: '$text'");
 
-    final result = GlobalRecognizer().recognize(text);
-
-    final output = StringBuffer("Recognized items in '$text'\n");
-    for (final item in result) {
-      output.writeln(" • '${item.text}' - ${item.start} -> ${item.end}");
-    }
+    final result = GlobalRecognizer.recognize(text);
 
     setState(() {
-      final outputText = AttributedText(text);
+      var outputText = AttributedText(text);
+
       for (final item in result) {
         outputText.addAttribution(
-          const _Extraction(),
+          _Extraction(HSVColor.fromAHSV(1.0, Random().nextDouble() * 360, 1.0, 1.0).toColor()),
           SpanRange(item.start, item.end),
         );
       }
+
+      final additionalInfo = StringBuffer("\n-----------\nRecognized items in '$text'\n");
+      for (final item in result) {
+        additionalInfo
+          ..writeln("")
+          ..writeln(" • '${item.text}' - ${item.start} -> ${item.end}")
+          ..writeln(const JsonEncoder.withIndent("  ").convert(item.resolution));
+      }
+      outputText = outputText.copyAndAppend(AttributedText(additionalInfo.toString()));
 
       _output = outputText;
     });
   }
 
+  void _onPreCannedInputSelected(String preCannedInput) {
+    _inputTextController.text = preCannedInput;
+    _extractFromText();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
+      body: Row(
+        children: [
+          Expanded(
+            child: _buildMainContent(),
+          ),
+          _buildPreCannedInputsList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainContent() {
+    return Center(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: ConstrainedBox(
@@ -121,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Expanded(
                     child: TextField(
                       controller: _inputTextController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Enter some natural text",
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -135,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: _extractFromText,
-                    child: Icon(Icons.arrow_forward),
+                    child: const Icon(Icons.arrow_forward),
                   ),
                 ],
               ),
@@ -144,38 +114,142 @@ class _MyHomePageState extends State<MyHomePage> {
                 constraints: const BoxConstraints(maxHeight: 500),
                 child: SingleChildScrollView(
                   child: _output == null
-                      ? Text(
+                      ? const Text(
                           "Output...",
                         )
-                      : Text.rich(_output!.computeTextSpan((attributions) {
-                          if (attributions.contains(const _Extraction())) {
-                            return TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            );
-                          }
-                          return TextStyle(
-                            color: const Color(0xFFAAAAAA),
-                          );
-                        })),
+                      : Text.rich(
+                          _output!.computeTextSpan(
+                            (attributions) {
+                              final extraction =
+                                  attributions.firstWhereOrNull((item) => item is _Extraction) as _Extraction?;
+                              if (extraction != null) {
+                                return TextStyle(
+                                  color: extraction.color,
+                                  fontWeight: FontWeight.bold,
+                                );
+                              }
+
+                              return const TextStyle(
+                                color: Color(0xFFAAAAAA),
+                              );
+                            },
+                          ),
+                        ),
                 ),
               ),
             ],
           ),
         ),
       ),
-    ));
+    );
+  }
+
+  Widget _buildPreCannedInputsList() {
+    return Container(
+      width: 400,
+      height: double.infinity,
+      color: const Color(0xFFEEEEEE),
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final preCannedInput in _preCannedInputs)
+                _PreCannedInputChip(
+                  preCannedInput: preCannedInput,
+                  onPressed: _onPreCannedInputSelected,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
+const _preCannedInputs = [
+  "It happened when the baby was only ten months old",
+  "I'll leave for 3h",
+  "The project estimative is a 2 ys duration",
+  "We've been in Pakistan for 2ys",
+  "I'll leave for 1 year 1 month 21 days",
+  "I'll leave for 2 days 1 month",
+  "Send a birthday card to Dad every year on May 3rd",
+  "Change Tires on Car next Tuesday at 5pm",
+];
+
+/// Chip that displays a line of pre-canned input, which can be run through NLP
+/// to extract meaningful tokens.
+class _PreCannedInputChip extends StatefulWidget {
+  const _PreCannedInputChip({
+    required this.preCannedInput,
+    required this.onPressed,
+  });
+
+  final String preCannedInput;
+
+  final void Function(String input) onPressed;
+
+  @override
+  State<_PreCannedInputChip> createState() => _PreCannedInputChipState();
+}
+
+class _PreCannedInputChipState extends State<_PreCannedInputChip> {
+  bool _isHovering = false;
+
+  void _onHoverStart() {
+    setState(() {
+      _isHovering = true;
+    });
+  }
+
+  void _onHoverEnd() {
+    setState(() {
+      _isHovering = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => widget.onPressed(widget.preCannedInput),
+      child: MouseRegion(
+        onEnter: (_) => _onHoverStart(),
+        onExit: (_) => _onHoverEnd(),
+        hitTestBehavior: HitTestBehavior.opaque,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: _isHovering ? const Color(0xFFCC0000) : Colors.red,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          child: Text(
+            widget.preCannedInput,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Attribution that marks a single extracted NLP value.
 class _Extraction implements Attribution {
-  const _Extraction();
+  const _Extraction(this.color);
 
   @override
   String get id => "extraction";
 
+  final Color color;
+
   @override
   bool canMergeWith(Attribution other) {
-    return other is _Extraction;
+    return other is _Extraction && color.value == other.color.value;
   }
 }
