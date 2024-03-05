@@ -867,7 +867,7 @@ class DateTimeModel {
     int start = parsedDateTime.start;
     int end = parsedDateTime.start + parsedDateTime.length - 1;
     String typeName = parsedDateTime.type!;
-    final resolution = parsedDateTime.value as Map<String, Object>;
+    final resolution = parsedDateTime.value as Map<String, Object>?;
     String text = parsedDateTime.text;
 
     var result = ModelResult(
@@ -875,7 +875,7 @@ class DateTimeModel {
       start: start,
       end: end,
       typeName: typeName,
-      resolution: resolution,
+      resolution: resolution ?? <String, Object>{},
     );
 
     final types = parsedDateTime.type!.split("\\.");
