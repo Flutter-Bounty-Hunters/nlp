@@ -1,7 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:nlp/nlp.dart';
 import 'package:nlp/src/core/string_utility.dart';
-import 'package:nlp/src/date_time/constants.dart';
 
 class DateTimeFormatUtil {
   static final HourTimexRegex = r"(?<!P)T(\\d{2})";
@@ -12,7 +11,7 @@ class DateTimeFormatUtil {
       return DateTimeConstants.TimexFuzzyYear;
     }
 
-    return year.toString().padRight(4, '0');
+    return year.toString().padLeft(4, '0');
   }
 
   // public static String luisDate(int year, int month) {
@@ -29,7 +28,7 @@ class DateTimeFormatUtil {
 
   static String luisDateFromComponents(int year, [int? month, int? day]) {
     // TODO: replace all these if statements with a single list that uses conditional inclusion and then join()s.
-    if (year == -1) {
+    if (year == -1 || year == DateTimeConstants.InvalidYear) {
       if (month == -1) {
         if (day == -1) {
           return const [
@@ -39,16 +38,25 @@ class DateTimeFormatUtil {
           ].join(DateTimeConstants.DateTimexConnector);
         }
 
-        return [DateTimeConstants.TimexFuzzyYear, DateTimeConstants.TimexFuzzyMonth, day.toString().padLeft(2, '0')]
-            .join(DateTimeConstants.DateTimexConnector);
+        return [
+          DateTimeConstants.TimexFuzzyYear,
+          DateTimeConstants.TimexFuzzyMonth,
+          if (day != null) day.toString().padLeft(2, '0')
+        ].join(DateTimeConstants.DateTimexConnector);
       }
 
-      return [DateTimeConstants.TimexFuzzyYear, month.toString().padLeft(2, '0'), day.toString().padLeft(2, '0')]
-          .join(DateTimeConstants.DateTimexConnector);
+      return [
+        DateTimeConstants.TimexFuzzyYear,
+        month.toString().padLeft(2, '0'),
+        if (day != null) day.toString().padLeft(2, '0')
+      ].join(DateTimeConstants.DateTimexConnector);
     }
 
-    return [year.toString().padRight(4, '0'), month.toString().padLeft(2, '0'), day.toString().padLeft(2, '0')]
-        .join(DateTimeConstants.DateTimexConnector);
+    return [
+      year.toString().padLeft(4, '0'),
+      month.toString().padLeft(2, '0'),
+      if (day != null) day.toString().padLeft(2, '0')
+    ].join(DateTimeConstants.DateTimexConnector);
   }
 
   static String luisDateFromDateTime(DateTime date, [DateTime? alternativeDate]) {
@@ -258,7 +266,7 @@ class DateTimeFormatUtil {
     hour = hour >= DateTimeConstants.HalfDayHourCount
         ? hour - DateTimeConstants.HalfDayHourCount
         : hour + DateTimeConstants.HalfDayHourCount;
-    splited[0] = hour.toString().padRight(2, "0");
+    splited[0] = hour.toString().padLeft(2, "0");
     timeStr = splited.join(":");
 
     return hasT ? "T$timeStr" : timeStr;
@@ -326,8 +334,15 @@ class DateTimeFormatUtil {
   }
 
   static String toIsoWeekTimex(DateTime date) {
-    int weekNum = weekNumber(date);
-    return "${date.year.toString().padRight(4, '0')}${weekNum.toString().padRight(2, '0')}";
+    //var cal = DateTimeFormatInfo.InvariantInfo.Calendar;
+    var thursday = date.AddDays(DateTime.thursday - date.weekday);
+
+    int weekNum = weekNumber(thursday);
+
+    return "${thursday.year.toString().padLeft(4, '0')}-W${weekNum.toString().padLeft(2, '0')}";
+
+    // int weekNum = weekNumber(date);
+    // return "${date.year.toString().padLeft(4, '0')}-W${weekNum.toString().padLeft(2, '0')}";
     // Response was previously:
     // return String.format("%04d-W%02d", date.year, weekNum);
   }

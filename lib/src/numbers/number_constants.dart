@@ -9,6 +9,7 @@ class Constants {
   static final SYS_NUM_ORDINAL = "builtin.num.ordinal";
   static final SYS_NUM_PERCENTAGE = "builtin.num.percentage";
   static final SYS_NUMRANGE = "builtin.num.numberrange";
+  static final SYS_NUMBER_ORDINAL = "builtin.num.ordinal";
 
   // Model type name
   static final MODEL_NUMBER = "number";

@@ -263,6 +263,10 @@ class RegExpComposer {
     return match;
   }
 
+  static NlpMatch? firstMatch(RegExp regExp, String input) {
+    return getMatchesSimple(regExp, input).firstOrNull;
+  }
+
   static NlpMatch? matchEnd(RegExp regExp, String text, [bool trim = false]) {
     final match = getMatchesSimple(regExp, text).lastOrNull;
     if (match == null) {
@@ -456,4 +460,6 @@ extension NlpRegExp on RegExp {
 extension NlpRegExpMatch on RegExpMatch {
   /// Returns the length of the text in this match.
   int get length => end - start;
+
+  String get value => input.substring(start, end);
 }

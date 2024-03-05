@@ -16,6 +16,10 @@ abstract interface class IMergedParserConfiguration implements ICommonDateTimePa
 
   RegExp getYearRegex();
 
+  RegExp getEqualRegex();
+
+  bool checkBothBeforeAfter();
+
   // IDateTimeParser getGetParser();
   //
   // IDateTimeParser getHolidayParser();

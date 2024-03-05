@@ -167,9 +167,9 @@ class BaseDurationParser implements IDateTimeParser {
   double _parseNumberWithUnitAndSuffix(String text) {
     double numVal = 0;
 
-    final match = config.getSuffixAndRegex().allMatches(text).firstOrNull;
+    final match = RegExpComposer.firstMatch(config.getSuffixAndRegex(), text);
     if (match != null) {
-      String numStr = match.namedGroup("suffix_num")!.toLowerCase();
+      String numStr = match.getGroup("suffix_num").value.toLowerCase();
 
       if (config.getDoubleNumbers().containsKey(numStr)) {
         numVal = config.getDoubleNumbers()[numStr]!;

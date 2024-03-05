@@ -227,7 +227,7 @@ class EnglishDateTime {
           .replaceAll("{WrittenOrdinalDayRegex}", WrittenOrdinalDayRegex);
 
   static final String MonthWithYear =
-      r"\b((({WrittenMonthRegex}[\.]?|((the\s+)?(?<cardinal>first|1st|second|2nd|third|3rd|fourth|4th|fifth|5th|sixth|6th|seventh|7th|eighth|8th|ninth|9th|tenth|10th|eleventh|11th|twelfth|12th|last)\s+month(?=\s+(of|in))))((\s*)[/\\\-\.,]?(\s+(of|in))?(\s*)({YearRegex}|(?<order>following|next|last|this)\s+year)|\s+(of|in)\s+{TwoDigitYearRegex}))|(({YearRegex}|(?<order>following|next|last|this)\s+year)(\s*),?(\s*){WrittenMonthRegex}))\b"
+      r"\b((({WrittenMonthRegex}[\.]?|((the\s+)?(?<cardinal>first|1st|second|2nd|third|3rd|fourth|4th|fifth|5th|sixth|6th|seventh|7th|eighth|8th|ninth|9th|tenth|10th|eleventh|11th|twelfth|12th|last)\s+month(?=\s+(of|in))))((\s*)[/\\\-\.,]?(\s+(of|in))?(\s*)({YearRegex}|{TwoDigitYearRegex}|(?<order>following|next|last|this)\s+year)|\s+(of|in)\s+{TwoDigitYearRegex}))|(({YearRegex}|(?<order>following|next|last|this)\s+year)(\s*),?(\s*){WrittenMonthRegex}))\b"
           .replaceAll("{WrittenMonthRegex}", WrittenMonthRegex)
           .replaceAll("{YearRegex}", YearRegex)
           .replaceAll("{TwoDigitYearRegex}", TwoDigitYearRegex);
@@ -1681,6 +1681,9 @@ class EnglishDateTime {
   static final String HalfMultiplierRegex = r"^(semi)(-|\s)?";
 
   static final String DayTypeRegex = r"((week)?da(il)?ys?)$";
+
+  static final String WeekDayTypeRegex = r"(weekday?)$";
+  static final String FortNightRegex = r"(fortnight?)$";
 
   static final String WeekTypeRegex = r"(week(s|ly)?)$";
 

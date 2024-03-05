@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names
 
+import 'package:nlp/src/date_time/date_util.dart';
+
 import 'english_date_time.dart';
 
 class DateTimeConstants {
@@ -92,6 +94,7 @@ class DateTimeConstants {
   static const int InvalidHour = intMin;
   static const int InvalidMinute = intMin;
   static const int InvalidSecond = intMin;
+  static final DateTime InvalidDate = DateUtil.minValue();
 
   static const int INVALID_CONNECTOR_CODE = -1;
 
@@ -140,6 +143,7 @@ class DateTimeConstants {
   static const DefaultLanguageFallback_YMD = "YMD"; // ZH
 
   // Groups' names for named groups in regexes
+  static const FirstGroupName = "first";
   static const NextGroupName = "next";
   static const AmGroupName = "am";
   static const PmGroupName = "pm";
@@ -158,9 +162,14 @@ class DateTimeConstants {
   static const MealTimeGroupName = "mealTime";
   static const IncludeGroupName = "include";
 
+  static const NumGroupName = "num";
+  static const NumberGroupName = "number";
+
   static const DECADE_UNIT = "10Y";
   static const FORTNIGHT_UNIT = "2W";
   static const WEEKEND_UNIT = "WE";
+
+  static const AmbiguousPattern = "ambiguous";
 
   // Timex
   static const DatePeriodTimexSplitter = [",", "(", ")"];
@@ -176,6 +185,7 @@ class DateTimeConstants {
   static const TimexSecond = "S";
   static const TimexFuzzy = 'X';
   static const TimexFuzzyYear = "XXXX";
+  static const TimexFuzzyTwoDigitYear = "XX";
   static const TimexFuzzyMonth = "XX";
   static const TimexFuzzyWeek = "WXX";
   static const TimexFuzzyDay = "XX";
@@ -184,6 +194,7 @@ class DateTimeConstants {
   static const GeneralPeriodPrefix = "P";
   static const TimeTimexPrefix = "T";
   static const TimexNow = "PRESENT_REF";
+  static const TimexFortnight = "W";
 
   // Timex of TimeOfDay
   static const EarlyMorning = "TDA";
@@ -204,12 +215,19 @@ class DateTimeConstants {
   static final MonthGroupName = "month";
   static final WeekdayGroupName = "weekday";
 
+  static final UnitOfYearGroupName = "uoy";
+
+  static final OrdinalGroupName = "ordinal";
+  static final OrderGroupName = "order";
+
   static const PluralUnit = "plural";
 
   static const String MealtimeBreakfast = "TMEB";
   static const String MealtimeBrunch = "TMER";
   static const String MealtimeLunch = "TMEL";
   static const String MealtimeDinner = "TMED";
+
+  static const String HAS_MOD = "mod";
 
   static final BASE_YEAR_PAST_CENTURY = 1900;
   static final BASE_YEAR_CURRENT_CENTURY = 2000;

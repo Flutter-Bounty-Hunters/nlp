@@ -2,10 +2,13 @@
 
 import 'dart:collection';
 
+import 'package:intl/intl.dart';
 import 'package:nlp/src/core/range_timex_component.dart';
 import 'package:nlp/src/core/string_utility.dart';
 import 'package:nlp/src/date_time/base_date_parser.dart';
 import 'package:nlp/src/date_time/constants.dart';
+import 'package:nlp/src/date_time/data_structure.dart';
+import 'package:nlp/src/date_time/date_context.dart';
 import 'package:nlp/src/date_time/date_time_format_util.dart';
 import 'package:nlp/src/date_time/date_util.dart';
 import 'package:nlp/src/date_time/time_of_day_resolution_result.dart';
@@ -169,6 +172,171 @@ class TimexUtility {
     );
   }
 
+  // TODO: Unify this two methods. This one here detect if "begin/end" have same year, month and day with "alter begin/end" and make them nonspecific.
+  static String GenerateDatePeriodTimex(DateTime begin, DateTime end, DatePeriodTimexType timexType,
+      [DateTime? alternativeBegin, DateTime? alternativeEnd, bool hasYear = true]) {
+    // If the year is not specified, the combined range timex will use fuzzy years.
+    if (!hasYear) {
+      return GenerateDatePeriodTimexByUnspecifiedTerms(begin, end, timexType, UnspecificDateTimeTerms.NonspecificYear);
+    }
+
+    var equalDurationLength = (end.difference(begin)) ==
+        ((alternativeEnd ?? DateUtil.minValue()).difference(alternativeBegin ?? DateUtil.minValue()));
+
+    if (alternativeBegin == null ||
+        alternativeBegin == DateUtil.minValue() ||
+        alternativeEnd == null ||
+        alternativeEnd == DateUtil.minValue()) {
+      equalDurationLength = true;
+    }
+
+    var unitCount = equalDurationLength ? GetDatePeriodTimexUnitCount(begin, end, timexType) : "XX";
+
+    var datePeriodTimex = "P$unitCount${DatePeriodTimexTypeToTimexSuffix[timexType]}";
+
+    return "(${DateTimeFormatUtil.luisDateFromDateTime(begin, alternativeBegin)},${DateTimeFormatUtil.luisDateFromDateTime(end, alternativeEnd)},$datePeriodTimex)";
+  }
+
+  static String GenerateDatePeriodTimexFromTimex(
+      DateTime begin, DateTime end, DatePeriodTimexType timexType, String timex1, String timex2) {
+    var boundaryValid = begin != DateUtil.minValue() && end != DateUtil.minValue();
+    var unitCount = boundaryValid ? GetDatePeriodTimexUnitCount(begin, end, timexType) : "X";
+    var datePeriodTimex = "P$unitCount${DatePeriodTimexTypeToTimexSuffix[timexType]}";
+    return "($timex1,$timex2,$datePeriodTimex)";
+  }
+
+  static String GetDatePeriodTimexUnitCount(DateTime begin, DateTime end, DatePeriodTimexType timexType) {
+    String unitCount;
+    final adjustedEnd = end.add(Duration(hours: end.timeZoneOffset.inHours - begin.timeZoneOffset.inHours));
+
+    switch (timexType) {
+      case DatePeriodTimexType.ByDay:
+        unitCount = adjustedEnd.difference(begin).inDays.toString();
+        break;
+      case DatePeriodTimexType.ByWeek:
+        unitCount = (adjustedEnd.difference(begin).inDays / 7).toString();
+        break;
+      case DatePeriodTimexType.ByFortnight:
+        unitCount = (adjustedEnd.difference(begin).inDays / 7).toString();
+        break;
+      case DatePeriodTimexType.ByMonth:
+        unitCount = (((end.year - begin.year) * 12) + (end.month - begin.month)).toString();
+        break;
+      default:
+        unitCount = ((end.year - begin.year) + ((end.month - begin.month) / 12.0)).toString();
+        break;
+    }
+
+    return unitCount;
+  }
+
+  static String GenerateDatePeriodTimexByUnspecifiedTerms(
+      DateTime begin, DateTime end, DatePeriodTimexType timexType, UnspecificDateTimeTerms terms) {
+    var beginYear = begin.year;
+    var endYear = end.year;
+    var beginMonth = begin.month;
+    var endMonth = end.month;
+    var beginDay = begin.day;
+    var endDay = end.day;
+
+    if (terms.match(UnspecificDateTimeTerms.NonspecificYear)) {
+      beginYear = endYear = -1;
+    }
+
+    if (terms.match(UnspecificDateTimeTerms.NonspecificMonth)) {
+      beginMonth = endMonth = -1;
+    }
+
+    if (terms.match(UnspecificDateTimeTerms.NonspecificDay)) {
+      beginDay = endDay = -1;
+    }
+
+    var unitCount = GetDatePeriodTimexUnitCount(begin, end, timexType);
+
+    var datePeriodTimex = "P$unitCount${DatePeriodTimexTypeToTimexSuffix[timexType]}";
+
+    return "(${DateTimeFormatUtil.luisDateFromComponents(beginYear, beginMonth, beginDay)},${DateTimeFormatUtil.luisDateFromComponents(endYear, endMonth, endDay)},$datePeriodTimex)";
+  }
+
+  static String GenerateWeekTimex([DateTime? monday]) {
+    if (monday == null || monday == DateUtil.minValue()) {
+      return "${DateTimeConstants.TimexFuzzyYear}${DateTimeConstants.DateTimexConnector}${DateTimeConstants.TimexFuzzyWeek}";
+    } else {
+      return DateTimeFormatUtil.toIsoWeekTimex(monday);
+    }
+  }
+
+  static String GenerateWeekTimexFromWeekNum(int weekNum) {
+    return "W${weekNum.toString().padLeft(2, '0')}";
+  }
+
+  static String GenerateWeekendTimex([DateTime? date]) {
+    if (date == null || date == DateUtil.minValue()) {
+      return "${DateTimeConstants.TimexFuzzyYear}${DateTimeConstants.DateTimexConnector}${DateTimeConstants.TimexFuzzyWeek}${DateTimeConstants.DateTimexConnector}${DateTimeConstants.TimexWeekend}";
+    } else {
+      return "${DateTimeFormatUtil.toIsoWeekTimex(date)}${DateTimeConstants.DateTimexConnector}${DateTimeConstants.TimexWeekend}";
+    }
+  }
+
+  static String GenerateMonthTimex([DateTime? date]) {
+    if (date == null || date == DateUtil.minValue()) {
+      return "${DateTimeConstants.TimexFuzzyYear}${DateTimeConstants.DateTimexConnector}${DateTimeConstants.TimexFuzzyMonth}";
+    } else {
+      return "${date.year.toString().padLeft(4, '0')}${DateTimeConstants.DateTimexConnector}${date.month.toString().padLeft(2, '0')}";
+    }
+  }
+
+  static String GenerateYearTimex([DateTime? date, String? specialYearPrefixes]) {
+    var yearTimex = date == null || date == DateUtil.minValue()
+        ? DateTimeConstants.TimexFuzzyYear
+        : date.year.toString().padLeft(4, '0');
+    return specialYearPrefixes == null ? yearTimex : specialYearPrefixes + yearTimex;
+  }
+
+  static String GenerateYearTimexFromYear(int year, [String? specialYearPrefixes]) {
+    var yearTimex = DateTimeFormatUtil.luisDateFromYear(year);
+    return specialYearPrefixes == null ? yearTimex : specialYearPrefixes + yearTimex;
+  }
+
+  static String GenerateWeekOfYearTimex(int year, int weekNum) {
+    var weekTimex = GenerateWeekTimexFromWeekNum(weekNum);
+    var yearTimex = DateTimeFormatUtil.luisDateFromYear(year);
+
+    return "${yearTimex}-${weekTimex}";
+  }
+
+  static String GenerateDecadeTimex(int beginYear, int totalLastYear, int decade, bool inputCentury) {
+    String beginStr, endStr;
+    if (inputCentury) {
+      beginStr = DateTimeFormatUtil.luisDateFromComponents(beginYear, 1, 1);
+      endStr = DateTimeFormatUtil.luisDateFromComponents(beginYear + totalLastYear, 1, 1);
+    } else {
+      var beginYearStr = DateTimeConstants.TimexFuzzyTwoDigitYear + decade.toString();
+      beginStr = DateTimeFormatUtil.luisDateFromComponents(-1, 1, 1);
+      beginStr = beginStr.replaceAll(DateTimeConstants.TimexFuzzyYear, beginYearStr);
+
+      var endYearStr =
+          DateTimeConstants.TimexFuzzyTwoDigitYear + ((decade + totalLastYear) % 100).toString().padLeft(2, '0');
+      endStr = DateTimeFormatUtil.luisDateFromComponents(-1, 1, 1);
+      endStr = endStr.replaceAll(DateTimeConstants.TimexFuzzyYear, endYearStr);
+    }
+
+    return "(${beginStr},${endStr},${DateTimeConstants.GeneralPeriodPrefix}${totalLastYear}${DateTimeConstants.TimexYear})";
+  }
+
+  static String GenerateWeekOfMonthTimex(int year, int month, int weekNum) {
+    var weekTimex = GenerateWeekTimexFromWeekNum(weekNum);
+    var monthTimex = DateTimeFormatUtil.luisDateFromComponents(year, month);
+
+    return "${monthTimex}-${weekTimex}";
+  }
+
+  static String GenerateSetTimex(String durationType, double durationLength, [double multiplier = 1]) {
+    final text = NumberFormat.decimalPattern().format(durationLength * multiplier);
+    // TODO :  multiplier:0.#;
+    return "P${text}${durationType}";
+  }
+
   static String CombineDateTimeTimex(String timeTimex1, String dateTimeTimex2, DateTime dateTime1) {
     return dateTimeTimex2 == DateTimeConstants.TimexNow
         ? DateTimeFormatUtil.LuisDateShortTime(dateTime1)
@@ -254,6 +422,26 @@ class TimexUtility {
 
     return result;
   }
+
+  static Map<DatePeriodTimexType, String> DatePeriodTimexTypeToTimexSuffix = <DatePeriodTimexType, String>{
+    DatePeriodTimexType.ByDay: DateTimeConstants.TimexDay,
+    DatePeriodTimexType.ByWeek: DateTimeConstants.TimexWeek,
+    DatePeriodTimexType.ByFortnight: DateTimeConstants.TimexFortnight,
+    DatePeriodTimexType.ByMonth: DateTimeConstants.TimexMonth,
+    DatePeriodTimexType.ByYear: DateTimeConstants.TimexYear,
+  };
+
+  static String SetTimexWithContext(String timex, DateContext context) {
+    return timex.replaceAll(DateTimeConstants.TimexFuzzyYear, context.year.toString().padLeft(4, '0'));
+  }
+
+  static String MergeTimexAlternatives(String timex1, String timex2) {
+    if (timex1 == timex2) {
+      return timex1;
+    }
+
+    return "$timex1${DateTimeConstants.CompositeTimexDelimiter}$timex2";
+  }
 }
 
 class DateTimeResolutionKey {
@@ -264,6 +452,7 @@ class DateTimeResolutionKey {
   static final String END = "end";
   static final String List = "list";
   static final String SourceEntity = "sourceEntity";
+  static final String Value = "value";
 }
 
 class TimexHelpers {
@@ -342,4 +531,34 @@ class TimexTypes {
   static const TIME = "time";
   static const TIME_RANGE = "timerange";
   static const DATE_TIME_RANGE = "datetimerange";
+}
+
+enum UnspecificDateTimeTerms {
+  /// <summary>
+  /// None
+  /// </summary>
+  None(0),
+
+  /// <summary>
+  /// NonspecificYear
+  /// </summary>
+  NonspecificYear(1),
+
+  /// <summary>
+  /// NonspecificMonth
+  /// </summary>
+  NonspecificMonth(2),
+
+  /// <summary>
+  /// NonspecificDay
+  /// </summary>
+  NonspecificDay(4);
+
+  const UnspecificDateTimeTerms(this.value);
+
+  final int value;
+
+  bool match(UnspecificDateTimeTerms option) {
+    return (value & option.value) == option.value;
+  }
 }

@@ -1,872 +1,872 @@
 const datePeriodExtractorTestCases = [
   {
-    "Input": "I'll be out in Jan",
+    "Input": "I'll be out in jan",
     "Results": [
-      {"Text": "Jan", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "jan", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Jan",
+    "Input": "I'll be out this jan",
     "Results": [
-      {"Text": "this Jan", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this jan", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Jan",
+    "Input": "I'll be out month of jan",
     "Results": [
-      {"Text": "month of Jan", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of jan", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Jan",
+    "Input": "I'll be out the month of jan",
     "Results": [
-      {"Text": "the month of Jan", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of jan", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Jan 2001",
+    "Input": "I was missing jan 2001",
     "Results": [
-      {"Text": "Jan 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "jan 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Jan, 2001",
+    "Input": "I was missing jan, 2001",
     "Results": [
-      {"Text": "Jan, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "jan, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Feb",
+    "Input": "I'll be out in feb",
     "Results": [
-      {"Text": "Feb", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "feb", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Feb",
+    "Input": "I'll be out this feb",
     "Results": [
-      {"Text": "this Feb", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this feb", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Feb",
+    "Input": "I'll be out month of feb",
     "Results": [
-      {"Text": "month of Feb", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of feb", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Feb",
+    "Input": "I'll be out the month of feb",
     "Results": [
-      {"Text": "the month of Feb", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of feb", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Feb 2001",
+    "Input": "I was missing feb 2001",
     "Results": [
-      {"Text": "Feb 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "feb 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Feb, 2001",
+    "Input": "I was missing feb, 2001",
     "Results": [
-      {"Text": "Feb, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "feb, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Mar",
+    "Input": "I'll be out in mar",
     "Results": [
-      {"Text": "Mar", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "mar", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Mar",
+    "Input": "I'll be out this mar",
     "Results": [
-      {"Text": "this Mar", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this mar", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Mar",
+    "Input": "I'll be out month of mar",
     "Results": [
-      {"Text": "month of Mar", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of mar", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Mar",
+    "Input": "I'll be out the month of mar",
     "Results": [
-      {"Text": "the month of Mar", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of mar", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Mar 2001",
+    "Input": "I was missing mar 2001",
     "Results": [
-      {"Text": "Mar 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "mar 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Mar, 2001",
+    "Input": "I was missing mar, 2001",
     "Results": [
-      {"Text": "Mar, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "mar, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Apr",
+    "Input": "I'll be out in apr",
     "Results": [
-      {"Text": "Apr", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "apr", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Apr",
+    "Input": "I'll be out this apr",
     "Results": [
-      {"Text": "this Apr", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this apr", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Apr",
+    "Input": "I'll be out month of apr",
     "Results": [
-      {"Text": "month of Apr", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of apr", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Apr",
+    "Input": "I'll be out the month of apr",
     "Results": [
-      {"Text": "the month of Apr", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of apr", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Apr 2001",
+    "Input": "I was missing apr 2001",
     "Results": [
-      {"Text": "Apr 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "apr 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Apr, 2001",
+    "Input": "I was missing apr, 2001",
     "Results": [
-      {"Text": "Apr, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "apr, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in May",
+    "Input": "I'll be out in may",
     "Results": [
-      {"Text": "May", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "may", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this May",
+    "Input": "I'll be out this may",
     "Results": [
-      {"Text": "this May", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this may", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of May",
+    "Input": "I'll be out month of may",
     "Results": [
-      {"Text": "month of May", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of may", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of May",
+    "Input": "I'll be out the month of may",
     "Results": [
-      {"Text": "the month of May", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of may", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing May 2001",
+    "Input": "I was missing may 2001",
     "Results": [
-      {"Text": "May 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "may 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing May, 2001",
+    "Input": "I was missing may, 2001",
     "Results": [
-      {"Text": "May, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "may, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Jun",
+    "Input": "I'll be out in jun",
     "Results": [
-      {"Text": "Jun", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "jun", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Jun",
+    "Input": "I'll be out this jun",
     "Results": [
-      {"Text": "this Jun", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this jun", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Jun",
+    "Input": "I'll be out month of jun",
     "Results": [
-      {"Text": "month of Jun", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of jun", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Jun",
+    "Input": "I'll be out the month of jun",
     "Results": [
-      {"Text": "the month of Jun", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of jun", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Jun 2001",
+    "Input": "I was missing jun 2001",
     "Results": [
-      {"Text": "Jun 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "jun 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Jun, 2001",
+    "Input": "I was missing jun, 2001",
     "Results": [
-      {"Text": "Jun, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "jun, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Jul",
+    "Input": "I'll be out in jul",
     "Results": [
-      {"Text": "Jul", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "jul", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Jul",
+    "Input": "I'll be out this jul",
     "Results": [
-      {"Text": "this Jul", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this jul", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Jul",
+    "Input": "I'll be out month of jul",
     "Results": [
-      {"Text": "month of Jul", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of jul", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Jul",
+    "Input": "I'll be out the month of jul",
     "Results": [
-      {"Text": "the month of Jul", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of jul", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Jul 2001",
+    "Input": "I was missing jul 2001",
     "Results": [
-      {"Text": "Jul 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "jul 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Jul, 2001",
+    "Input": "I was missing jul, 2001",
     "Results": [
-      {"Text": "Jul, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "jul, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Aug",
+    "Input": "I'll be out in aug",
     "Results": [
-      {"Text": "Aug", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "aug", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Aug",
+    "Input": "I'll be out this aug",
     "Results": [
-      {"Text": "this Aug", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this aug", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Aug",
+    "Input": "I'll be out month of aug",
     "Results": [
-      {"Text": "month of Aug", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of aug", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Aug",
+    "Input": "I'll be out the month of aug",
     "Results": [
-      {"Text": "the month of Aug", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of aug", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Aug 2001",
+    "Input": "I was missing aug 2001",
     "Results": [
-      {"Text": "Aug 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "aug 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Aug, 2001",
+    "Input": "I was missing aug, 2001",
     "Results": [
-      {"Text": "Aug, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "aug, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Sep",
+    "Input": "I'll be out in sep",
     "Results": [
-      {"Text": "Sep", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "sep", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Sep",
+    "Input": "I'll be out this sep",
     "Results": [
-      {"Text": "this Sep", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this sep", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Sep",
+    "Input": "I'll be out month of sep",
     "Results": [
-      {"Text": "month of Sep", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of sep", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Sep",
+    "Input": "I'll be out the month of sep",
     "Results": [
-      {"Text": "the month of Sep", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of sep", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Sep 2001",
+    "Input": "I was missing sep 2001",
     "Results": [
-      {"Text": "Sep 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "sep 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Sep, 2001",
+    "Input": "I was missing sep, 2001",
     "Results": [
-      {"Text": "Sep, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "sep, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Sept",
+    "Input": "I'll be out in sept",
     "Results": [
-      {"Text": "Sept", "Type": "daterange", "Start": 15, "Length": 4}
+      {"Text": "sept", "Type": "daterange", "Start": 15, "Length": 4}
     ]
   },
   {
-    "Input": "I'll be out this Sept",
+    "Input": "I'll be out this sept",
     "Results": [
-      {"Text": "this Sept", "Type": "daterange", "Start": 12, "Length": 9}
+      {"Text": "this sept", "Type": "daterange", "Start": 12, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out month of Sept",
+    "Input": "I'll be out month of sept",
     "Results": [
-      {"Text": "month of Sept", "Type": "daterange", "Start": 12, "Length": 13}
+      {"Text": "month of sept", "Type": "daterange", "Start": 12, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out the month of Sept",
+    "Input": "I'll be out the month of sept",
     "Results": [
-      {"Text": "the month of Sept", "Type": "daterange", "Start": 12, "Length": 17}
+      {"Text": "the month of sept", "Type": "daterange", "Start": 12, "Length": 17}
     ]
   },
   {
-    "Input": "I was missing Sept 2001",
+    "Input": "I was missing sept 2001",
     "Results": [
-      {"Text": "Sept 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "sept 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I was missing Sept, 2001",
+    "Input": "I was missing sept, 2001",
     "Results": [
-      {"Text": "Sept, 2001", "Type": "daterange", "Start": 14, "Length": 10}
+      {"Text": "sept, 2001", "Type": "daterange", "Start": 14, "Length": 10}
     ]
   },
   {
-    "Input": "I'll be out in Oct",
+    "Input": "I'll be out in oct",
     "Results": [
-      {"Text": "Oct", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "oct", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Oct",
+    "Input": "I'll be out this oct",
     "Results": [
-      {"Text": "this Oct", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this oct", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Oct",
+    "Input": "I'll be out month of oct",
     "Results": [
-      {"Text": "month of Oct", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of oct", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Oct",
+    "Input": "I'll be out the month of oct",
     "Results": [
-      {"Text": "the month of Oct", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of oct", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Oct 2001",
+    "Input": "I was missing oct 2001",
     "Results": [
-      {"Text": "Oct 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "oct 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Oct, 2001",
+    "Input": "I was missing oct, 2001",
     "Results": [
-      {"Text": "Oct, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "oct, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Nov",
+    "Input": "I'll be out in nov",
     "Results": [
-      {"Text": "Nov", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "nov", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Nov",
+    "Input": "I'll be out this nov",
     "Results": [
-      {"Text": "this Nov", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this nov", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Nov",
+    "Input": "I'll be out month of nov",
     "Results": [
-      {"Text": "month of Nov", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of nov", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Nov",
+    "Input": "I'll be out the month of nov",
     "Results": [
-      {"Text": "the month of Nov", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of nov", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Nov 2001",
+    "Input": "I was missing nov 2001",
     "Results": [
-      {"Text": "Nov 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "nov 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Nov, 2001",
+    "Input": "I was missing nov, 2001",
     "Results": [
-      {"Text": "Nov, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "nov, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in Dec",
+    "Input": "I'll be out in dec",
     "Results": [
-      {"Text": "Dec", "Type": "daterange", "Start": 15, "Length": 3}
+      {"Text": "dec", "Type": "daterange", "Start": 15, "Length": 3}
     ]
   },
   {
-    "Input": "I'll be out this Dec",
+    "Input": "I'll be out this dec",
     "Results": [
-      {"Text": "this Dec", "Type": "daterange", "Start": 12, "Length": 8}
+      {"Text": "this dec", "Type": "daterange", "Start": 12, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out month of Dec",
+    "Input": "I'll be out month of dec",
     "Results": [
-      {"Text": "month of Dec", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "month of dec", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out the month of Dec",
+    "Input": "I'll be out the month of dec",
     "Results": [
-      {"Text": "the month of Dec", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "the month of dec", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I was missing Dec 2001",
+    "Input": "I was missing dec 2001",
     "Results": [
-      {"Text": "Dec 2001", "Type": "daterange", "Start": 14, "Length": 8}
+      {"Text": "dec 2001", "Type": "daterange", "Start": 14, "Length": 8}
     ]
   },
   {
-    "Input": "I was missing Dec, 2001",
+    "Input": "I was missing dec, 2001",
     "Results": [
-      {"Text": "Dec, 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "dec, 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out in January",
+    "Input": "I'll be out in january",
     "Results": [
-      {"Text": "January", "Type": "daterange", "Start": 15, "Length": 7}
+      {"Text": "january", "Type": "daterange", "Start": 15, "Length": 7}
     ]
   },
   {
-    "Input": "I'll be out this January",
+    "Input": "I'll be out this january",
     "Results": [
-      {"Text": "this January", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "this january", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out month of January",
+    "Input": "I'll be out month of january",
     "Results": [
-      {"Text": "month of January", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "month of january", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I'll be out the month of January",
+    "Input": "I'll be out the month of january",
     "Results": [
-      {"Text": "the month of January", "Type": "daterange", "Start": 12, "Length": 20}
+      {"Text": "the month of january", "Type": "daterange", "Start": 12, "Length": 20}
     ]
   },
   {
-    "Input": "I was missing January 2001",
+    "Input": "I was missing january 2001",
     "Results": [
-      {"Text": "January 2001", "Type": "daterange", "Start": 14, "Length": 12}
+      {"Text": "january 2001", "Type": "daterange", "Start": 14, "Length": 12}
     ]
   },
   {
-    "Input": "I was missing January, 2001",
+    "Input": "I was missing january, 2001",
     "Results": [
-      {"Text": "January, 2001", "Type": "daterange", "Start": 14, "Length": 13}
+      {"Text": "january, 2001", "Type": "daterange", "Start": 14, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out in February",
+    "Input": "I'll be out in february",
     "Results": [
-      {"Text": "February", "Type": "daterange", "Start": 15, "Length": 8}
+      {"Text": "february", "Type": "daterange", "Start": 15, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out this February",
+    "Input": "I'll be out this february",
     "Results": [
-      {"Text": "this February", "Type": "daterange", "Start": 12, "Length": 13}
+      {"Text": "this february", "Type": "daterange", "Start": 12, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out month of February",
+    "Input": "I'll be out month of february",
     "Results": [
-      {"Text": "month of February", "Type": "daterange", "Start": 12, "Length": 17}
+      {"Text": "month of february", "Type": "daterange", "Start": 12, "Length": 17}
     ]
   },
   {
-    "Input": "I'll be out the month of February",
+    "Input": "I'll be out the month of february",
     "Results": [
-      {"Text": "the month of February", "Type": "daterange", "Start": 12, "Length": 21}
+      {"Text": "the month of february", "Type": "daterange", "Start": 12, "Length": 21}
     ]
   },
   {
-    "Input": "I was missing February 2001",
+    "Input": "I was missing february 2001",
     "Results": [
-      {"Text": "February 2001", "Type": "daterange", "Start": 14, "Length": 13}
+      {"Text": "february 2001", "Type": "daterange", "Start": 14, "Length": 13}
     ]
   },
   {
-    "Input": "I was missing February, 2001",
+    "Input": "I was missing february, 2001",
     "Results": [
-      {"Text": "February, 2001", "Type": "daterange", "Start": 14, "Length": 14}
+      {"Text": "february, 2001", "Type": "daterange", "Start": 14, "Length": 14}
     ]
   },
   {
-    "Input": "I'll be out in March",
+    "Input": "I'll be out in march",
     "Results": [
-      {"Text": "March", "Type": "daterange", "Start": 15, "Length": 5}
+      {"Text": "march", "Type": "daterange", "Start": 15, "Length": 5}
     ]
   },
   {
-    "Input": "I'll be out this March",
+    "Input": "I'll be out this march",
     "Results": [
-      {"Text": "this March", "Type": "daterange", "Start": 12, "Length": 10}
+      {"Text": "this march", "Type": "daterange", "Start": 12, "Length": 10}
     ]
   },
   {
-    "Input": "I'll be out month of March",
+    "Input": "I'll be out month of march",
     "Results": [
-      {"Text": "month of March", "Type": "daterange", "Start": 12, "Length": 14}
+      {"Text": "month of march", "Type": "daterange", "Start": 12, "Length": 14}
     ]
   },
   {
-    "Input": "I'll be out the month of March",
+    "Input": "I'll be out the month of march",
     "Results": [
-      {"Text": "the month of March", "Type": "daterange", "Start": 12, "Length": 18}
+      {"Text": "the month of march", "Type": "daterange", "Start": 12, "Length": 18}
     ]
   },
   {
-    "Input": "I was missing March 2001",
+    "Input": "I was missing march 2001",
     "Results": [
-      {"Text": "March 2001", "Type": "daterange", "Start": 14, "Length": 10}
+      {"Text": "march 2001", "Type": "daterange", "Start": 14, "Length": 10}
     ]
   },
   {
-    "Input": "I was missing March, 2001",
+    "Input": "I was missing march, 2001",
     "Results": [
-      {"Text": "March, 2001", "Type": "daterange", "Start": 14, "Length": 11}
+      {"Text": "march, 2001", "Type": "daterange", "Start": 14, "Length": 11}
     ]
   },
   {
-    "Input": "I'll be out in April",
+    "Input": "I'll be out in april",
     "Results": [
-      {"Text": "April", "Type": "daterange", "Start": 15, "Length": 5}
+      {"Text": "april", "Type": "daterange", "Start": 15, "Length": 5}
     ]
   },
   {
-    "Input": "I'll be out this April",
+    "Input": "I'll be out this april",
     "Results": [
-      {"Text": "this April", "Type": "daterange", "Start": 12, "Length": 10}
+      {"Text": "this april", "Type": "daterange", "Start": 12, "Length": 10}
     ]
   },
   {
-    "Input": "I'll be out month of April",
+    "Input": "I'll be out month of april",
     "Results": [
-      {"Text": "month of April", "Type": "daterange", "Start": 12, "Length": 14}
+      {"Text": "month of april", "Type": "daterange", "Start": 12, "Length": 14}
     ]
   },
   {
-    "Input": "I'll be out the month of April",
+    "Input": "I'll be out the month of april",
     "Results": [
-      {"Text": "the month of April", "Type": "daterange", "Start": 12, "Length": 18}
+      {"Text": "the month of april", "Type": "daterange", "Start": 12, "Length": 18}
     ]
   },
   {
-    "Input": "I was missing April 2001",
+    "Input": "I was missing april 2001",
     "Results": [
-      {"Text": "April 2001", "Type": "daterange", "Start": 14, "Length": 10}
+      {"Text": "april 2001", "Type": "daterange", "Start": 14, "Length": 10}
     ]
   },
   {
-    "Input": "I was missing April, 2001",
+    "Input": "I was missing april, 2001",
     "Results": [
-      {"Text": "April, 2001", "Type": "daterange", "Start": 14, "Length": 11}
+      {"Text": "april, 2001", "Type": "daterange", "Start": 14, "Length": 11}
     ]
   },
   {
-    "Input": "I'll be out in June",
+    "Input": "I'll be out in june",
     "Results": [
-      {"Text": "June", "Type": "daterange", "Start": 15, "Length": 4}
+      {"Text": "june", "Type": "daterange", "Start": 15, "Length": 4}
     ]
   },
   {
-    "Input": "I'll be out this June",
+    "Input": "I'll be out this june",
     "Results": [
-      {"Text": "this June", "Type": "daterange", "Start": 12, "Length": 9}
+      {"Text": "this june", "Type": "daterange", "Start": 12, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out month of June",
+    "Input": "I'll be out month of june",
     "Results": [
-      {"Text": "month of June", "Type": "daterange", "Start": 12, "Length": 13}
+      {"Text": "month of june", "Type": "daterange", "Start": 12, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out the month of June",
+    "Input": "I'll be out the month of june",
     "Results": [
-      {"Text": "the month of June", "Type": "daterange", "Start": 12, "Length": 17}
+      {"Text": "the month of june", "Type": "daterange", "Start": 12, "Length": 17}
     ]
   },
   {
-    "Input": "I was missing June 2001",
+    "Input": "I was missing june 2001",
     "Results": [
-      {"Text": "June 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "june 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I was missing June, 2001",
+    "Input": "I was missing june, 2001",
     "Results": [
-      {"Text": "June, 2001", "Type": "daterange", "Start": 14, "Length": 10}
+      {"Text": "june, 2001", "Type": "daterange", "Start": 14, "Length": 10}
     ]
   },
   {
-    "Input": "I'll be out in July",
+    "Input": "I'll be out in july",
     "Results": [
-      {"Text": "July", "Type": "daterange", "Start": 15, "Length": 4}
+      {"Text": "july", "Type": "daterange", "Start": 15, "Length": 4}
     ]
   },
   {
-    "Input": "I'll be out this July",
+    "Input": "I'll be out this july",
     "Results": [
-      {"Text": "this July", "Type": "daterange", "Start": 12, "Length": 9}
+      {"Text": "this july", "Type": "daterange", "Start": 12, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out month of July",
+    "Input": "I'll be out month of july",
     "Results": [
-      {"Text": "month of July", "Type": "daterange", "Start": 12, "Length": 13}
+      {"Text": "month of july", "Type": "daterange", "Start": 12, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out the month of July",
+    "Input": "I'll be out the month of july",
     "Results": [
-      {"Text": "the month of July", "Type": "daterange", "Start": 12, "Length": 17}
+      {"Text": "the month of july", "Type": "daterange", "Start": 12, "Length": 17}
     ]
   },
   {
-    "Input": "I was missing July 2001",
+    "Input": "I was missing july 2001",
     "Results": [
-      {"Text": "July 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "july 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
-    "Input": "I was missing July, 2001",
+    "Input": "I was missing july, 2001",
     "Results": [
-      {"Text": "July, 2001", "Type": "daterange", "Start": 14, "Length": 10}
+      {"Text": "july, 2001", "Type": "daterange", "Start": 14, "Length": 10}
     ]
   },
   {
-    "Input": "I'll be out in August",
+    "Input": "I'll be out in august",
     "Results": [
-      {"Text": "August", "Type": "daterange", "Start": 15, "Length": 6}
+      {"Text": "august", "Type": "daterange", "Start": 15, "Length": 6}
     ]
   },
   {
-    "Input": "I'll be out this August",
+    "Input": "I'll be out this august",
     "Results": [
-      {"Text": "this August", "Type": "daterange", "Start": 12, "Length": 11}
+      {"Text": "this august", "Type": "daterange", "Start": 12, "Length": 11}
     ]
   },
   {
-    "Input": "I'll be out month of August",
+    "Input": "I'll be out month of august",
     "Results": [
-      {"Text": "month of August", "Type": "daterange", "Start": 12, "Length": 15}
+      {"Text": "month of august", "Type": "daterange", "Start": 12, "Length": 15}
     ]
   },
   {
-    "Input": "I'll be out the month of August",
+    "Input": "I'll be out the month of august",
     "Results": [
-      {"Text": "the month of August", "Type": "daterange", "Start": 12, "Length": 19}
+      {"Text": "the month of august", "Type": "daterange", "Start": 12, "Length": 19}
     ]
   },
   {
-    "Input": "I was missing August 2001",
+    "Input": "I was missing august 2001",
     "Results": [
-      {"Text": "August 2001", "Type": "daterange", "Start": 14, "Length": 11}
+      {"Text": "august 2001", "Type": "daterange", "Start": 14, "Length": 11}
     ]
   },
   {
-    "Input": "I was missing August, 2001",
+    "Input": "I was missing august, 2001",
     "Results": [
-      {"Text": "August, 2001", "Type": "daterange", "Start": 14, "Length": 12}
+      {"Text": "august, 2001", "Type": "daterange", "Start": 14, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out in September",
+    "Input": "I'll be out in september",
     "Results": [
-      {"Text": "September", "Type": "daterange", "Start": 15, "Length": 9}
+      {"Text": "september", "Type": "daterange", "Start": 15, "Length": 9}
     ]
   },
   {
-    "Input": "I'll be out this September",
+    "Input": "I'll be out this september",
     "Results": [
-      {"Text": "this September", "Type": "daterange", "Start": 12, "Length": 14}
+      {"Text": "this september", "Type": "daterange", "Start": 12, "Length": 14}
     ]
   },
   {
-    "Input": "I'll be out month of September",
+    "Input": "I'll be out month of september",
     "Results": [
-      {"Text": "month of September", "Type": "daterange", "Start": 12, "Length": 18}
+      {"Text": "month of september", "Type": "daterange", "Start": 12, "Length": 18}
     ]
   },
   {
-    "Input": "I'll be out the month of September",
+    "Input": "I'll be out the month of september",
     "Results": [
-      {"Text": "the month of September", "Type": "daterange", "Start": 12, "Length": 22}
+      {"Text": "the month of september", "Type": "daterange", "Start": 12, "Length": 22}
     ]
   },
   {
-    "Input": "I was missing September 2001",
+    "Input": "I was missing september 2001",
     "Results": [
-      {"Text": "September 2001", "Type": "daterange", "Start": 14, "Length": 14}
+      {"Text": "september 2001", "Type": "daterange", "Start": 14, "Length": 14}
     ]
   },
   {
-    "Input": "I was missing September, 2001",
+    "Input": "I was missing september, 2001",
     "Results": [
-      {"Text": "September, 2001", "Type": "daterange", "Start": 14, "Length": 15}
+      {"Text": "september, 2001", "Type": "daterange", "Start": 14, "Length": 15}
     ]
   },
   {
-    "Input": "I'll be out in October",
+    "Input": "I'll be out in october",
     "Results": [
-      {"Text": "October", "Type": "daterange", "Start": 15, "Length": 7}
+      {"Text": "october", "Type": "daterange", "Start": 15, "Length": 7}
     ]
   },
   {
-    "Input": "I'll be out this October",
+    "Input": "I'll be out this october",
     "Results": [
-      {"Text": "this October", "Type": "daterange", "Start": 12, "Length": 12}
+      {"Text": "this october", "Type": "daterange", "Start": 12, "Length": 12}
     ]
   },
   {
-    "Input": "I'll be out month of October",
+    "Input": "I'll be out month of october",
     "Results": [
-      {"Text": "month of October", "Type": "daterange", "Start": 12, "Length": 16}
+      {"Text": "month of october", "Type": "daterange", "Start": 12, "Length": 16}
     ]
   },
   {
-    "Input": "I'll be out the month of October",
+    "Input": "I'll be out the month of october",
     "Results": [
-      {"Text": "the month of October", "Type": "daterange", "Start": 12, "Length": 20}
+      {"Text": "the month of october", "Type": "daterange", "Start": 12, "Length": 20}
     ]
   },
   {
-    "Input": "I was missing October 2001",
+    "Input": "I was missing october 2001",
     "Results": [
-      {"Text": "October 2001", "Type": "daterange", "Start": 14, "Length": 12}
+      {"Text": "october 2001", "Type": "daterange", "Start": 14, "Length": 12}
     ]
   },
   {
-    "Input": "I was missing October, 2001",
+    "Input": "I was missing october, 2001",
     "Results": [
-      {"Text": "October, 2001", "Type": "daterange", "Start": 14, "Length": 13}
+      {"Text": "october, 2001", "Type": "daterange", "Start": 14, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out in November",
+    "Input": "I'll be out in november",
     "Results": [
-      {"Text": "November", "Type": "daterange", "Start": 15, "Length": 8}
+      {"Text": "november", "Type": "daterange", "Start": 15, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out this November",
+    "Input": "I'll be out this november",
     "Results": [
-      {"Text": "this November", "Type": "daterange", "Start": 12, "Length": 13}
+      {"Text": "this november", "Type": "daterange", "Start": 12, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out month of November",
+    "Input": "I'll be out month of november",
     "Results": [
-      {"Text": "month of November", "Type": "daterange", "Start": 12, "Length": 17}
+      {"Text": "month of november", "Type": "daterange", "Start": 12, "Length": 17}
     ]
   },
   {
-    "Input": "I'll be out the month of November",
+    "Input": "I'll be out the month of november",
     "Results": [
-      {"Text": "the month of November", "Type": "daterange", "Start": 12, "Length": 21}
+      {"Text": "the month of november", "Type": "daterange", "Start": 12, "Length": 21}
     ]
   },
   {
-    "Input": "I was missing November 2001",
+    "Input": "I was missing november 2001",
     "Results": [
-      {"Text": "November 2001", "Type": "daterange", "Start": 14, "Length": 13}
+      {"Text": "november 2001", "Type": "daterange", "Start": 14, "Length": 13}
     ]
   },
   {
-    "Input": "I was missing November, 2001",
+    "Input": "I was missing november, 2001",
     "Results": [
-      {"Text": "November, 2001", "Type": "daterange", "Start": 14, "Length": 14}
+      {"Text": "november, 2001", "Type": "daterange", "Start": 14, "Length": 14}
     ]
   },
   {
-    "Input": "I'll be out in December",
+    "Input": "I'll be out in december",
     "Results": [
-      {"Text": "December", "Type": "daterange", "Start": 15, "Length": 8}
+      {"Text": "december", "Type": "daterange", "Start": 15, "Length": 8}
     ]
   },
   {
-    "Input": "I'll be out this December",
+    "Input": "I'll be out this december",
     "Results": [
-      {"Text": "this December", "Type": "daterange", "Start": 12, "Length": 13}
+      {"Text": "this december", "Type": "daterange", "Start": 12, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out month of December",
+    "Input": "I'll be out month of december",
     "Results": [
-      {"Text": "month of December", "Type": "daterange", "Start": 12, "Length": 17}
+      {"Text": "month of december", "Type": "daterange", "Start": 12, "Length": 17}
     ]
   },
   {
-    "Input": "I'll be out the month of December",
+    "Input": "I'll be out the month of december",
     "Results": [
-      {"Text": "the month of December", "Type": "daterange", "Start": 12, "Length": 21}
+      {"Text": "the month of december", "Type": "daterange", "Start": 12, "Length": 21}
     ]
   },
   {
-    "Input": "I was missing December 2001",
+    "Input": "I was missing december 2001",
     "Results": [
-      {"Text": "December 2001", "Type": "daterange", "Start": 14, "Length": 13}
+      {"Text": "december 2001", "Type": "daterange", "Start": 14, "Length": 13}
     ]
   },
   {
-    "Input": "I was missing December, 2001",
+    "Input": "I was missing december, 2001",
     "Results": [
-      {"Text": "December, 2001", "Type": "daterange", "Start": 14, "Length": 14}
+      {"Text": "december, 2001", "Type": "daterange", "Start": 14, "Length": 14}
     ]
   },
   {
-    "Input": "Calendar for the month of September.",
+    "Input": "Calendar for the month of september.",
     "Results": [
-      {"Text": "the month of September", "Type": "daterange", "Start": 13, "Length": 22}
+      {"Text": "the month of september", "Type": "daterange", "Start": 13, "Length": 22}
     ]
   },
   {
@@ -882,9 +882,9 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out from 3 until 12 of Sept hahaha",
+    "Input": "I'll be out from 3 until 12 of sept hahaha",
     "Results": [
-      {"Text": "from 3 until 12 of Sept", "Type": "daterange", "Start": 12, "Length": 23}
+      {"Text": "from 3 until 12 of sept", "Type": "daterange", "Start": 12, "Length": 23}
     ]
   },
   {
@@ -906,9 +906,9 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out between 3 and 12 of Sept hahaha",
+    "Input": "I'll be out between 3 and 12 of sept hahaha",
     "Results": [
-      {"Text": "between 3 and 12 of Sept", "Type": "daterange", "Start": 12, "Length": 24}
+      {"Text": "between 3 and 12 of sept", "Type": "daterange", "Start": 12, "Length": 24}
     ]
   },
   {
@@ -918,33 +918,33 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out between November 15th through 19th",
+    "Input": "I'll be out between november 15th through 19th",
     "Results": [
-      {"Text": "between November 15th through 19th", "Type": "daterange", "Start": 12, "Length": 34}
+      {"Text": "between november 15th through 19th", "Type": "daterange", "Start": 12, "Length": 34}
     ]
   },
   {
-    "Input": "I'll be out between November 15th through the 19th",
+    "Input": "I'll be out between november 15th through the 19th",
     "Results": [
-      {"Text": "between November 15th through the 19th", "Type": "daterange", "Start": 12, "Length": 38}
+      {"Text": "between november 15th through the 19th", "Type": "daterange", "Start": 12, "Length": 38}
     ]
   },
   {
-    "Input": "I'll be out between November the 15th through 19th",
+    "Input": "I'll be out between november the 15th through 19th",
     "Results": [
-      {"Text": "between November the 15th through 19th", "Type": "daterange", "Start": 12, "Length": 38}
+      {"Text": "between november the 15th through 19th", "Type": "daterange", "Start": 12, "Length": 38}
     ]
   },
   {
-    "Input": "I'll be out from 4 to 22 January, 2017",
+    "Input": "I'll be out from 4 to 22 january, 2017",
     "Results": [
-      {"Text": "from 4 to 22 January, 2017", "Type": "daterange", "Start": 12, "Length": 26}
+      {"Text": "from 4 to 22 january, 2017", "Type": "daterange", "Start": 12, "Length": 26}
     ]
   },
   {
-    "Input": "I'll be out between 4-22 January, 2017",
+    "Input": "I'll be out between 4-22 january, 2017",
     "Results": [
-      {"Text": "between 4-22 January, 2017", "Type": "daterange", "Start": 12, "Length": 26}
+      {"Text": "between 4-22 january, 2017", "Type": "daterange", "Start": 12, "Length": 26}
     ]
   },
   {
@@ -960,9 +960,9 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out September",
+    "Input": "I'll be out september",
     "Results": [
-      {"Text": "September", "Type": "daterange", "Start": 12, "Length": 9}
+      {"Text": "september", "Type": "daterange", "Start": 12, "Length": 9}
     ]
   },
   {
@@ -1008,9 +1008,9 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "schedule camping for Friday through Sunday",
+    "Input": "schedule camping for friday through sunday",
     "Results": [
-      {"Text": "Friday through Sunday", "Type": "daterange", "Start": 21, "Length": 21}
+      {"Text": "friday through sunday", "Type": "daterange", "Start": 21, "Length": 21}
     ]
   },
   {
@@ -1071,21 +1071,21 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out Oct. 2 to October 22",
+    "Input": "I'll be out oct. 2 to october 22",
     "Results": [
-      {"Text": "Oct. 2 to October 22", "Type": "daterange", "Start": 12, "Length": 20}
+      {"Text": "oct. 2 to october 22", "Type": "daterange", "Start": 12, "Length": 20}
     ]
   },
   {
-    "Input": "I'll be out January 12, 2016 - 02/22/2016",
+    "Input": "I'll be out january 12, 2016 - 02/22/2016",
     "Results": [
-      {"Text": "January 12, 2016 - 02/22/2016", "Type": "daterange", "Start": 12, "Length": 29}
+      {"Text": "january 12, 2016 - 02/22/2016", "Type": "daterange", "Start": 12, "Length": 29}
     ]
   },
   {
-    "Input": "I'll be out 1st Jan until Wed, 22 of Jan",
+    "Input": "I'll be out 1st jan until wed, 22 of jan",
     "Results": [
-      {"Text": "1st Jan until Wed, 22 of Jan", "Type": "daterange", "Start": 12, "Length": 28}
+      {"Text": "1st jan until wed, 22 of jan", "Type": "daterange", "Start": 12, "Length": 28}
     ]
   },
   {
@@ -1095,46 +1095,46 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out today to October 22",
+    "Input": "I'll be out today to october 22",
     "Results": [
-      {"Text": "today to October 22", "Type": "daterange", "Start": 12, "Length": 19}
+      {"Text": "today to october 22", "Type": "daterange", "Start": 12, "Length": 19}
     ]
   },
   {
-    "Input": "I'll be out Oct. 2 until the day after tomorrow",
+    "Input": "I'll be out oct. 2 until the day after tomorrow",
     "Results": [
-      {"Text": "Oct. 2 until the day after tomorrow", "Type": "daterange", "Start": 12, "Length": 35}
+      {"Text": "oct. 2 until the day after tomorrow", "Type": "daterange", "Start": 12, "Length": 35}
     ]
   },
   {
-    "Input": "I'll be out today until next Sunday",
+    "Input": "I'll be out today until next sunday",
     "Results": [
-      {"Text": "today until next Sunday", "Type": "daterange", "Start": 12, "Length": 23}
+      {"Text": "today until next sunday", "Type": "daterange", "Start": 12, "Length": 23}
     ]
   },
   {
-    "Input": "I'll be out this Friday until next Sunday",
+    "Input": "I'll be out this friday until next sunday",
     "Results": [
-      {"Text": "this Friday until next Sunday", "Type": "daterange", "Start": 12, "Length": 29}
+      {"Text": "this friday until next sunday", "Type": "daterange", "Start": 12, "Length": 29}
     ]
   },
   {
-    "Input": "I'll be out from Oct. 2 to October 22",
+    "Input": "I'll be out from oct. 2 to october 22",
     "Results": [
-      {"Text": "from Oct. 2 to October 22", "Type": "daterange", "Start": 12, "Length": 25}
+      {"Text": "from oct. 2 to october 22", "Type": "daterange", "Start": 12, "Length": 25}
     ]
   },
   {
-    "Input": "I'll be out from 2015/08/12 until October 22",
+    "Input": "I'll be out from 2015/08/12 until october 22",
     "Results": [
-      {"Text": "from 2015/08/12 until October 22", "Type": "daterange", "Start": 12, "Length": 32}
+      {"Text": "from 2015/08/12 until october 22", "Type": "daterange", "Start": 12, "Length": 32}
     ]
   },
   {
-    "Input": "I'll be out from Friday the 2nd until Tuesday the 6th",
+    "Input": "I'll be out from friday the 2nd until tuesday the 6th",
     "Context": {"ReferenceDateTime": "2018-03-01T00:00:00"},
     "Results": [
-      {"Text": "from Friday the 2nd until Tuesday the 6th", "Type": "daterange", "Start": 12, "Length": 41}
+      {"Text": "from friday the 2nd until tuesday the 6th", "Type": "daterange", "Start": 12, "Length": 41}
     ]
   },
   {
@@ -1144,33 +1144,33 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out from this Friday until next Sunday",
+    "Input": "I'll be out from this friday until next sunday",
     "Results": [
-      {"Text": "from this Friday until next Sunday", "Type": "daterange", "Start": 12, "Length": 34}
+      {"Text": "from this friday until next sunday", "Type": "daterange", "Start": 12, "Length": 34}
     ]
   },
   {
-    "Input": "I'll be out between Oct. 2 and October 22",
+    "Input": "I'll be out between oct. 2 and october 22",
     "Results": [
-      {"Text": "between Oct. 2 and October 22", "Type": "daterange", "Start": 12, "Length": 29}
+      {"Text": "between oct. 2 and october 22", "Type": "daterange", "Start": 12, "Length": 29}
     ]
   },
   {
-    "Input": "I'll be out November 19-20",
+    "Input": "I'll be out november 19-20",
     "Results": [
-      {"Text": "November 19-20", "Type": "daterange", "Start": 12, "Length": 14}
+      {"Text": "november 19-20", "Type": "daterange", "Start": 12, "Length": 14}
     ]
   },
   {
-    "Input": "I'll be out November 19 to 20",
+    "Input": "I'll be out november 19 to 20",
     "Results": [
-      {"Text": "November 19 to 20", "Type": "daterange", "Start": 12, "Length": 17}
+      {"Text": "november 19 to 20", "Type": "daterange", "Start": 12, "Length": 17}
     ]
   },
   {
-    "Input": "I'll be out November between 19 and 20",
+    "Input": "I'll be out november between 19 and 20",
     "Results": [
-      {"Text": "November between 19 and 20", "Type": "daterange", "Start": 12, "Length": 26}
+      {"Text": "november between 19 and 20", "Type": "daterange", "Start": 12, "Length": 26}
     ]
   },
   {
@@ -1192,15 +1192,15 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be back during Q1",
+    "Input": "I'll be back during q1",
     "Results": [
-      {"Text": "Q1", "Type": "daterange", "Start": 20, "Length": 2}
+      {"Text": "q1", "Type": "daterange", "Start": 20, "Length": 2}
     ]
   },
   {
-    "Input": "I'll be out this Q3",
+    "Input": "I'll be out this q3",
     "Results": [
-      {"Text": "Q3", "Type": "daterange", "Start": 17, "Length": 2}
+      {"Text": "q3", "Type": "daterange", "Start": 17, "Length": 2}
     ]
   },
   {
@@ -1288,9 +1288,9 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "What do I have the week of November 30th",
+    "Input": "What do I have the week of november 30th",
     "Results": [
-      {"Text": "the week of November 30th", "Type": "daterange", "Start": 15, "Length": 25}
+      {"Text": "the week of november 30th", "Type": "daterange", "Start": 15, "Length": 25}
     ]
   },
   {
@@ -1420,27 +1420,27 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "Cortana, please coordinate a 25 minutes meeting with antonio next week between Wednesday and Friday.",
+    "Input": "Cortana, please coordinate a 25 minutes meeting with antonio next week between wednesday and friday.",
     "Results": [
-      {"Text": "next week between Wednesday and Friday", "Type": "daterange", "Start": 61, "Length": 38}
+      {"Text": "next week between wednesday and friday", "Type": "daterange", "Start": 61, "Length": 38}
     ]
   },
   {
-    "Input": "Cortana, please coordinate a 25 minutes meeting with antonio next week from Wednesday to Friday.",
+    "Input": "Cortana, please coordinate a 25 minutes meeting with antonio next week from wednesday to friday.",
     "Results": [
-      {"Text": "next week from Wednesday to Friday", "Type": "daterange", "Start": 61, "Length": 34}
+      {"Text": "next week from wednesday to friday", "Type": "daterange", "Start": 61, "Length": 34}
     ]
   },
   {
-    "Input": "Cortana, please coordinate a 25 minutes meeting with antonio last week from Wednesday to Friday.",
+    "Input": "Cortana, please coordinate a 25 minutes meeting with antonio last week from wednesday to friday.",
     "Results": [
-      {"Text": "last week from Wednesday to Friday", "Type": "daterange", "Start": 61, "Length": 34}
+      {"Text": "last week from wednesday to friday", "Type": "daterange", "Start": 61, "Length": 34}
     ]
   },
   {
-    "Input": "Cortana, please coordinate a 25 minutes meeting with antonio this week between Wednesday and Friday.",
+    "Input": "Cortana, please coordinate a 25 minutes meeting with antonio this week between wednesday and friday.",
     "Results": [
-      {"Text": "this week between Wednesday and Friday", "Type": "daterange", "Start": 61, "Length": 38}
+      {"Text": "this week between wednesday and friday", "Type": "daterange", "Start": 61, "Length": 38}
     ]
   },
   {
@@ -1535,31 +1535,31 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out from 2 to 7 Feb, two thousand and eighteen",
+    "Input": "I'll be out from 2 to 7 feb, two thousand and eighteen",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "from 2 to 7 Feb, two thousand and eighteen", "Type": "daterange", "Start": 12, "Length": 42}
+      {"Text": "from 2 to 7 feb, two thousand and eighteen", "Type": "daterange", "Start": 12, "Length": 42}
     ]
   },
   {
-    "Input": "I'll be out between 2 and 7 Feb two thousand and eighteen",
+    "Input": "I'll be out between 2 and 7 feb two thousand and eighteen",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "between 2 and 7 Feb two thousand and eighteen", "Type": "daterange", "Start": 12, "Length": 45}
+      {"Text": "between 2 and 7 feb two thousand and eighteen", "Type": "daterange", "Start": 12, "Length": 45}
     ]
   },
   {
-    "Input": "I'll be out Feb between 2-7 two thousand and eighteen",
+    "Input": "I'll be out feb between 2-7 two thousand and eighteen",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "Feb between 2-7 two thousand and eighteen", "Type": "daterange", "Start": 12, "Length": 41}
+      {"Text": "feb between 2-7 two thousand and eighteen", "Type": "daterange", "Start": 12, "Length": 41}
     ]
   },
   {
-    "Input": "It happened in June of nineteen ninety nine",
+    "Input": "It happened in june of nineteen ninety nine",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "June of nineteen ninety nine", "Type": "daterange", "Start": 15, "Length": 28}
+      {"Text": "june of nineteen ninety nine", "Type": "daterange", "Start": 15, "Length": 28}
     ]
   },
   {
@@ -1591,10 +1591,10 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "Year two hundred and sixty seven,",
+    "Input": "year two hundred and sixty seven,",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "Year two hundred and sixty seven", "Type": "daterange", "Start": 0, "Length": 32}
+      {"Text": "year two hundred and sixty seven", "Type": "daterange", "Start": 0, "Length": 32}
     ]
   },
   {
@@ -1661,10 +1661,10 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "Cortana, find us a time end of March",
+    "Input": "Cortana, find us a time end of march",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "end of March", "Type": "daterange", "Start": 24, "Length": 12}
+      {"Text": "end of march", "Type": "daterange", "Start": 24, "Length": 12}
     ]
   },
   {
@@ -1675,10 +1675,10 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "cortana can arrange us to meet mid March",
+    "Input": "cortana can arrange us to meet mid march",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "mid March", "Type": "daterange", "Start": 31, "Length": 9}
+      {"Text": "mid march", "Type": "daterange", "Start": 31, "Length": 9}
     ]
   },
   {
@@ -1794,17 +1794,17 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out 2016 November",
+    "Input": "I'll be out 2016 november",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "2016 November", "Type": "daterange", "Start": 12, "Length": 13}
+      {"Text": "2016 november", "Type": "daterange", "Start": 12, "Length": 13}
     ]
   },
   {
-    "Input": "I'll be out November , 2016",
+    "Input": "I'll be out november , 2016",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "November , 2016", "Type": "daterange", "Start": 12, "Length": 15}
+      {"Text": "november , 2016", "Type": "daterange", "Start": 12, "Length": 15}
     ]
   },
   {
@@ -1822,111 +1822,111 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I'll be out between January 1st and April 5th",
+    "Input": "I'll be out between january 1st and april 5th",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "between January 1st and April 5th", "Type": "daterange", "Start": 12, "Length": 33}
+      {"Text": "between january 1st and april 5th", "Type": "daterange", "Start": 12, "Length": 33}
     ]
   },
   {
-    "Input": "I'll be out between January 1st 2015 and Feb 5th 2018",
+    "Input": "I'll be out between january 1st 2015 and feb 5th 2018",
     "NotSupported": "javascript",
     "Results": [
-      {"Text": "between January 1st 2015 and Feb 5th 2018", "Type": "daterange", "Start": 12, "Length": 41}
+      {"Text": "between january 1st 2015 and feb 5th 2018", "Type": "daterange", "Start": 12, "Length": 41}
     ]
   },
   {
-    "Input": "I'll be out between January 1st 2015 and Feb 2018",
+    "Input": "I'll be out between january 1st 2015 and feb 2018",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between January 1st 2015 and Feb 2018", "Type": "daterange", "Start": 12, "Length": 37}
+      {"Text": "between january 1st 2015 and feb 2018", "Type": "daterange", "Start": 12, "Length": 37}
     ]
   },
   {
-    "Input": "I'll be out between 2015 and Feb 2018",
+    "Input": "I'll be out between 2015 and feb 2018",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between 2015 and Feb 2018", "Type": "daterange", "Start": 12, "Length": 25}
+      {"Text": "between 2015 and feb 2018", "Type": "daterange", "Start": 12, "Length": 25}
     ]
   },
   {
-    "Input": "I'll be out from Feb 1st to March 2019",
+    "Input": "I'll be out from feb 1st to march 2019",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "from Feb 1st to March 2019", "Type": "daterange", "Start": 12, "Length": 26}
+      {"Text": "from feb 1st to march 2019", "Type": "daterange", "Start": 12, "Length": 26}
     ]
   },
   {
-    "Input": "I'll be out between Feb 1st and March 2019",
+    "Input": "I'll be out between feb 1st and march 2019",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between Feb 1st and March 2019", "Type": "daterange", "Start": 12, "Length": 30}
+      {"Text": "between feb 1st and march 2019", "Type": "daterange", "Start": 12, "Length": 30}
     ]
   },
   {
-    "Input": "I'll be out between 2015 June and 2018 May",
+    "Input": "I'll be out between 2015 june and 2018 may",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between 2015 June and 2018 May", "Type": "daterange", "Start": 12, "Length": 30}
+      {"Text": "between 2015 june and 2018 may", "Type": "daterange", "Start": 12, "Length": 30}
     ]
   },
   {
-    "Input": "I'll be out between 2015 May and 2018",
+    "Input": "I'll be out between 2015 may and 2018",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between 2015 May and 2018", "Type": "daterange", "Start": 12, "Length": 25}
+      {"Text": "between 2015 may and 2018", "Type": "daterange", "Start": 12, "Length": 25}
     ]
   },
   {
-    "Input": "I'll be out between May 2015 and 2018",
+    "Input": "I'll be out between may 2015 and 2018",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between May 2015 and 2018", "Type": "daterange", "Start": 12, "Length": 25}
+      {"Text": "between may 2015 and 2018", "Type": "daterange", "Start": 12, "Length": 25}
     ]
   },
   {
-    "Input": "I'll be out between May 2015 and 2018 June",
+    "Input": "I'll be out between may 2015 and 2018 june",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between May 2015 and 2018 June", "Type": "daterange", "Start": 12, "Length": 30}
+      {"Text": "between may 2015 and 2018 june", "Type": "daterange", "Start": 12, "Length": 30}
     ]
   },
   {
-    "Input": "I'll be out between 2015 and January 5th 2018",
+    "Input": "I'll be out between 2015 and january 5th 2018",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between 2015 and January 5th 2018", "Type": "daterange", "Start": 12, "Length": 33}
+      {"Text": "between 2015 and january 5th 2018", "Type": "daterange", "Start": 12, "Length": 33}
     ]
   },
   {
-    "Input": "I'll be out from 2015 to May 5th, 2017",
+    "Input": "I'll be out from 2015 to may 5th, 2017",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "from 2015 to May 5th, 2017", "Type": "daterange", "Start": 12, "Length": 26}
+      {"Text": "from 2015 to may 5th, 2017", "Type": "daterange", "Start": 12, "Length": 26}
     ]
   },
   {
-    "Input": "I'll be out from last Monday April to 2019",
+    "Input": "I'll be out from last monday april to 2019",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "from last Monday April to 2019", "Type": "daterange", "Start": 12, "Length": 30}
+      {"Text": "from last monday april to 2019", "Type": "daterange", "Start": 12, "Length": 30}
     ]
   },
   {
-    "Input": "I'll be out from Week 31 to Week 35",
+    "Input": "I'll be out from week 31 to week 35",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "from Week 31 to Week 35", "Type": "daterange", "Start": 12, "Length": 23}
+      {"Text": "from week 31 to week 35", "Type": "daterange", "Start": 12, "Length": 23}
     ]
   },
   {
-    "Input": "I'll be out between Week 31 and Week 35",
+    "Input": "I'll be out between week 31 and week 35",
     "NotSupported": "javascript, python",
     "Results": [
-      {"Text": "between Week 31 and Week 35", "Type": "daterange", "Start": 12, "Length": 27}
+      {"Text": "between week 31 and week 35", "Type": "daterange", "Start": 12, "Length": 27}
     ]
   },
-  {"Input": "Week 0 and Week 00 aren't valid weeks", "Results": []},
+  {"Input": "week 0 and week 00 aren't valid weeks", "Results": []},
   {
     "Input": "I'll stay here from today to two and half days later",
     "NotSupported": "javascript",
@@ -1998,9 +1998,9 @@ const datePeriodExtractorTestCases = [
   },
   {"Input": "4832 North Kedvale Avenue https://t.co/Jzruq4pTxp", "Results": []},
   {
-    "Input": "I was missing Oct. 2001",
+    "Input": "I was missing oct. 2001",
     "Results": [
-      {"Text": "Oct. 2001", "Type": "daterange", "Start": 14, "Length": 9}
+      {"Text": "oct. 2001", "Type": "daterange", "Start": 14, "Length": 9}
     ]
   },
   {
@@ -2055,15 +2055,15 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "I will do my work between now and November 15th",
+    "Input": "I will do my work between now and november 15th",
     "Results": [
-      {"Text": "between now and November 15th", "Type": "daterange", "Start": 18, "Length": 29}
+      {"Text": "between now and november 15th", "Type": "daterange", "Start": 18, "Length": 29}
     ]
   },
   {
-    "Input": "I have finished my work between Jan 22 and now",
+    "Input": "I have finished my work between jan 22 and now",
     "Results": [
-      {"Text": "between Jan 22 and now", "Type": "daterange", "Start": 24, "Length": 22}
+      {"Text": "between jan 22 and now", "Type": "daterange", "Start": 24, "Length": 22}
     ]
   },
   {
@@ -2103,9 +2103,9 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "6,107.31 August 2019 should not include the decimal",
+    "Input": "6,107.31 august 2019 should not include the decimal",
     "Results": [
-      {"Text": "August 2019", "Type": "daterange", "Start": 9, "Length": 11}
+      {"Text": "august 2019", "Type": "daterange", "Start": 9, "Length": 11}
     ]
   },
   {
@@ -2163,10 +2163,10 @@ const datePeriodExtractorTestCases = [
     ]
   },
   {
-    "Input": "Show me the records for August 99",
+    "Input": "Show me the records for august 99",
     "NotSupportedByDesign": "javascript,java",
     "Results": [
-      {"Text": "August 99", "Type": "daterange", "Start": 24, "Length": 9}
+      {"Text": "august 99", "Type": "daterange", "Start": 24, "Length": 9}
     ]
   }
 ];

@@ -1,13 +1,31 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:nlp/src/core/extraction.dart';
+import 'package:nlp/src/date_time/base_date_extractor.dart';
+import 'package:nlp/src/date_time/base_date_period_extractor.dart';
+import 'package:nlp/src/date_time/base_date_time_period_extractor.dart';
+import 'package:nlp/src/date_time/base_datetime_extractor.dart';
 import 'package:nlp/src/date_time/base_holiday_extractor.dart';
+import 'package:nlp/src/date_time/base_set_extractor.dart';
+import 'package:nlp/src/date_time/base_time_extractor.dart';
+import 'package:nlp/src/date_time/base_time_period_extractor.dart';
 import 'package:nlp/src/date_time/date_time_extraction.dart';
+import 'package:nlp/src/date_time/english/english_date_period_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_date_time_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_date_time_period_extractor_configuration.dart';
 import 'package:nlp/src/date_time/english/english_holiday_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_set_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_time_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english/english_time_period_extractor_configuration.dart';
+import 'package:nlp/src/date_time/english_date_extractor.dart';
 import 'package:nlp/src/date_time/english_date_time.dart';
+import 'package:nlp/src/date_time/english_date_time_parser.dart';
 import 'package:nlp/src/duration/duration.dart';
 import 'package:nlp/src/duration/duration_extractor.dart';
+import 'package:nlp/src/numbers/numbers.dart';
 import 'package:nlp/src/regular_expressions/regular_expressions_extensions.dart';
+import 'package:nlp/src/time/english_time_zone_extractor.dart';
+import 'package:nlp/src/time/time_zone_extractor.dart';
 
 class EnglishMergedExtractorConfiguration extends BaseOptionsConfiguration implements IMergedExtractorConfiguration {
   static final AfterRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.AfterRegex);
@@ -25,6 +43,17 @@ class EnglishMergedExtractorConfiguration extends BaseOptionsConfiguration imple
   static final UnspecificDatePeriodRegex =
       RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.UnspecificDatePeriodRegex);
 
+  static final YearRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.YearRegex);
+
+  static final EqualRegex = RegExpComposer.sanitizeGroupsAndCompile(BaseDateTime.EqualRegex);
+
+  static final FailFastRegex = RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.FailFastRegex);
+
+  static final TermFilterRegexes = <RegExp>[
+    RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.OneOnOneRegex),
+    RegExpComposer.sanitizeGroupsAndCompile(EnglishDateTime.SingleAmbiguousTermsRegex),
+  ];
+
   // TODO: bring back
   // static final StringMatcher SuperfluousWordMatcher = StringMatcher();
 
@@ -37,19 +66,20 @@ class EnglishMergedExtractorConfiguration extends BaseOptionsConfiguration imple
   ];
 
   EnglishMergedExtractorConfiguration(super.options) {
-    // TODO: bring back
-    // setExtractor = BaseSetExtractor(EnglishSetExtractorConfiguration(options));
-    // dateExtractor = BaseDateExtractor(EnglishDateExtractorConfiguration(this));
-    // timeExtractor = BaseTimeExtractor(EnglishTimeExtractorConfiguration(options));
+    final config = EnglishCommonDateTimeParserConfiguration(options);
+    setExtractor = BaseSetExtractor(EnglishSetExtractorConfiguration(config, options: options));
+    dateExtractor = BaseDateExtractor(EnglishDateExtractorConfiguration(config, options));
+    timeExtractor = BaseTimeExtractor(EnglishTimeExtractorConfiguration(config, options: options));
     holidayExtractor = BaseHolidayExtractor(config: EnglishHolidayExtractorConfiguration(options));
-    // datePeriodExtractor = BaseDatePeriodExtractor(EnglishDatePeriodExtractorConfiguration(this));
-    // dateTimeExtractor = BaseDateTimeExtractor(EnglishDateTimeExtractorConfiguration(options));
+    datePeriodExtractor = BaseDatePeriodExtractor(EnglishDatePeriodExtractorConfiguration(config, options: options));
+    dateTimeExtractor = BaseDateTimeExtractor(EnglishDateTimeExtractorConfiguration(config, options));
     durationExtractor = DurationExtractor(config: EnglishDurationExtractorConfiguration(options));
-    // timeZoneExtractor = BaseTimeZoneExtractor(EnglishTimeZoneExtractorConfiguration(options));
+    timeZoneExtractor = BaseTimeZoneExtractor(EnglishTimeZoneExtractorConfiguration(options));
     // dateTimeAltExtractor = BaseDateTimeAltExtractor(EnglishDateTimeAltExtractorConfiguration(this));
-    // timePeriodExtractor = BaseTimePeriodExtractor(EnglishTimePeriodExtractorConfiguration(options));
-    // dateTimePeriodExtractor = BaseDateTimePeriodExtractor(EnglishDateTimePeriodExtractorConfiguration(options));
-    // integerExtractor = IntegerExtractor.getInstance();
+    timePeriodExtractor = BaseTimePeriodExtractor(EnglishTimePeriodExtractorConfiguration(config, options: options));
+    dateTimePeriodExtractor =
+        BaseDateTimePeriodExtractor(EnglishDateTimePeriodExtractorConfiguration(config, options: options));
+    integerExtractor = IntegerExtractor.getInstance();
 
     // TODO: Bring back
     // ambiguityFiltersDict = EnglishDateTime.AmbiguityFiltersDict.entrySet().stream().map((pair) {
@@ -105,7 +135,7 @@ class EnglishMergedExtractorConfiguration extends BaseOptionsConfiguration imple
   late final IDateTimeExtractor timePeriodExtractor;
 
   // TODO: Bring back
-  // late final IDateTimeZoneExtractor timeZoneExtractor;
+  late final IDateTimeZoneExtractor timeZoneExtractor;
 
   // TODO: Bring back
   // late final IDateTimeListExtractor dateTimeAltExtractor;
@@ -148,6 +178,21 @@ class EnglishMergedExtractorConfiguration extends BaseOptionsConfiguration imple
 
   @override
   RegExp getUnspecificDatePeriodRegex() => UnspecificDatePeriodRegex;
+
+  @override
+  bool get checkBothBeforeAfter => EnglishDateTime.CheckBothBeforeAfter;
+
+  @override
+  RegExp getEqualRegex() => EqualRegex;
+
+  @override
+  RegExp? getFailFastRegex() => FailFastRegex;
+
+  @override
+  List<RegExp> getTermFilterRegexes() => TermFilterRegexes;
+
+  @override
+  RegExp getYearRegex() => YearRegex;
 }
 
 abstract interface class IMergedExtractorConfiguration implements IOptionsConfiguration {
@@ -203,9 +248,19 @@ abstract interface class IMergedExtractorConfiguration implements IOptionsConfig
 
   RegExp getUnspecificDatePeriodRegex();
 
+  RegExp? getFailFastRegex();
+
+  RegExp getYearRegex();
+
+  RegExp getEqualRegex();
+
+  List<RegExp> getTermFilterRegexes();
+
   // TODO: bring back
   // StringMatcher getSuperfluousWordMatcher();
 
   // TODO: bring back
   // Iterable<(RegExp, RegExp)> getAmbiguityFiltersDict();
+
+  bool get checkBothBeforeAfter;
 }

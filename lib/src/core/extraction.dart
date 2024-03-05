@@ -56,6 +56,9 @@ class Metadata {
     this.isDurationWithBeforeAndAfter = false,
     this.isHoliday = false,
     this.isMealtime = false,
+    this.possiblyIncludePeriodEnd = false,
+    this.isOrdinalRelative = false,
+    this.hasMod = false,
   });
 
   bool isHoliday;
@@ -84,9 +87,13 @@ class Metadata {
 
   String holidayName = "";
 
-  bool isOrdinalRelative = false;
+  bool isOrdinalRelative;
 
   bool isMealtime = false;
+
+  bool possiblyIncludePeriodEnd;
+
+  bool isDurationWithAgoAndLater = false;
 }
 
 class Token {
