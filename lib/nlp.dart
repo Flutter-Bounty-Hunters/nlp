@@ -36,6 +36,11 @@ export 'src/date_time/english/english_set_extractor_configuration.dart';
 export 'src/date_time/base_set_parser.dart';
 export 'src/date_time/english/english_set_parser_configuration.dart';
 
+export 'src/date_time/base_merged_date_time_extractor.dart';
+export 'src/date_time/base_merged_date_time_parser.dart';
+export 'src/core/english_merged_extractor.dart';
+export 'src/core/global_recognizer.dart';
+
 export 'src/duration/base_duration_parser.dart';
 export 'src/duration/duration.dart';
 export 'src/duration/duration_extractor.dart';

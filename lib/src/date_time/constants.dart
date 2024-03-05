@@ -169,6 +169,8 @@ class DateTimeConstants {
   static const FORTNIGHT_UNIT = "2W";
   static const WEEKEND_UNIT = "WE";
 
+  static const AmbiguousPattern = "ambiguous";
+
   // Timex
   static const DatePeriodTimexSplitter = [",", "(", ")"];
   static const TimexYear = "Y";
@@ -224,6 +226,8 @@ class DateTimeConstants {
   static const String MealtimeBrunch = "TMER";
   static const String MealtimeLunch = "TMEL";
   static const String MealtimeDinner = "TMED";
+
+  static const String HAS_MOD = "mod";
 
   static final BASE_YEAR_PAST_CENTURY = 1900;
   static final BASE_YEAR_CURRENT_CENTURY = 2000;

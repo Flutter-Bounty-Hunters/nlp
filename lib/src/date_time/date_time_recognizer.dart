@@ -95,8 +95,8 @@ class DateTimeModel {
   DateTimeModel();
 
   List<ModelResult> parse(String query, DateTime referenceTime) {
-    final durationExtractor = DurationExtractor(
-      config: EnglishDurationExtractorConfiguration(),
+    final durationExtractor = BaseMergedDateTimeExtractor(
+      EnglishMergedExtractorConfiguration(DateTimeOptions.None),
     );
     final extractions = durationExtractor.extractDateTime(query, DateTime.now());
     print("Extracted ${extractions.length} from the query.");
@@ -206,37 +206,35 @@ class DateTimeModel {
       }
     }
 
-    // if (er.type == DateTimeConstants.SYS_DATETIME_DATE) {
-    //   if (er.metadata != null && er.metadata!.isHoliday) {
-    //     pr = config.getHolidayParser().parse(er, reference);
-    //   } else {
-    //     pr = config.getDateParser().parse(er, reference);
-    //   }
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_TIME) {
-    //   pr = config.getTimeParser().parse(er, reference);
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_DATETIME) {
-    //   pr = config.getDateTimeParser().parse(er, reference);
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_DATEPERIOD) {
-    //   pr = config.getDatePeriodParser().parse(er, reference);
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_TIMEPERIOD) {
-    //   pr = config.getTimePeriodParser().parse(er, reference);
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD) {
-    //   pr = config.getDateTimePeriodParser().parse(er, reference);
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_DURATION) {
-    if (er.type == DateTimeConstants.SYS_DATETIME_DURATION) {
+    if (er.type == DateTimeConstants.SYS_DATETIME_DATE) {
+      // if (er.metadata != null && er.metadata!.isHoliday) {
+      //   pr = config.getHolidayParser().parse(er, reference);
+      // } else {
+      pr = config.dateParser.parseDateTime(er, reference);
+      //}
+    } else if (er.type == DateTimeConstants.SYS_DATETIME_TIME) {
+      pr = config.timeParser.parseDateTime(er, reference);
+    } else if (er.type == DateTimeConstants.SYS_DATETIME_DATETIME) {
+      pr = config.dateTimeParser.parseDateTime(er, reference);
+    } else if (er.type == DateTimeConstants.SYS_DATETIME_DATEPERIOD) {
+      pr = config.datePeriodParser.parseDateTime(er, reference);
+    } else if (er.type == DateTimeConstants.SYS_DATETIME_TIMEPERIOD) {
+      pr = config.timePeriodParser.parseDateTime(er, reference);
+    } else if (er.type == DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD) {
+      pr = config.dateTimePeriodParser.parseDateTime(er, reference);
+    } else if (er.type == DateTimeConstants.SYS_DATETIME_DURATION) {
       pr = config.durationParser.parseDateTime(er, reference);
+    } else if (er.type == DateTimeConstants.SYS_DATETIME_SET) {
+      pr = config.setParser.parseDateTime(er, reference);
+      // } else if (er.type == DateTimeConstants.SYS_DATETIME_DATETIMEALT) {
+      //   pr = config.getDateTimeAltParser().parse(er, reference);
+      // } else if (er.type == DateTimeConstants.SYS_DATETIME_TIMEZONE) {
+      //   if (config.options.match(DateTimeOptions.EnablePreview)) {
+      //     pr = config.getTimeZoneParser().parse(er, reference);
+      //   }
+    } else {
+      return null;
     }
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_SET) {
-    //   pr = config.getGetParser().parse(er, reference);
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_DATETIMEALT) {
-    //   pr = config.getDateTimeAltParser().parse(er, reference);
-    // } else if (er.type == DateTimeConstants.SYS_DATETIME_TIMEZONE) {
-    //   if (config.options.match(DateTimeOptions.EnablePreview)) {
-    //     pr = config.getTimeZoneParser().parse(er, reference);
-    //   }
-    // } else {
-    //   return null;
-    // }
 
     if (pr == null) {
       return null;
@@ -385,7 +383,7 @@ class DateTimeModel {
   }
 
   // // TODO: return type should be a SortedMap
-  Map<String, Object>? dateTimeResolution(DateTimeParseResult? slot, IOptionsConfiguration config) {
+  static Map<String, Object>? dateTimeResolution(DateTimeParseResult? slot, IOptionsConfiguration config) {
     if (slot == null) {
       return null;
     }
@@ -545,7 +543,7 @@ class DateTimeModel {
     return result;
   }
 
-  String? determineSourceEntityType(String sourceType, String newType, bool hasMod) {
+  static String? determineSourceEntityType(String sourceType, String newType, bool hasMod) {
     if (!hasMod) {
       return null;
     }
@@ -561,7 +559,7 @@ class DateTimeModel {
     return null;
   }
 
-  String determineResolutionDateTimeType(LinkedHashMap<String, String> pastResolutionStr) {
+  static String determineResolutionDateTimeType(LinkedHashMap<String, String> pastResolutionStr) {
     switch (pastResolutionStr.keys.first) {
       case TimeTypeConstants.START_DATE:
         return DateTimeConstants.SYS_DATETIME_DATEPERIOD;
@@ -574,7 +572,7 @@ class DateTimeModel {
     }
   }
 
-  Map<String, String> generateResolution(String type, Map<String, String> resolutionDic, String? mod) {
+  static Map<String, String> generateResolution(String type, Map<String, String> resolutionDic, String? mod) {
     final res = LinkedHashMap<String, String>();
 
     if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
@@ -606,7 +604,7 @@ class DateTimeModel {
     return res;
   }
 
-  void resolveAmPm(Map<String, Object> resolutionDic, String keyName) {
+  static void resolveAmPm(Map<String, Object> resolutionDic, String keyName) {
     if (resolutionDic.containsKey(keyName)) {
       final resolution = resolutionDic[keyName] as Map<String, String>;
 
@@ -682,7 +680,7 @@ class DateTimeModel {
     }
   }
 
-  void resolveWeekOf(Map<String, Object> resolutionDic, String keyName) {
+  static void resolveWeekOf(Map<String, Object> resolutionDic, String keyName) {
     if (resolutionDic.containsKey(keyName)) {
       Map<String, String> resolution = resolutionDic[keyName] as Map<String, String>;
 
@@ -817,13 +815,13 @@ class DateTimeModel {
     }
   }
 
-  void addResolutionFieldsObject(Map<String, Object> dic, String key, Object? value) {
+  static void addResolutionFieldsObject(Map<String, Object> dic, String key, Object? value) {
     if (value != null) {
       dic[key] = value;
     }
   }
 
-  void addResolutionFieldsString(Map<String, String> dic, String key, String? value) {
+  static void addResolutionFieldsString(Map<String, String> dic, String key, String? value) {
     if (!StringUtility.isNullOrEmpty(value)) {
       dic[key] = value!;
     }
@@ -841,7 +839,7 @@ class DateTimeModel {
     return slot;
   }
 
-  String determineDateTimeType(String type, bool hasMod, IOptionsConfiguration config) {
+  static String determineDateTimeType(String type, bool hasMod, IOptionsConfiguration config) {
     if (config.options.match(DateTimeOptions.SplitDateAndTime)) {
       if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
         return DateTimeConstants.SYS_DATETIME_TIME;

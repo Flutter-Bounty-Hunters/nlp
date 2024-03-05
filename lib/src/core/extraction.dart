@@ -58,6 +58,7 @@ class Metadata {
     this.isMealtime = false,
     this.possiblyIncludePeriodEnd = false,
     this.isOrdinalRelative = false,
+    this.hasMod = false,
   });
 
   bool isHoliday;

@@ -26,27 +26,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // const phrase = "We've been in Pakistan for 2ys";
     // const phrase = "I'll leave for 1 year 1 month 21 days";
     // const phrase = "I'll leave for 2 days 1 month";
-    const phrase = "We had a meeting 1 month and 21 days ago";
-    final referenceDate = DateTime(2017, 11, 23);
-    final extractor = BaseDateExtractor(
-      EnglishDateExtractorConfiguration(
-        EnglishCommonDateTimeParserConfiguration(DateTimeOptions.None),
-      ),
-    );
+    const phrase = "Send a birthday card to Dad every year on May 3rd";
+    //const phrase = "Change Tires on Car next Tuesday at 5pm";
 
-    final parser = BaseDateParser(
-      EnglishDateParserConfiguration(
-        EnglishCommonDateTimeParserConfiguration(DateTimeOptions.None),
-      ),
-    );
+    final res = GlobalRecognizer.recognize(phrase);
 
-    final extractions = extractor.extract(phrase);
-
-    final parsed = extractions //
-        .map((extraction) => parser.parseDateTime(extraction, referenceDate))
-        .toList();
-    for (final item in parsed) {
-      print((item.value as DateTimeResolutionResult?)?.toTestCaseJson());
+    for (final item in res) {
+      print(item.toJson());
     }
   }
 

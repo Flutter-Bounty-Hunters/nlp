@@ -234,6 +234,7 @@ enum DateTimeOptions {
   TasksMode(1048576),
   EnablePreview(8388608),
   ExperimentalMode(4194304),
+  FailFast(2097152),
   ComplexCalendar(8 + 4 + 8388608);
 
   const DateTimeOptions(this.value);

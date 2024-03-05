@@ -1,9 +1,11 @@
 import 'package:nlp/src/core/timex_utility.dart';
+import 'package:nlp/src/date_time/base_date_extractor.dart';
 import 'package:nlp/src/date_time/constants.dart';
 import 'package:nlp/src/date_time/date_time_format_util.dart';
 import 'package:nlp/src/date_time/date_time_parsing.dart';
 import 'package:nlp/src/date_time/date_time_recognizer.dart';
 import 'package:nlp/src/date_time/date_util.dart';
+import 'package:nlp/src/duration/duration.dart';
 
 class MergedParserUtil {
   static const String ParserTypeName = "datetimeV2";
@@ -14,17 +16,15 @@ class MergedParserUtil {
     return candidateResults;
   }
 
-  //  static String CombineMod(String originalMod, String newMod)
-  // {
-  //     var combinedMod = newMod;
+  static String CombineMod(String originalMod, String newMod) {
+    var combinedMod = newMod;
 
-  //     if (originalMod.isNotEmpty && originalMod!=newMod)
-  //     {
-  //         combinedMod = "${newMod}-${originalMod}";
-  //     }
+    if (originalMod.isNotEmpty && originalMod != newMod) {
+      combinedMod = "${newMod}-${originalMod}";
+    }
 
-  //     return combinedMod;
-  // }
+    return combinedMod;
+  }
 
   //  static bool IsDurationWithAgoAndLater(ExtractResult er)
   // {
@@ -241,47 +241,38 @@ class MergedParserUtil {
   //     return slot;
   // }
 
-  //  static DateTimeParseResult SetParseResult(DateTimeParseResult slot, bool hasMod, IDateTimeOptionsConfiguration config)
-  // {
-  //     slot.value = DateTimeResolution(slot, config);
+  static DateTimeParseResult SetParseResult(
+      DateTimeParseResult slot, bool hasMod, IDateTimeOptionsConfiguration config) {
+    slot.value = DateTimeModel.dateTimeResolution(slot, config);
 
-  //     // Change the type at last for the after or before modes
-  //     slot.type = "${ParserTypeName}.${DetermineDateTimeType(slot.type??'', hasMod, config)}";
-  //     return slot;
-  // }
+    // Change the type at last for the after or before modes
+    slot.type = "${ParserTypeName}.${DetermineDateTimeType(slot.type ?? '', hasMod, config)}";
+    return slot;
+  }
 
-  //  static String DetermineDateTimeType(String type, bool hasMod, IDateTimeOptionsConfiguration config)
-  // {
-  //     if (config.options.match(DateTimeOptions.SplitDateAndTime))
-  //     {
-  //         if (type==DateTimeConstants.SYS_DATETIME_DATETIME)
-  //         {
-  //             return DateTimeConstants.SYS_DATETIME_TIME;
-  //         }
-  //     }
-  //     else
-  //     {
-  //         if (hasMod)
-  //         {
-  //             if (type==DateTimeConstants.SYS_DATETIME_DATE)
-  //             {
-  //                 return DateTimeConstants.SYS_DATETIME_DATEPERIOD;
-  //             }
+  static String DetermineDateTimeType(String type, bool hasMod, IDateTimeOptionsConfiguration config) {
+    if (config.options.match(DateTimeOptions.SplitDateAndTime)) {
+      if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
+        return DateTimeConstants.SYS_DATETIME_TIME;
+      }
+    } else {
+      if (hasMod) {
+        if (type == DateTimeConstants.SYS_DATETIME_DATE) {
+          return DateTimeConstants.SYS_DATETIME_DATEPERIOD;
+        }
 
-  //             if (type==DateTimeConstants.SYS_DATETIME_TIME)
-  //             {
-  //                 return DateTimeConstants.SYS_DATETIME_TIMEPERIOD;
-  //             }
+        if (type == DateTimeConstants.SYS_DATETIME_TIME) {
+          return DateTimeConstants.SYS_DATETIME_TIMEPERIOD;
+        }
 
-  //             if (type==DateTimeConstants.SYS_DATETIME_DATETIME)
-  //             {
-  //                 return DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD;
-  //             }
-  //         }
-  //     }
+        if (type == DateTimeConstants.SYS_DATETIME_DATETIME) {
+          return DateTimeConstants.SYS_DATETIME_DATETIMEPERIOD;
+        }
+      }
+    }
 
-  //     return type;
-  // }
+    return type;
+  }
 
   //  static String? DetermineSourceEntityType(String sourceType, String newType, bool hasMod)
   // {
@@ -497,28 +488,24 @@ class MergedParserUtil {
   //     return new SortedDictionary<String, Object> { { ResolutionKey.ValueSet, resolutions } };
   // }
 
-  //  static List<DateTimeParseResult> DateTimeResolutionForSplit(DateTimeParseResult slot, IDateTimeOptionsConfiguration config)
-  // {
-  //     var results = new List<DateTimeParseResult>();
-  //     if (((DateTimeResolutionResult)slot.value).SubDateTimeEntities != null)
-  //     {
-  //         var subEntities = ((DateTimeResolutionResult)slot.value).SubDateTimeEntities;
-  //         for (var subEntity in subEntities)
-  //         {
-  //             var result = (DateTimeParseResult)subEntity;
-  //             result.Start += slot.Start;
-  //             results.AddRange(DateTimeResolutionForSplit(result, config));
-  //         }
-  //     }
-  //     else
-  //     {
-  //         slot.value = DateTimeResolution(slot, config);
-  //         slot.type = $"{ParserTypeName}.{DetermineDateTimeType(slot.type, hasMod: false, config)}";
-  //         results.add(slot);
-  //     }
+  static List<DateTimeParseResult> DateTimeResolutionForSplit(
+      DateTimeParseResult slot, IDateTimeOptionsConfiguration config) {
+    var results = <DateTimeParseResult>[];
+    if ((slot.value as DateTimeResolutionResult).subDateTimeEntities != null) {
+      var subEntities = (slot.value as DateTimeResolutionResult).subDateTimeEntities!;
+      for (var subEntity in subEntities) {
+        var result = subEntity as DateTimeParseResult;
+        result.start += slot.start;
+        results.addAll(DateTimeResolutionForSplit(result, config));
+      }
+    } else {
+      slot.value = DateTimeModel.dateTimeResolution(slot, config);
+      slot.type = "${ParserTypeName}.${DetermineDateTimeType(slot.type ?? '', false, config)}";
+      results.add(slot);
+    }
 
-  //     return results;
-  // }
+    return results;
+  }
 
   //  static void AddResolutionFieldsStr(Map<String, Object> dic, String key, String value)
   // {
